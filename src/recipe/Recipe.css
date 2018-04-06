@@ -1,0 +1,32 @@
+.title-container {
+  margin-top: 3em;
+}
+.recipe-title {
+  padding: 1em;
+}
+.recipe-title p {
+  font-size: 3em;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+.pic-des-container {
+  height: 300px;
+  margin-top: 10px !important;
+}
+
+.ingredients-container {
+  height: 300px;
+}
+
+.instructions-container {
+  height: 300px;
+}
+
+.recipe-pic img {
+  width: inherit;
+  height: inherit;
+}
+
+.description-text {
+  padding: 20px;
+}
