@@ -1,5 +1,18 @@
 .recipeAuthor,
-.cookTime {
+.tags {
     padding: 1em;
     width: 50%;
+    display: flex;
+}
+
+.recipeInfo {
+    display: flex;
+}
+
+.recipeAuthor p {
+    margin-left: 2em;
+}
+
+.chip {
+    width: auto;
 }

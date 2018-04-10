@@ -23,7 +23,7 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 10,
+      title: 8,
     },
   },
 };
@@ -55,19 +55,22 @@ class Recipe extends Component {
   render() {
     return (
       <div>
-        <Grid className='pic-des-container' container spacing={styles.spacing} justify={'center'}>
-          <Grid className='title-container' container item xs={styles.sizes.xs.title} sm={styles.sizes.sm.title}>
-            <Card>
-              <div className="recipe-title">
-                <Typography>
-                  Recipe Name
-                </Typography>
-              </div>
-            </Card>
+        <Grid className='title-container' container spacing={styles.spacing} justify={'center'}>
+          <Grid item xs={styles.sizes.xs.title} sm={styles.sizes.sm.title}>
+            <div className="recipe-title">
+              <Typography>
+                Recipe Name
+              </Typography>
+            </div>
           </Grid>
+        </Grid>
+        <Grid className='pic-des-container' container spacing={styles.spacing} justify={'center'}>
           <Grid className='picture' item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
             <Card className="recipe-pic">
               <CardMedia image="https://foodtomake.blob.core.windows.net/images/best-quick-homemade-pizza-recipe.jpg" alt="hello" />
+              <div className="picture-title">
+                <span>Recipe Name</span>
+              </div>
             </Card>
           </Grid>
           <Grid className='description' item xs={styles.sizes.xs.description} sm={styles.sizes.sm.description}>

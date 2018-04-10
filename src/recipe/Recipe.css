@@ -1,8 +1,8 @@
-.title-container {
-  margin-top: 3em;
+div.title-container {
+  margin-top: 4em;
 }
 .recipe-title {
-  padding: 1em;
+  /*padding: 1em;*/
 }
 .recipe-title p {
   font-size: 3em;
@@ -22,11 +22,32 @@
   height: 300px;
 }
 
+.recipe-pic {
+  position: relative;
+}
 .recipe-pic img {
   width: inherit;
   height: inherit;
 }
+.picture-title {
+  position: absolute;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 2em;
+  height: 2em;
+  line-height: 2em;
+  text-shadow: #000 2px 2px;
+}
+.picture-title span {
+  margin-left: .5em;
+}
 
 .description-text {
   padding: 20px;
+}
+
+div.title-container,
+div.info {
+  height: initial;
 }
