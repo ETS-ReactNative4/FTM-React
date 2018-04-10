@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Card, CardMedia, Typography } from 'material-ui';
+import { Grid, Card, CardMedia } from 'material-ui';
 import axios from 'axios';
 import './Recipe.css';
 import RecipeInstructions from './recipeInstructions/RecipeInstructions';
