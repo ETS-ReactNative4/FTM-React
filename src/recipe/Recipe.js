@@ -58,8 +58,8 @@ class Recipe extends Component {
       <div>
         <Grid className='pic-des-container' container spacing={styles.spacing} justify={'center'}>
           <Grid className='picture' item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
-            <Card className="recipe-pic">
-              <CardMedia image="https://foodtomake.blob.core.windows.net/images/best-quick-homemade-pizza-recipe.jpg" alt="hello" />
+            <Card className="recipe-pic" style={{"height" : "100%"}}>
+              <CardMedia image="https://foodtomake.blob.core.windows.net/images/best-quick-homemade-pizza-recipe.jpg" alt="hello" style={{"height" : "100%"}}/>
               <div className="picture-title">
                 <span>Recipe Name</span>
                 <span>Five Stars</span>
