@@ -1,8 +1,10 @@
 .app-bar {
+  width: 100vw;
   height: 8vh;
 }
 
 .content-area {
+  width: 100vw;
   height: 92vh;
-  margin: 10px;
+  margin: 0px;
 }

@@ -14,6 +14,7 @@ class App extends Component {
       <div className="app-container">
         <BrowserRouter>
           <MuiThemeProvider theme={theme}>
+
             <div className="app-bar">
               <FTMAppBar/>
             </div>

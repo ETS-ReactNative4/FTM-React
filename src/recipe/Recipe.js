@@ -46,7 +46,7 @@ class Recipe extends Component {
       },
     };
     try {
-      const response = await axios.post('http://localhost:8080/api/recipes', data, options);
+      const response = await axios.post('http://localhost:3000/api/recipes', data, options);
       return response.data[0];
     } catch (err) {
       return {};

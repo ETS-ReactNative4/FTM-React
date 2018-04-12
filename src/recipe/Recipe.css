@@ -21,6 +21,8 @@ div.title-container {
 
 .recipe-pic {
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 .recipe-pic img {
   width: inherit;
