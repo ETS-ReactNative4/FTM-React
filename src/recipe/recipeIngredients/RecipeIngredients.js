@@ -8,37 +8,33 @@ for (i = 0; i < ingredientList.length; i++) {
   ingredientList[i] = "Item " + i;
 }
 
-/*
-function DisplayItems() {
-  let i;
-  const retVal = <Grid><List>;
-  for (i = 0; i < ingredientList.length; i++) {
-    if (i % 5 === 0) {
-      retVal.concat(</List></Grid><Grid></List>);
-    }
-    retVal.concat(<ListItem>a</ListItem>);
-  }
-  retVal.concat(</List><Grid>);
-  return retVal;
-}
-*/
-
 class RecipeIngredients extends Component {
+
+  displayItems = () => {
+    let outer = [];
+    let inner = [];
+    outer.push(<Grid>what</Grid>);
+    for (let i = 0; i < ingredientList.length; i++) {
+      inner.push(<ListItem>{ingredientList[i]}</ListItem>);
+    }
+    return inner;
+  }
 
   createTable = () => {
     let table = [];
-
+    table.push(<h1>what</h1>);
     // Outer loop to create parent
     for (let i = 0; i < 3; i++) {
       let children = [];
       // Inner loop to create children
       for (let j = 0; j < 5; j++) {
         children.push(<td>{`Column ${j + 1}`}</td>);
+        children.push(<td>what</td>);
       }
       // Create the parent and add the children
       table.push(<tr>{children}</tr>);
     }
-    return table;
+    return (<table>{table}</table>);
   }
 
   render() {
@@ -46,13 +42,13 @@ class RecipeIngredients extends Component {
       <div className="fullSize">
         <Card>
           <Typography component="p" className="ingredients-title">Ingredients</Typography>
-          <Grid>
-            <List>
-              {
-                this.createTable()
-              }
-            </List>
-          </Grid>
+          <List>
+            {
+              ingredientList.map((name, index) => {
+                return <ListItem> {name} </ListItem>;
+              })
+            }
+          </List>
         </Card>
       </div>
     );
