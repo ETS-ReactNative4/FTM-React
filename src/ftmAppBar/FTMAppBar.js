@@ -6,7 +6,7 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
-// import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
 
 const styles = {
   root: {
@@ -19,7 +19,6 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
-
 };
 
 function ButtonAppBar(props) {
@@ -29,12 +28,12 @@ function ButtonAppBar(props) {
       <AppBar position="static">
         <Toolbar>
           <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-            {/* <MenuIcon /> */}
+            <MenuIcon />
           </IconButton>
           <Typography variant="title" color="inherit" className={classes.flex}>
-            Title
+            FoodtoMake
           </Typography>
-          <Button color="inherit" className={classes.root}>Login</Button>
+          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
     </div>
