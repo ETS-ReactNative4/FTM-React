@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
-import { Paper, Checkbox, List, ListItem } from 'material-ui';
+import { Card, Checkbox, List, ListItem, Typography } from 'material-ui';
 import './RecipeIngredients.css';
+
+const ingredientList = new Array(5);
+let i;
+for (i = 0; i < ingredientList.length; i++) {
+  ingredientList[i] = "Item " + i;
+}
+
 
 class RecipeIngredients extends Component {
   render() {
     return (
       <div className="fullSize">
-        <Paper rounded='false' className="fullSize">
+        <Card>
+          <Typography component="p" className="ingredients-title">Ingredients</Typography>
           <List>
-            <ListItem leftcheckbox={<Checkbox/>}>Item 1</ListItem>
-            <ListItem leftcheckbox={<Checkbox/>}>Item 2</ListItem>
-            <ListItem leftcheckbox={<Checkbox/>}>Item 3</ListItem>
-            <ListItem leftcheckbox={<Checkbox/>}>Item 4</ListItem>
-            <ListItem leftcheckbox={<Checkbox/>}>Item 5</ListItem>
+            {ingredientList.map((name, index) => {
+              return <ListItem> {name} </ListItem>;
+            })}
           </List>
-        </Paper>
+        </Card>
       </div>
     );
   }

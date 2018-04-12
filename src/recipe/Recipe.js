@@ -62,6 +62,7 @@ class Recipe extends Component {
               <CardMedia image="https://foodtomake.blob.core.windows.net/images/best-quick-homemade-pizza-recipe.jpg" alt="hello" />
               <div className="picture-title">
                 <span>Recipe Name</span>
+                <span>Five Stars</span>
               </div>
             </Card>
           </Grid>

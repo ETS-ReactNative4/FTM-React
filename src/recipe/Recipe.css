@@ -30,14 +30,20 @@ div.title-container {
   position: absolute;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
+  height: 4em;
+}
+.picture-title span:first-child {
+  margin-left: .5em;
   color: #fff;
   font-size: 2em;
-  height: 2em;
   line-height: 2em;
   text-shadow: #000 2px 2px;
 }
-.picture-title span {
+.picture-title span:nth-child(2) {
   margin-left: .5em;
+  color: gold;
+  font-size: 1em;
+  clear: both;
 }
 
 .description-text {

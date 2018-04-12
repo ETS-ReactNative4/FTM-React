@@ -30,6 +30,9 @@ class RecipeInfo extends Component {
           <Typography paragraph component="p" className="time">
             10 Hours!
           </Typography>
+          <Typography paragraph component="p" className="difficulty">
+            Super easy
+          </Typography>
         </div>
         <div className="tags">
           <div style={styles.wrapper}>
