@@ -29,7 +29,20 @@ const styles = {
   },
 };
 
+const ingredientList = new Array(8);
+let i;
+for (i = 0; i < ingredientList.length; i++) {
+  ingredientList[i] = "Item " + i;
+}
+
 class Recipe extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ingredients: ingredientList,
+    };
+  }
+
   async componentDidMount() {
     const recipe = await this.fetchRecipe();
     this.setState(recipe);
@@ -58,8 +71,8 @@ class Recipe extends Component {
       <div>
         <Grid className='pic-des-container' container spacing={styles.spacing} justify={'center'}>
           <Grid className='picture' item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
-            <Card className="recipe-pic" style={{"height" : "100%"}}>
-              <CardMedia image="https://foodtomake.blob.core.windows.net/images/best-quick-homemade-pizza-recipe.jpg" alt="hello" style={{"height" : "100%"}}/>
+            <Card className="recipe-pic">
+              <CardMedia className="recipe-picture" image="https://foodtomake.blob.core.windows.net/images/best-quick-homemade-pizza-recipe.jpg" alt="hello"/>
               <div className="picture-title">
                 <span>Recipe Name</span>
                 <span>Five Stars</span>
@@ -73,7 +86,7 @@ class Recipe extends Component {
             <RecipeInfo />
           </Grid>
           <Grid className='ingredients' item xs={styles.sizes.xs.instructions} sm={styles.sizes.sm.instructions}>
-            <RecipeIngredients />
+            <RecipeIngredients value={this.state.ingredients} />
           </Grid>
           <Grid className='instructions' item xs={styles.sizes.xs.ingredients} sm={styles.sizes.sm.ingredients}>
             <RecipeInstructions />

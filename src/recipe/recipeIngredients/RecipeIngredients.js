@@ -2,14 +2,9 @@ import React, { Component } from 'react';
 import { Grid, Card, List, ListItem, Typography } from 'material-ui';
 import './RecipeIngredients.css';
 
-const ingredientList = new Array(6);
-let i;
-for (i = 0; i < ingredientList.length; i++) {
-  ingredientList[i] = "Item " + i;
-}
 
 class RecipeIngredients extends Component {
-
+  /*
   displayItems = () => {
     let outer = [];
     let inner = [];
@@ -36,6 +31,13 @@ class RecipeIngredients extends Component {
     }
     return (<table>{table}</table>);
   }
+  */
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: null,
+    };
+  }
 
   render() {
     return (
@@ -44,7 +46,7 @@ class RecipeIngredients extends Component {
           <Typography component="p" className="ingredients-title">Ingredients</Typography>
           <List>
             {
-              ingredientList.map((name, index) => {
+              this.props.value.map((name, index) => {
                 return <ListItem> {name} </ListItem>;
               })
             }
