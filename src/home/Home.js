@@ -16,7 +16,8 @@ class Home extends Component {
         </div>
         <div className="filters">
         </div>
-        <Route exact path="/recipe" component={Recipe}/>
+        {/* <Route exact path="/recipe" component={Recipe}/>
+        <Route path="/" component={Recipe} /> */}
       </div>
     );
   }
