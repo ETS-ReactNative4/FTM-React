@@ -20,7 +20,6 @@ class App extends Component {
             </div>
             <div className="content-area">
               <Route exact path="/" component={Home} />
-              <Route path="/recipe" component={Recipe} />
             </div>
           </MuiThemeProvider>
         </BrowserRouter>
