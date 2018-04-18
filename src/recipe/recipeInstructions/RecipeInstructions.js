@@ -15,13 +15,25 @@ const styles = {
 };
 
 class RecipeInstructions extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: null,
+    };
+  }
+
   render() {
     return (
       <Card>
-        <Typography className="directions-title"> Directions </Typography>
+        <Typography className="instructions-title"> Directions </Typography>
         <Grid item>
-          <List>
-            <ListItem><Checkbox/><ListItemText primary='1. This is the first instruction'/></ListItem>
+          <List className="instructions-list">
+            {
+              this.props.value.map((name) => {
+                return <ListItem key={name.id}><Checkbox />{name}</ListItem>;
+              })
+            }
           </List>
         </Grid>
       </Card>

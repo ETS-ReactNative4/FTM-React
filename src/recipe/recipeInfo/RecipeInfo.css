@@ -9,10 +9,24 @@
     display: flex;
 }
 
-.recipeAuthor p {
-    margin-left: 2em;
-}
-
 .chip {
     width: auto;
+}
+
+.authorName,
+.time,
+.difficulty {
+  display: flex;
+  align-items: center;
+}
+
+.authorName {
+  margin-left: .5em;
+}
+
+.time,
+.difficulty {
+  font-size: .8em;
+  color: gray;
+  margin-left: 2em;
 }
