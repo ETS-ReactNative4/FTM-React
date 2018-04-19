@@ -75,9 +75,9 @@ function MainAppBar(props) {
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+          {/* <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
             <MainDrawer />
-          </IconButton>
+          </IconButton> */}
           <Typography 
             variant="title" 
             color="inherit" 
@@ -86,6 +86,7 @@ function MainAppBar(props) {
             component={Link} to="/">
             FoodtoMake
           </Typography>
+          <Button color="inherit" component={Link} to="/recipe">Recipes</Button>
           <Button color="inherit" component={Link} to="/login">Login</Button>
         </Toolbar>
       </AppBar>
