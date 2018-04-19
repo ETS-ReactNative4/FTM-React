@@ -34,8 +34,7 @@ class Filters extends Component {
     });
 
     return (
-      <div className={styles.root}>
-        <div>
+      <div className={styles.root} justify={'center'}>
           <Card className={styles.card}>
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -132,7 +131,6 @@ class Filters extends Component {
               </ExpansionPanelActions>
             </ExpansionPanel>
           </Card>
-        </div>
 
       </div>
     );

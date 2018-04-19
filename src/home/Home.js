@@ -8,10 +8,10 @@ class Home extends Component {
   render() {
     return (
       <div className="container" >
-        <div className="logo" >
+        <div className="logo"  >
           <img 
             src="https://i.imgur.com/XPjGdyV.png"
-            alt="foodtomake logso" />
+            alt="foodtomake logo" />
         </div>
         <div className="search-box">
           <TextField fullWidth className="" placeholder="Search for a Recipe..." />
