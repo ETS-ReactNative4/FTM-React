@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Avatar, Card, Typography, Chip } from 'material-ui';
+import { Avatar, Card, Chip } from 'material-ui';
 import './RecipeInfo.css';
 
 
@@ -46,8 +46,8 @@ class RecipeInfo extends Component {
         <div className="tags">
           <div style={styles.wrapper}>
             {
-              this.props.tags.map((name) => {
-                return <Chip onClick={handleClick} style={styles.chip} className="chip" label={name} />;
+              this.props.tags.map((name, index) => {
+                return <Chip key={index} onClick={handleClick} style={styles.chip} className="chip" label={name} />;
               })
             }
           </div>

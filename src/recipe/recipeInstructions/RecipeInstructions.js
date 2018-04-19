@@ -1,18 +1,6 @@
 import React, { Component } from 'react';
-import { Card, Grid, List, ListItem, ListItemText, Checkbox, Typography } from 'material-ui';
+import { Card, Grid, List, ListItem, Checkbox, Typography } from 'material-ui';
 import './RecipeInstructions.css';
-
-const styles = {
-  spacing: 24,
-  sizes: {
-    xs: {
-      instructions: 8,
-    },
-    sm: {
-      instructions: 8,
-    },
-  },
-};
 
 class RecipeInstructions extends Component {
 
@@ -30,8 +18,8 @@ class RecipeInstructions extends Component {
         <Grid item>
           <List className="instructions-list">
             {
-              this.props.value.map((name) => {
-                return <ListItem key={name.id}><Checkbox />{name}</ListItem>;
+              this.props.value.map((name, index) => {
+                return <ListItem key={index}><Checkbox />{name}</ListItem>;
               })
             }
           </List>

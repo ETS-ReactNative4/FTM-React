@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Card, List, ListItem, Typography } from 'material-ui';
+import { Card, List, ListItem, Typography } from 'material-ui';
 import './RecipeIngredients.css';
 
 
@@ -58,8 +58,8 @@ class RecipeIngredients extends Component {
           <Typography component="p" className="ingredients-title">Ingredients</Typography>
           <List>
             {
-              this.props.value.map((name) => {
-                return <ListItem key={name.id}> {name} </ListItem>;
+              this.props.value.map((ingredient, index) => {
+                return <ListItem key={index}> {ingredient.quantity} {ingredient.unit} {ingredient.name} </ListItem>;
               })
             }
           </List>

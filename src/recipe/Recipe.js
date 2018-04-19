@@ -30,13 +30,13 @@ const styles = {
   },
 };
 
-const ingredientList = new Array(8);
+const ingredientList = new Array(0);
 let i;
 for (i = 0; i < ingredientList.length; i++) {
   ingredientList[i] = "Item " + i;
 }
 
-const instructionsList = new Array(5);
+const instructionsList = new Array(0);
 for (i = 0; i < instructionsList.length; i++) {
   instructionsList[i] = i + ". Instruction here";
 }
@@ -54,23 +54,48 @@ class Recipe extends Component {
     this.state = {
       ingredients: ingredientList,
       instructions: instructionsList,
-      description: descriptionText,
-      image: 'https://foodtomake.blob.core.windows.net/images/best-quick-homemade-pizza-recipe.jpg',
-      title: 'Recipe Title',
+      description: null,
+      image: null,
+      title: null,
       stars: 'Four',
       tags: tagsList,
+      author: null,
+      authorImage: null,
+      cookTime: null,
+      difficulty: null,
     };
+    this.getDataFromAPI();
   }
 
-  async componentDidMount() {
+
+  async getDataFromAPI() {
     const recipe = await this.fetchRecipe();
-    this.setState(recipe);
+    console.log(recipe);
+    this.setState({
+      title: recipe.name,
+      author: recipe.author.name,
+      authorImage: recipe.author.image,
+      image: recipe.images[0],
+      cookTime: recipe.cookTime,
+      difficulty: recipe.difficulty,
+      instructions: recipe.instructions,
+      ingredients: recipe.ingredients,
+      tags: recipe.tags,
+      description: recipe.notes[0],
+    });
   }
 
   fetchRecipe = async () => {
     const data = {
-      lmt: 5,
-      query: 'cheese',
+      limit: '1',
+      offset: '0',
+      filters: [
+        {
+          field: 'name',
+          operator: '=',
+          values: ['Chocolate Sandwich'],
+        },
+      ],
     };
     const options = {
       headers: {
@@ -78,11 +103,23 @@ class Recipe extends Component {
       },
     };
     try {
-      const response = await axios.post('http://localhost:3000/api/recipes', data, options);
-      return response.data[0];
+      const response = await axios.post('http://localhost:8081/public/recipes', data, options);
+      console.log('completed GET request');
+      return response.data.recipes[0];
     } catch (err) {
+      console.log(err);
       return {};
-    }   
+    }
+    // await axios.post('http://localhost:8081/public/recipes', data, options)
+    //   .then((res) => {
+    //     console.log('RESPONSE RECEIVED: ', res.data.recipes[0]);
+    //     // this.setState({
+    //     //   title: recipe.data,
+    //     // });
+    //   })
+    //   .catch((err) => {
+    //     console.log('ERROR: ', err);
+    //   });
   }
 
   render() {
@@ -96,7 +133,7 @@ class Recipe extends Component {
             <RecipeDescription desc={this.state.description}/>
           </Grid>
           <Grid className='info' item xs={styles.sizes.xs.author} sm={styles.sizes.sm.author}>
-            <RecipeInfo authorImage='https://i.pinimg.com/originals/88/2d/88/882d883fcf289d704c064da27ed4fa60.png' authorName='Mario' time='11 minutes' difficulty='easy' tags={this.state.tags} />
+            <RecipeInfo authorImage={this.state.authorImage} authorName={this.state.author} time={this.state.cookTime} difficulty={this.state.difficulty} tags={this.state.tags} />
           </Grid>
           <Grid className='ingredients' item xs={styles.sizes.xs.instructions} sm={styles.sizes.sm.instructions}>
             <RecipeIngredients value={this.state.ingredients} />
