@@ -81,7 +81,7 @@ class Recipe extends Component {
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
-        authorImage: 'https://cdn2.iconfinder.com/data/icons/lil-silhouettes/2176/person5-128.png',
+        authorImage: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
       });
     }
   }
