@@ -31,22 +31,12 @@ const styles = {
 };
 
 const ingredientList = new Array(0);
-let i;
-for (i = 0; i < ingredientList.length; i++) {
-  ingredientList[i] = "Item " + i;
-}
 
 const instructionsList = new Array(0);
-for (i = 0; i < instructionsList.length; i++) {
-  instructionsList[i] = i + ". Instruction here";
-}
 
 const descriptionText = "Here's a description. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean et convallis massa.  Maecenas posuere porttitor dui at tincidunt. Maecenas neque elit, ultrices at accumsan pulvinar, sodales eget sapien.   Duis id risus non eros vulputate consectetur. Nunc luctus sagittis tortor. Phasellus rhoncus blandit urna quis mollis.  Sed justo felis, commodo non imperdiet convallis, placerat vel arcu. Ut vitae arcu sed neque accumsan vestibulum sed non neque.  Morbi gravida metus et egestas congue. Integer sit amet fermentum tellus. Vivamus varius odio ut sollicitudin congue.  Duis congue lorem odio, ut placerat leo interdum eu. Suspendisse molestie nunc ut ullamcorper placerat. In hac habitasse platea dictumst.";
 
-const tagsList = new Array(3);
-for (i = 0; i < tagsList.length; i++) {
-  tagsList[i] = "#Tag " + i;
-}
+const tagsList = new Array(0);
 
 class Recipe extends Component {
   constructor(props) {
@@ -62,6 +52,7 @@ class Recipe extends Component {
       author: null,
       authorImage: null,
       cookTime: null,
+      prepTime: null,
       difficulty: null,
     };
     this.getDataFromAPI();
@@ -77,12 +68,18 @@ class Recipe extends Component {
       authorImage: recipe.author.image,
       image: recipe.images[0],
       cookTime: recipe.cookTime,
+      prepTime: recipe.prepTime,
       difficulty: recipe.difficulty,
       instructions: recipe.instructions,
       ingredients: recipe.ingredients,
       tags: recipe.tags,
       description: recipe.notes[0],
     });
+    if (this.state.authorImage == null || this.state.authorImage === '') {
+      this.setState({
+        authorImage: 'https://cdn2.iconfinder.com/data/icons/lil-silhouettes/2176/person5-128.png',
+      });
+    }
   }
 
   fetchRecipe = async () => {
@@ -110,16 +107,6 @@ class Recipe extends Component {
       console.log(err);
       return {};
     }
-    // await axios.post('http://localhost:8081/public/recipes', data, options)
-    //   .then((res) => {
-    //     console.log('RESPONSE RECEIVED: ', res.data.recipes[0]);
-    //     // this.setState({
-    //     //   title: recipe.data,
-    //     // });
-    //   })
-    //   .catch((err) => {
-    //     console.log('ERROR: ', err);
-    //   });
   }
 
   render() {
@@ -133,7 +120,7 @@ class Recipe extends Component {
             <RecipeDescription desc={this.state.description}/>
           </Grid>
           <Grid className='info' item xs={styles.sizes.xs.author} sm={styles.sizes.sm.author}>
-            <RecipeInfo authorImage={this.state.authorImage} authorName={this.state.author} time={this.state.cookTime} difficulty={this.state.difficulty} tags={this.state.tags} />
+            <RecipeInfo authorImage={this.state.authorImage} authorName={this.state.author} prepTime={this.state.prepTime} cookTime={this.state.cookTime} difficulty={this.state.difficulty} tags={this.state.tags} />
           </Grid>
           <Grid className='ingredients' item xs={styles.sizes.xs.instructions} sm={styles.sizes.sm.instructions}>
             <RecipeIngredients value={this.state.ingredients} />

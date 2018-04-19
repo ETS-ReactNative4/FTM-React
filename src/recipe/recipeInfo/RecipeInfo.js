@@ -28,7 +28,8 @@ class RecipeInfo extends Component {
     this.state = {
       authorImage: null,
       authorName: null,
-      time: null,
+      cookTime: null,
+      prepTime: null,
       difficulty: null,
       tags: null,
     };
@@ -40,8 +41,9 @@ class RecipeInfo extends Component {
         <div className="recipeAuthor">
           <Avatar src={this.props.authorImage} />
           <span className="authorName">{this.props.authorName}</span>
-          <span className="time">{this.props.time}</span>
-          <span className="difficulty">{this.props.difficulty}</span>
+          <span className="time">Prep: {this.props.prepTime}</span>
+          <span className="time">Cook: {this.props.cookTime}</span>
+          <span className="difficulty">Difficulty: {this.props.difficulty}</span>
         </div>
         <div className="tags">
           <div style={styles.wrapper}>
