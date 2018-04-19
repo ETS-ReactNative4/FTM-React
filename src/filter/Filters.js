@@ -15,10 +15,10 @@ import Button from 'material-ui/Button';
 import Divider from 'material-ui/Divider';
 import classNames from 'classnames';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
-import './Filter.css';
+import './Filters.css';
 
 
-class Filter extends Component {
+class Filters extends Component {
   render() {
     const styles = theme => ({
       root: {
@@ -34,8 +34,7 @@ class Filter extends Component {
     });
 
     return (
-      <div className={styles.root}>
-        <div>
+      <div className={styles.root} justify={'center'}>
           <Card className={styles.card}>
             <ExpansionPanel>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -132,11 +131,10 @@ class Filter extends Component {
               </ExpansionPanelActions>
             </ExpansionPanel>
           </Card>
-        </div>
 
       </div>
     );
   }
 }
 
-export default Filter;
+export default Filters;
