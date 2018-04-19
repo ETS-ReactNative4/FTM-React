@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
@@ -7,7 +7,6 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import Menu, { MenuItem } from 'material-ui/Menu';
 import { Link } from 'react-router-dom';
 import Drawer from 'material-ui/Drawer';
 import List from 'material-ui/List';
@@ -43,21 +42,12 @@ class MainDrawer extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
-
     const sideList = (
       <div>
+        <List><Link to="/recipe">Recipe</Link></List>
         <List>[1, 2, 3, 4, 5]</List>
         <Divider />
         <List>[test2]</List>
-      </div>
-    );
-
-    const fullList = (
-      <div>
-        <List>[testfull1]</List>
-        <Divider />
-        <List>[testfull2]</List>
       </div>
     );
 
@@ -88,7 +78,12 @@ function MainAppBar(props) {
           <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
             <MainDrawer />
           </IconButton>
-          <Typography variant="title" color="inherit" className={classes.flex}>
+          <Typography 
+            variant="title" 
+            color="inherit" 
+            className={classes.flex} 
+            style={{ textDecoration: 'none' }}
+            component={Link} to="/">
             FoodtoMake
           </Typography>
           <Button color="inherit" component={Link} to="/login">Login</Button>
@@ -99,10 +94,6 @@ function MainAppBar(props) {
 }
 
 MainAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-MainDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
