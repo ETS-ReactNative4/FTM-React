@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import { MuiThemeProvider, createMuiTheme} from 'material-ui/styles';
 import FTMAppBar from './ftmAppBar/FTMAppBar';
 import Home from './home/Home';
 import Recipe from './recipe/Recipe';
@@ -15,11 +15,10 @@ class App extends Component {
       <div className="app-container">
         <BrowserRouter>
           <MuiThemeProvider theme={theme}>
-
             <div className="app-bar">
-              <FTMAppBar/>
+              <FTMAppBar />
             </div>
-            <div className="content-area">
+            <div className="content-area" >
               <Route exact path="/" component={Home} />
               <Route path="/recipe" component={Recipe} />
               <Route path="/login" component={Login} />
