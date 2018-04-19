@@ -54,6 +54,8 @@ class Recipe extends Component {
       cookTime: null,
       prepTime: null,
       difficulty: null,
+      sourceURL: null,
+      servings: null,
     };
     this.getDataFromAPI();
   }
@@ -74,6 +76,8 @@ class Recipe extends Component {
       ingredients: recipe.ingredients,
       tags: recipe.tags,
       description: recipe.notes[0],
+      sourceURL: recipe.sourceURL,
+      servings: recipe.servings,
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
@@ -123,10 +127,13 @@ class Recipe extends Component {
             <RecipeInfo authorImage={this.state.authorImage} authorName={this.state.author} prepTime={this.state.prepTime} cookTime={this.state.cookTime} difficulty={this.state.difficulty} tags={this.state.tags} />
           </Grid>
           <Grid className='ingredients' item xs={styles.sizes.xs.instructions} sm={styles.sizes.sm.instructions}>
-            <RecipeIngredients value={this.state.ingredients} />
+            <RecipeIngredients ingredients={this.state.ingredients} servings={this.state.servings} />
           </Grid>
           <Grid className='instructions' item xs={styles.sizes.xs.ingredients} sm={styles.sizes.sm.ingredients}>
             <RecipeInstructions value={this.state.instructions} />
+          </Grid>
+          <Grid className='source-url' item xs={styles.sizes.xs.ingredients} sm={styles.sizes.sm.ingredients}>
+            <span>Recipe taken from <a href={this.state.sourceURL}>{this.state.sourceURL}</a></span>
           </Grid>
         </Grid>
       </div>

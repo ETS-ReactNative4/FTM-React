@@ -47,7 +47,8 @@ class RecipeIngredients extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: null,
+      ingredients: null,
+      servings: null,
     };
   }
 
@@ -55,10 +56,10 @@ class RecipeIngredients extends Component {
     return (
       <div className="fullSize">
         <Card>
-          <Typography component="p" className="ingredients-title">Ingredients</Typography>
+          <Typography component="p" className="ingredients-title">Ingredients<span className='servings'>This amount produces {this.state.servings} servings.</span></Typography>
           <List>
             {
-              this.props.value.map((ingredient, index) => {
+              this.props.ingredients.map((ingredient, index) => {
                 return <ListItem key={index}> {ingredient.quantity} {ingredient.unit} {ingredient.name} </ListItem>;
               })
             }
