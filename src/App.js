@@ -4,6 +4,7 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import FTMAppBar from './ftmAppBar/FTMAppBar';
 import Home from './home/Home';
 import Recipe from './recipe/Recipe';
+import Login from './login/Login';
 import './App.css';
 
 const theme = createMuiTheme();
@@ -21,6 +22,7 @@ class App extends Component {
             <div className="content-area">
               <Route exact path="/" component={Home} />
               <Route path="/recipe" component={Recipe} />
+              <Route path="/login" component={Login} />
             </div>
           </MuiThemeProvider>
         </BrowserRouter>

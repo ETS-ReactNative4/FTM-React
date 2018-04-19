@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { TextField } from 'material-ui';
-import Recipe from '../recipe/Recipe';
 import './Home.css';
 
 class Home extends Component {
@@ -16,7 +15,6 @@ class Home extends Component {
         </div>
         <div className="filters">
         </div>
-        <Route exact path="/recipe" component={Recipe}/>
       </div>
     );
   }

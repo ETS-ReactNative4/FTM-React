@@ -87,7 +87,7 @@ class Recipe extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{width: "100% - 24px"}}>
         <Grid className='pic-des-container' container spacing={styles.spacing} justify={'center'}>
           <Grid className='picture' item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
             <RecipePicture title={this.state.title} stars={this.state.stars} imageURL={this.state.image} />
