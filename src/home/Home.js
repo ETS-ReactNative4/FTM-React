@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { TextField } from 'material-ui';
-import Filter from '../filter/Filter';
+import Filters from '../filter/Filters';
 import './Home.css';
 
 class Home extends Component {
@@ -17,7 +17,7 @@ class Home extends Component {
           <TextField fullWidth className="" placeholder="Search for a Recipe..." />
         </div>
         <div className="filters">
-          <Filter />
+          <Filters />
         </div>
       </div>
     );
