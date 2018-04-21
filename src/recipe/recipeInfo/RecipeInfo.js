@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Avatar, Card, Chip } from 'material-ui';
+import TimerIcon from '@material-ui/icons/Timer';
 import './RecipeInfo.css';
 
 
@@ -41,8 +42,7 @@ class RecipeInfo extends Component {
         <div className="recipeAuthor">
           <Avatar src={this.props.authorImage} />
           <span className="authorName">{this.props.authorName}</span>
-          <span className="time">Prep: {this.props.prepTime}</span>
-          <span className="time">Cook: {this.props.cookTime}</span>
+          <span className="time"><TimerIcon /> {this.props.cookTime} mins</span>
           <span className="difficulty">Difficulty: {this.props.difficulty}</span>
         </div>
         <div className="tags">

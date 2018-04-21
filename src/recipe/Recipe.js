@@ -31,11 +31,7 @@ const styles = {
 };
 
 const ingredientList = new Array(0);
-
 const instructionsList = new Array(0);
-
-const descriptionText = "Here's a description. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean et convallis massa.  Maecenas posuere porttitor dui at tincidunt. Maecenas neque elit, ultrices at accumsan pulvinar, sodales eget sapien.   Duis id risus non eros vulputate consectetur. Nunc luctus sagittis tortor. Phasellus rhoncus blandit urna quis mollis.  Sed justo felis, commodo non imperdiet convallis, placerat vel arcu. Ut vitae arcu sed neque accumsan vestibulum sed non neque.  Morbi gravida metus et egestas congue. Integer sit amet fermentum tellus. Vivamus varius odio ut sollicitudin congue.  Duis congue lorem odio, ut placerat leo interdum eu. Suspendisse molestie nunc ut ullamcorper placerat. In hac habitasse platea dictumst.";
-
 const tagsList = new Array(0);
 
 class Recipe extends Component {
@@ -47,7 +43,7 @@ class Recipe extends Component {
       description: null,
       image: null,
       title: null,
-      stars: 'Four',
+      stars: null,
       tags: tagsList,
       author: null,
       authorImage: null,
@@ -78,6 +74,7 @@ class Recipe extends Component {
       description: recipe.notes[0],
       sourceURL: recipe.sourceURL,
       servings: recipe.servings,
+      stars: recipe.rating,
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({

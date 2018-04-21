@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardMedia } from 'material-ui';
+import StarIcon from '@material-ui/icons/Star';
 import './RecipePicture.css';
 
 class RecipePicture extends Component {
@@ -13,15 +14,24 @@ class RecipePicture extends Component {
     };
   }
 
-
   render() {
+    const tmp = [];
+    for (let i = 0; i < this.props.stars; i++) {
+      tmp.push(i);
+    }
+    const staricons = tmp.map(function (i) {
+      return (
+        <StarIcon key={i} />
+      );
+    });
+
     return (
       <div className="fullSize">
         <Card className="recipe-pic">
           <CardMedia className="recipe-picture" image={this.props.imageURL} alt="hello" />
           <div className="picture-title">
             <span>{this.props.title}</span>
-            <span>{this.props.stars} Stars</span>
+            <span>{staricons}</span>
           </div>
         </Card>
       </div>
