@@ -42,7 +42,7 @@ class RecipeInfo extends Component {
         <div className="recipeAuthor">
           <Avatar src={this.props.authorImage} />
           <span className="authorName">{this.props.authorName}</span>
-          <span className="time"><TimerIcon /> {this.props.cookTime} mins</span>
+          <span className="time"><TimerIcon /> {this.props.cookTime + this.props.prepTime} mins</span>
           <span className="difficulty">Difficulty: {this.props.difficulty}</span>
         </div>
         <div className="tags">

@@ -30,9 +30,19 @@ const styles = {
   },
 };
 
-const ingredientList = new Array(0);
-const instructionsList = new Array(0);
-const tagsList = new Array(0);
+const ingredientList = new Array(8);
+let i;
+for (i = 0; i < ingredientList.length; i++) {
+  ingredientList[i] = 'ingredient ' + i;
+}
+const instructionsList = new Array(4);
+for (i = 0; i < instructionsList.length; i++) {
+  instructionsList[i] = 'instruction ' + i;
+}
+const tagsList = new Array(3);
+for (i = 0; i < tagsList.length; i++) {
+  tagsList[i] = 'tag ' + i;
+}
 
 class Recipe extends Component {
   constructor(props) {
@@ -40,18 +50,18 @@ class Recipe extends Component {
     this.state = {
       ingredients: ingredientList,
       instructions: instructionsList,
-      description: null,
-      image: null,
-      title: null,
-      stars: null,
+      description: 'This is a test description',
+      image: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/flayed-man-cheese-ball.jpg',
+      title: 'Test Title',
+      stars: 4,
       tags: tagsList,
-      author: null,
-      authorImage: null,
-      cookTime: null,
-      prepTime: null,
-      difficulty: null,
-      sourceURL: null,
-      servings: null,
+      author: 'Test Author',
+      authorImage: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
+      cookTime: 15,
+      prepTime: 10,
+      difficulty: 3,
+      sourceURL: 'www.google.com',
+      servings: 3,
     };
     this.getDataFromAPI();
   }
@@ -59,11 +69,11 @@ class Recipe extends Component {
 
   async getDataFromAPI() {
     const recipe = await this.fetchRecipe();
-    console.log(recipe);
+    console.log('recipe: \n', recipe);
     this.setState({
       title: recipe.name,
-      author: recipe.author.name,
-      authorImage: recipe.author.image,
+      author: recipe.author,
+     // authorImage: recipe.author.image,
       image: recipe.images[0],
       cookTime: recipe.cookTime,
       prepTime: recipe.prepTime,
@@ -71,7 +81,7 @@ class Recipe extends Component {
       instructions: recipe.instructions,
       ingredients: recipe.ingredients,
       tags: recipe.tags,
-      description: recipe.notes[0],
+      description: recipe.description,
       sourceURL: recipe.sourceURL,
       servings: recipe.servings,
       stars: recipe.rating,
@@ -85,13 +95,14 @@ class Recipe extends Component {
 
   fetchRecipe = async () => {
     const data = {
+      query: "Easy Ham and Cheese Appetizer Sandwiches",
       limit: '1',
       offset: '0',
       filters: [
         {
           field: 'name',
           operator: '=',
-          values: ['Chocolate Sandwich'],
+          values: ['Awesome Grilled Cheese Sandwiches'],
         },
       ],
     };
