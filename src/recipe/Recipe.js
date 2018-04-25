@@ -53,7 +53,7 @@ class Recipe extends Component {
       instructions: instructionsList,
       description: 'This is a test description',
       image: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/flayed-man-cheese-ball.jpg',
-      title: 'Test title',
+      title: this.props.match.params.title,
       stars: 4,
       tags: tagsList,
       author: 'Test Author',
@@ -63,9 +63,10 @@ class Recipe extends Component {
       difficulty: 3,
       sourceURL: 'www.google.com',
       servings: 3,
-      //recipe_id: this.match.params.recipe_id,
+      recipe_id: this.props.match.params.recipe_id,
     };
     this.getDataFromAPI();
+    console.log(this.state.recipe_id);
   }
 
   async getDataFromAPI() {
@@ -102,9 +103,9 @@ class Recipe extends Component {
       offset: '0',
       filters: [
         {
-          field: 'name',
+          field: 'author',
           operator: '=',
-          values: ['Flayed Man Cheese Ball'],
+          values: ['Tara'],
         },
       ],
     };
