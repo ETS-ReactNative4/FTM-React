@@ -86,7 +86,8 @@ function MainAppBar(props) {
             component={Link} to="/">
             FoodtoMake
           </Typography>
-          <Button color="inherit" component={Link} to="/recipe">Recipes</Button>
+          {/* removed recipes buttons for demo day since it doesnt lead to a specific recipe */}
+          {/* <Button color="inherit" component={Link} to="/recipe">Recipes</Button> */}
           <Button color="inherit" component={Link} to="/login">Login</Button>
         </Toolbar>
       </AppBar>

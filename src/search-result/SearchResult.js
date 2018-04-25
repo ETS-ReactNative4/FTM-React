@@ -64,8 +64,8 @@ class SearchResult extends Component {
               className={styles.tile}
               onClick={ () => this.handleClick(tile) }
               style={{ cursor: 'pointer' }}
-              component={Link} to="/recipe">
-              
+              component={Link} to={`/recipe/${tile.author}/${tile.name}`}>
+
               <img src={tile.images[0]} alt={tile.name} />
               <GridListTileBar
                 title={tile.name}
@@ -86,7 +86,7 @@ class SearchResult extends Component {
     }
     return (
       <div className="container">
-        <Paper elevation={4}>
+        {/* <Paper elevation={4}>
           <Typography className="form" variant="headline" component="h3">
           Result
           </Typography>
@@ -99,7 +99,7 @@ class SearchResult extends Component {
           <Typography className="form" component="p">
           Form
           </Typography>
-        </Paper>
+        </Paper> */}
       </div>
     );
   }
