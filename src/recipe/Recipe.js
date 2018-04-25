@@ -56,14 +56,14 @@ class Recipe extends Component {
       title: this.props.match.params.title,
       stars: 4,
       tags: tagsList,
-      author: 'Test Author',
+      author: this.props.match.params.author,
       authorImage: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
       cookTime: 15,
       prepTime: 10,
       difficulty: 3,
       sourceURL: 'www.google.com',
       servings: 3,
-      recipe_id: this.props.match.params.recipe_id,
+      // recipe_id: this.props.match.params.recipe_id,
     };
     this.getDataFromAPI();
     console.log(this.state.recipe_id);
@@ -98,20 +98,21 @@ class Recipe extends Component {
 
   fetchRecipe = async () => {
     const data = {
-      query: 'Flayed Man Cheese Ball',
+      query: this.state.title,
       limit: '1',
       offset: '0',
       filters: [
         {
           field: 'author',
           operator: '=',
-          values: ['Tara'],
+          values: [this.state.author],
         },
       ],
     };
     try {
       const response = await axios.post('http://localhost:8081/public/recipes', data);
       console.log('completed GET request');
+      console.log(data);
       return response.data.recipes[0];
     } catch (err) {
       console.log(err);
