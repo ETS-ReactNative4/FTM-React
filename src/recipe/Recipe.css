@@ -9,6 +9,9 @@ div.title-container {
 .pic-des-container {
   height: 300px;
   margin-top: 2em !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 .ingredients-container {
