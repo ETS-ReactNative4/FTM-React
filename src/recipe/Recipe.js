@@ -49,20 +49,20 @@ class Recipe extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ingredients: ingredientList,
-      instructions: instructionsList,
-      description: 'This is a test description',
-      image: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/flayed-man-cheese-ball.jpg',
+      ingredients: [],
+      instructions: [],
+      description: null,
+      image: null,
       title: this.props.match.params.title,
-      stars: 4,
-      tags: tagsList,
+      stars: null,
+      tags: [],
       author: this.props.match.params.author,
-      authorImage: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
-      cookTime: 15,
-      prepTime: 10,
-      difficulty: 3,
-      sourceURL: 'www.google.com',
-      servings: 3,
+      authorImage: null,
+      cookTime: null,
+      prepTime: null,
+      difficulty: null,
+      sourceURL: null,
+      servings: null,
       // recipe_id: this.props.match.params.recipe_id,
     };
     this.getDataFromAPI();
@@ -122,7 +122,7 @@ class Recipe extends Component {
 
   render() {
     return (
-      <div style={{width: "100% - 24px"}}>
+      <div>
         <Grid className='pic-des-container' container spacing={styles.spacing} justify={'center'}>
           <Grid className='picture' item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
             <RecipePicture title={this.state.title} stars={this.state.stars} imageURL={this.state.image} />
@@ -140,7 +140,7 @@ class Recipe extends Component {
             <RecipeInstructions value={this.state.instructions} />
           </Grid>
           <Grid className='source-url' item xs={styles.sizes.xs.ingredients} sm={styles.sizes.sm.ingredients}>
-            <span>Recipe taken from <a href={this.state.sourceURL}>{this.state.sourceURL}</a></span>
+            <span><a href={this.state.sourceURL}>Source</a></span>
           </Grid>
         </Grid>
       </div>
