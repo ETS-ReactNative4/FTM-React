@@ -24,6 +24,7 @@ class SearchResult extends Component {
 
   handleClick = (tile) => {
     tile.defaultPrevented();
+  
   }
 
   render() {
