@@ -69,15 +69,8 @@ class Home extends Component {
   }
 
   render() {
-
-
     return (
       <div className="container" >
-        <div>
-          <img className="backgroundImage"
-            src="https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/italian-vegetables.jpg"
-            alt="background" />
-        </div>
         <div className="logo" >
           <img
             src="https://i.imgur.com/XPjGdyV.png"
@@ -86,13 +79,12 @@ class Home extends Component {
 
         <div className="search-box" >
           <TextField fullWidth className="" placeholder="Search for a Recipe..." onKeyPress={this.handleSearch}/>
-          <div className="filters">
-            <Filters />
-          </div>
-          <div className="search-results" >
-            <SearchResult recipes={this.state.recipes}/>
-          </div>
-
+        </div>
+        <div className="filters">
+          <Filters />
+        </div>
+        <div className="search-results" >
+          <SearchResult recipes={this.state.recipes}/>
         </div>
       </div>
     );
