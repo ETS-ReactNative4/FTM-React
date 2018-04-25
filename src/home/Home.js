@@ -60,7 +60,7 @@ class Home extends Component {
       },
     };
     try {
-      const response = await axios.post('/public/recipes', data, options);
+      const response = await axios.post('http://api.foodtomake.com/public/recipes', data, options);
       console.log(response.status);
       return response.data.recipes;
     } catch (err) {
