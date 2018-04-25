@@ -44,6 +44,7 @@ for (i = 0; i < tagsList.length; i++) {
   tagsList[i] = 'tag ' + i;
 }
 
+
 class Recipe extends Component {
   constructor(props) {
     super(props);
@@ -52,7 +53,7 @@ class Recipe extends Component {
       instructions: instructionsList,
       description: 'This is a test description',
       image: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/flayed-man-cheese-ball.jpg',
-      title: 'Test Title',
+      title: 'Test title',
       stars: 4,
       tags: tagsList,
       author: 'Test Author',
@@ -65,7 +66,6 @@ class Recipe extends Component {
     };
     this.getDataFromAPI();
   }
-
 
   async getDataFromAPI() {
     const recipe = await this.fetchRecipe();
@@ -99,20 +99,10 @@ class Recipe extends Component {
       limit: '1',
       offset: '0',
       filters: [
-        {
-          field: 'name',
-          operator: '=',
-          values: ['Awesome Grilled Cheese Sandwiches'],
-        },
       ],
     };
-    const options = {
-      headers: {
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJlcm5hcmRjb3NncmlmZkBnbWFpbC5jb20iLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTUyMTM0MzA4MX0.ip_Syjb-CQd2payC0Oo6MS911XQZ3OMdDY1hJjnjZ1s',
-      },
-    };
     try {
-      const response = await axios.post('http://localhost:8081/public/recipes', data, options);
+      const response = await axios.post('http://localhost:8081/public/recipes', data);
       console.log('completed GET request');
       return response.data.recipes[0];
     } catch (err) {

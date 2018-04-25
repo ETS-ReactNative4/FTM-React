@@ -56,7 +56,7 @@ class RecipeIngredients extends Component {
     return (
       <div className="fullSize">
         <Card>
-          <Typography component="p" className="ingredients-title">Ingredients<span className='servings'>This amount produces {this.props.servings} servings.</span></Typography>
+          <Typography component="p" className="ingredients-title">Ingredients<span className='servings'>This amount produces <b>{this.props.servings}</b> servings.</span></Typography>
           <List>
             {
               this.props.ingredients.map((ingredient, index) => {
