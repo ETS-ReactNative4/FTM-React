@@ -30,21 +30,6 @@ const styles = {
   },
 };
 
-const ingredientList = new Array(8);
-let i;
-for (i = 0; i < ingredientList.length; i++) {
-  ingredientList[i] = 'ingredient ' + i;
-}
-const instructionsList = new Array(4);
-for (i = 0; i < instructionsList.length; i++) {
-  instructionsList[i] = 'instruction ' + i;
-}
-const tagsList = new Array(3);
-for (i = 0; i < tagsList.length; i++) {
-  tagsList[i] = 'tag ' + i;
-}
-
-
 class Recipe extends Component {
   constructor(props) {
     super(props);
@@ -86,7 +71,7 @@ class Recipe extends Component {
       description: recipe.description,
       sourceURL: recipe.sourceURL,
       servings: recipe.servings,
-      stars: recipe.rating,
+      stars: Math.round(recipe.rating),
       //recipe_id: recipe._id,
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
