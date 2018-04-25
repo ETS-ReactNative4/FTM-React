@@ -24,6 +24,7 @@ class SearchResult extends Component {
 
   handleClick = (tile) => {
     tile.defaultPrevented();
+  
   }
 
   render() {
@@ -63,8 +64,8 @@ class SearchResult extends Component {
               className={styles.tile}
               onClick={ () => this.handleClick(tile) }
               style={{ cursor: 'pointer' }}
-              component={Link} to="/recipe${tile._id}">
-
+              component={Link} to="/recipe">
+              
               <img src={tile.images[0]} alt={tile.name} />
               <GridListTileBar
                 title={tile.name}
