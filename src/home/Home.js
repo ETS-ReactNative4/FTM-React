@@ -25,7 +25,6 @@ class Home extends Component {
         <div className="search-box">
           <TextField fullWidth className="" placeholder="Search for a Recipe..." />
         </div>
-        <Link to={`/recipe/${ title }/${desc}`} >link</Link>
         <div className="filters">
           <Filters />
         </div>

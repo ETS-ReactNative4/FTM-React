@@ -63,6 +63,7 @@ class Recipe extends Component {
       difficulty: 3,
       sourceURL: 'www.google.com',
       servings: 3,
+      //recipe_id: this.match.params.recipe_id,
     };
     this.getDataFromAPI();
   }
@@ -85,6 +86,7 @@ class Recipe extends Component {
       sourceURL: recipe.sourceURL,
       servings: recipe.servings,
       stars: recipe.rating,
+      //recipe_id: recipe._id,
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
@@ -95,10 +97,15 @@ class Recipe extends Component {
 
   fetchRecipe = async () => {
     const data = {
-      query: "Easy Ham and Cheese Appetizer Sandwiches",
+      query: 'Flayed Man Cheese Ball',
       limit: '1',
       offset: '0',
       filters: [
+        {
+          field: 'name',
+          operator: '=',
+          values: ['Flayed Man Cheese Ball'],
+        },
       ],
     };
     try {
