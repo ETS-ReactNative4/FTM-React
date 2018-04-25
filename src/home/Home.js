@@ -60,7 +60,8 @@ class Home extends Component {
       },
     };
     try {
-      const response = await axios.post('http://localhost:8081/public/recipes', data, options);
+      const response = await axios.post('/public/recipes', data, options);
+      console.log(response.status);
       return response.data.recipes;
     } catch (err) {
       console.log(err);

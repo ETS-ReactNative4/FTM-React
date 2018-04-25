@@ -110,7 +110,7 @@ class Recipe extends Component {
       ],
     };
     try {
-      const response = await axios.post('http://localhost:8081/public/recipes', data);
+      const response = await axios.post('/public/recipes', data);
       console.log('completed GET request');
       console.log(data);
       return response.data.recipes[0];
