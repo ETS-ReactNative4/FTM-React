@@ -86,7 +86,7 @@ class SearchResult extends Component {
     }
     return (
       <div className="container">
-        <Paper elevation={4}>
+        {/* <Paper elevation={4}>
           <Typography className="form" variant="headline" component="h3">
           Result
           </Typography>
@@ -99,7 +99,7 @@ class SearchResult extends Component {
           <Typography className="form" component="p">
           Form
           </Typography>
-        </Paper>
+        </Paper> */}
       </div>
     );
   }
