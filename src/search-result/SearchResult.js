@@ -63,7 +63,7 @@ class SearchResult extends Component {
               className={styles.tile}
               onClick={ () => this.handleClick(tile) }
               style={{ cursor: 'pointer' }}
-              component={Link} to="/recipe">
+              component={Link} to="/recipe${tile._id}">
 
               <img src={tile.images[0]} alt={tile.name} />
               <GridListTileBar
