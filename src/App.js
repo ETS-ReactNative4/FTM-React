@@ -9,6 +9,9 @@ import './App.css';
 
 const theme = createMuiTheme();
 
+const data = {
+  title: 'testing title',
+};
 class App extends Component {
   render() {
     return (
@@ -20,7 +23,8 @@ class App extends Component {
             </div>
             <div className="content-area" >
               <Route exact path="/" component={Home} />
-              <Route path="/recipe" component={Recipe} />
+              <Route exact path="/recipe" component={Recipe}/>
+              <Route exact path="/recipe/:title/:description" component={Recipe}/>
               <Route path="/login" component={Login} />
             </div>
           </MuiThemeProvider>

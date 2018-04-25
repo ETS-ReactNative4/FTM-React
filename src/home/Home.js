@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Router, Route, Link } from 'react-router-dom';
 import { TextField } from 'material-ui';
 import axios from 'axios';
 import Filters from '../filter/Filters';
+
 import SearchResult from '../search-result/SearchResult';
+
+import Recipe from '../recipe/Recipe';
+
 import './Home.css';
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+<<<<<<< HEAD
       phrase: '',
       recipes: null,
     };
@@ -66,6 +71,7 @@ class Home extends Component {
 
   render() {
 
+
     return (
       <div className="container" >
         <div>
@@ -78,6 +84,7 @@ class Home extends Component {
             src="https://i.imgur.com/XPjGdyV.png"
             alt="foodtomake logo" />
         </div>
+
         <div className="search-box" >
           <TextField fullWidth className="" placeholder="Search for a Recipe..." onKeyPress={this.handleSearch}/>
           <div className="filters">
@@ -86,6 +93,7 @@ class Home extends Component {
           <div className="search-results" >
             <SearchResult recipes={this.state.recipes}/>
           </div>
+
         </div>
       </div>
     );
