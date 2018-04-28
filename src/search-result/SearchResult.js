@@ -14,10 +14,8 @@ class SearchResult extends Component {
     };
   }
 
-  static get propTypes() {
-    return {
-      recipes: PropTypes.any,
-    };
+  static propTypes = {
+    recipes: PropTypes.object.isRequired,
   }
 
   handleClick = (tile) => {

@@ -64,13 +64,10 @@ class Home extends Component {
 
   render() {
     return (
-      <div className="container" >
-        <div className="logo" >
-          <img
-            src="https://i.imgur.com/XPjGdyV.png"
-            alt="foodtomake logo" />
-        </div>
-
+      <div className="home-container" >
+        <img className="logo"
+          src="https://i.imgur.com/XPjGdyV.png"
+          alt="foodtomake logo" />
         <div className="search-box" >
           <TextField fullWidth className="" placeholder="Search for a Recipe..." onKeyPress={this.handleSearch}/>
         </div>
