@@ -44,7 +44,7 @@ class Home extends Component {
   fetchRecipe = async () => {
     const data = {
       query: this.state.phrase,
-      limit: '15',
+      limit: '50',
       offset: '0',
       filters: [
         {

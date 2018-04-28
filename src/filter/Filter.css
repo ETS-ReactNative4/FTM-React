@@ -1,0 +1,18 @@
+.filter-root {
+  border: 1px solid black;
+  background-color: #4050b5;
+}
+
+.filter-root::after {
+  display: block;
+  padding-bottom: 100%;
+}
+
+.filter-button {
+  width: 100%;
+  height: 100%;
+}
+
+.filter-title {
+  color: white;
+}
