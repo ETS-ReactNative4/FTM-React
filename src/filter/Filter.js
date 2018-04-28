@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Typography } from 'material-ui';
 import './Filter.css';
-
 
 class Filter extends Component {
   render() {
@@ -16,5 +16,9 @@ class Filter extends Component {
     );
   }
 }
+
+Filter.propTypes = {
+  filter: PropTypes.string,
+};
 
 export default Filter;

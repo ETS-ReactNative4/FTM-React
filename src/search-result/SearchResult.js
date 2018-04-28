@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Paper from 'material-ui/Paper';
-import Typography from 'material-ui/Typography';
 import GridList, { GridListTile, GridListTileBar } from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
@@ -24,7 +22,6 @@ class SearchResult extends Component {
 
   handleClick = (tile) => {
     tile.defaultPrevented();
-  
   }
 
   render() {
@@ -42,7 +39,6 @@ class SearchResult extends Component {
       },
       gridList: {
         flexWrap: 'nowrap',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
       },
       tile: {
         width: '50px',
@@ -52,7 +48,8 @@ class SearchResult extends Component {
       },
       titleBar: {
         background:
-          'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+          'linear-gradient(to top, rgba(0,0,0,0.7) 0%,' +
+           'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
       },
     });
 

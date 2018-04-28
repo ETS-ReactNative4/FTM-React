@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { Router, Route, Link } from 'react-router-dom';
 import { TextField } from 'material-ui';
 import axios from 'axios';
 import Filters from '../filter/Filters';
-
 import SearchResult from '../search-result/SearchResult';
-
-import Recipe from '../recipe/Recipe';
-
 import './Home.css';
 
 class Home extends Component {
@@ -61,10 +56,8 @@ class Home extends Component {
     };
     try {
       const response = await axios.post('http://api.foodtomake.com/public/recipes', data, options);
-      console.log(response.status);
       return response.data.recipes;
     } catch (err) {
-      console.log(err);
       return {};
     }
   }
