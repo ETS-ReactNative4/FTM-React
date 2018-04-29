@@ -4,13 +4,14 @@ import axios from 'axios';
 import Filters from '../filter/Filters';
 import SearchResult from '../search-result/SearchResult';
 import './Home.css';
+import '../../node_modules/animate.css/animate.min.css';
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       phrase: '',
-      recipes: null,
+      recipes: [],
     };
   }
   handleSearch = (event) => {
@@ -18,44 +19,26 @@ class Home extends Component {
       // setState is not instant and event.target.value is discarded immediately
       // therefore the search phrase must be saved to a temporary.
       const query = event.target.value;
-      this.setState((prevState) => {
-        return {
-          phrase: query,
-        };
-      }, () => {
-        // this is the callback for this.setState()
-        this.getDataFromAPI();
-      });
+      this.setRecipes(query);
     }
   }
 
-  async getDataFromAPI() {
-    const fetchedRecipes = await this.fetchRecipe();
+  async setRecipes(query) {
+    const recipes = await this.fetchRecipes(query);
     this.setState({
-      recipes: fetchedRecipes,
+      recipes,
     });
   }
 
-  fetchRecipe = async () => {
+  fetchRecipes = async (query) => {
     const data = {
-      query: this.state.phrase,
+      query,
       limit: '50',
       offset: '0',
-      filters: [
-        {
-          field: 'name',
-          operator: 'in',
-          values: [],
-        },
-      ],
-    };
-    const options = {
-      headers: {
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJlcm5hcmRjb3NncmlmZkBnbWFpbC5jb20iLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTUyMTM0MzA4MX0.ip_Syjb-CQd2payC0Oo6MS911XQZ3OMdDY1hJjnjZ1s',
-      },
+      filters: [],
     };
     try {
-      const response = await axios.post('http://api.foodtomake.com/public/recipes', data, options);
+      const response = await axios.post('http://api.foodtomake.com/public/recipes', data);
       return response.data.recipes;
     } catch (err) {
       return {};
@@ -74,8 +57,8 @@ class Home extends Component {
         <div className="filters">
           <Filters />
         </div>
-        <div className="search-results" >
-          <SearchResult recipes={this.state.recipes}/>
+        <div className="search-results">
+          { this.state.recipes.map(recipe => <SearchResult key={recipe._id} recipe={recipe} />) }
         </div>
       </div>
     );
