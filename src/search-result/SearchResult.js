@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import GridList, { GridListTile, GridListTileBar } from 'material-ui/GridList';
-import IconButton from 'material-ui/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import { Link } from 'react-router-dom';
+import { Paper } from 'material-ui';
 import PropTypes from 'prop-types';
 import './SearchResult.css';
 import '../../node_modules/animate.css/animate.min.css';
@@ -18,8 +15,11 @@ class SearchResult extends Component {
 
   render() {
     return (
-      <div className="search-root">
-      </div>
+      <Paper>
+        <div className="search-root">
+          <img className="recipe-image" src={this.props.recipe.images[0]} />
+        </div>
+      </Paper>
     );
   }
 }
