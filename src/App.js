@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import blue from 'material-ui/colors/blue';
 import FTMAppBar from './ftmAppBar/FTMAppBar';
 import Home from './home/Home';
 import Recipe from './recipe/Recipe';
 import Login from './login/Login';
 import './App.css';
 
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  palette: {
+    primary: blue,
+  },
+});
 class App extends Component {
   render() {
     return (

@@ -8,7 +8,7 @@ class Filter extends Component {
     return (
       <Paper>
         <div className="filter-root">
-          <Button className="filter-button">
+          <Button variant="raised" color="primary" className="filter-button">
             <Typography className="filter-title" variant="button">
               {this.props.filter}
             </Typography>

@@ -3,7 +3,7 @@
   height: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: min-content min-content min-content min-content;
+  grid-template-rows: min-content 48px min-content min-content;
   grid-template-areas: 
     ". . logo . ."
     ". search search search ."

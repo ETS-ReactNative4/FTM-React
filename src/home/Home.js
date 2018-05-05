@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { TextField } from 'material-ui';
+import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
+import { FormControl, FormHelperText } from 'material-ui/Form';
+import { CircularProgress } from 'material-ui/Progress';
 import axios from 'axios';
 import Filters from '../filter/Filters';
 import SearchResult from '../search-result/SearchResult';
 import './Home.css';
-import '../../node_modules/animate.css/animate.min.css';
 
 class Home extends Component {
   constructor(props) {
@@ -12,6 +14,7 @@ class Home extends Component {
     this.state = {
       phrase: '',
       recipes: [],
+      loading: false,
     };
   }
   handleSearch = (event) => {
@@ -19,14 +22,17 @@ class Home extends Component {
       // setState is not instant and event.target.value is discarded immediately
       // therefore the search phrase must be saved to a temporary.
       const query = event.target.value;
+      this.setState((prevState) => {
+        return { ...prevState, loading: true };
+      });
       this.setRecipes(query);
     }
   }
 
   async setRecipes(query) {
     const recipes = await this.fetchRecipes(query);
-    this.setState({
-      recipes,
+    this.setState((prevState) => {
+      return { ...prevState, recipes, loading: false };
     });
   }
 
@@ -52,7 +58,16 @@ class Home extends Component {
           src="https://i.imgur.com/XPjGdyV.png"
           alt="foodtomake logo" />
         <div className="search-box" >
-          <TextField fullWidth className="" placeholder="Search for a Recipe..." onKeyPress={this.handleSearch}/>
+          {/* <TextField fullWidth className="" placeholder="Search for a Recipe..." onKeyPress={this.handleSearch}/> */}
+          <FormControl fullWidth>
+            <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
+            <Input id="search" onKeyPress={this.handleSearch} endAdornment={
+              <InputAdornment position="end">
+                {this.state.loading && <CircularProgress size={30} /> }
+              </InputAdornment>
+            }>
+            </Input>
+          </FormControl>
         </div>
         <div className="filters">
           <Filters />
