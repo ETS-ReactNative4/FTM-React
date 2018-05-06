@@ -6,6 +6,7 @@ import FTMAppBar from './ftmAppBar/FTMAppBar';
 import Home from './home/Home';
 import Recipe from './recipe/Recipe';
 import Login from './login/Login';
+import Signup from './signup/Signup';
 import './App.css';
 
 const theme = createMuiTheme({
@@ -28,6 +29,7 @@ class App extends Component {
               <Route exact path="/recipe/:title" component={Recipe}/>
               <Route exact path="/recipe/:author/:title" component={Recipe}/>
               <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
             </div>
           </MuiThemeProvider>
         </BrowserRouter>

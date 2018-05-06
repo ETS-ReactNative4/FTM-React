@@ -9,8 +9,10 @@
   grid-row-gap: 50px;
   grid-template-areas: 
     ". social ."
+    ". email ."
     ". user ."
     ". pass ."
+    ". verify ."
     ". submit .";
 }
 
@@ -25,7 +27,7 @@
 #fb-btn {
   grid-area: fb;
   background-color: #3B5998;
-  width: 220px;
+  width: 230px;
   margin: 10px;
 }
 
@@ -37,7 +39,7 @@
 
 #google-btn {
   grid-area: gg;
-  width: 220px;
+  width: 230px;
   padding: 0px;
   margin: 10px;
   background-color: white;
@@ -50,12 +52,20 @@
   height: inherit;
 }
 
+.email {
+  grid-area: email;
+}
+
 .username {
   grid-area: user;
 }
 
 .password {
   grid-area: pass;
+}
+
+.verify {
+  grid-area: verify;
 }
 
 .submit-btn {
