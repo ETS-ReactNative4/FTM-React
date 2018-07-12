@@ -77,7 +77,6 @@ class Home extends Component {
           src="https://i.imgur.com/XPjGdyV.png"
           alt="foodtomake logo" />
         <div className="search-box" >
-          {/* <TextField fullWidth className="" placeholder="Search for a Recipe..." onKeyPress={this.handleSearch}/> */}
           <FormControl fullWidth>
             <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
             <Input id="search" onKeyPress={this.handleSearch} endAdornment={
@@ -97,7 +96,7 @@ class Home extends Component {
           { this.state.recipes.map(recipe => <SearchResult key={recipe._id} recipe={recipe} />) }
         </div>
         <Paper className={this.getFilterClassNames()} elevation={5}>
-          <IconButton onClick={this.toggleFilter}>
+          <IconButton className="close-filters" onClick={this.toggleFilter}>
             <Close/>
           </IconButton>
         </Paper>
