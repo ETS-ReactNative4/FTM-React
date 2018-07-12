@@ -6,7 +6,7 @@
   align-content: center;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
-  grid-row-gap: 50px;
+  grid-row-gap: 30px;
   grid-template-areas: 
     ". social ."
     ". user ."

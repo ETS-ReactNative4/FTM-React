@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { TextField } from 'material-ui';
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import { FormControl, FormHelperText } from 'material-ui/Form';
-import { CircularProgress } from 'material-ui/Progress';
+import { IconButton, Paper } from 'material-ui';
+import { FormControl } from 'material-ui/Form';
+import { FilterList, Close } from '@material-ui/icons';
 import axios from 'axios';
 import Filters from '../filter/Filters';
 import SearchResult from '../search-result/SearchResult';
@@ -15,6 +15,7 @@ class Home extends Component {
       phrase: '',
       recipes: [],
       loading: false,
+      showFilter: false,
     };
   }
   handleSearch = (event) => {
@@ -51,6 +52,24 @@ class Home extends Component {
     }
   }
 
+  toggleFilter = () => {
+    this.setState({ showFilter: !this.state.showFilter });
+  }
+
+  getFilterClassNames = () => {
+    const classes = ['filter-card'];
+    if (this.state.showFilter) {
+      classes.push('showFilter');
+    } else {
+      classes.push('hideFilter');
+    }
+    return classes.join(' ');
+  }
+
+  handleMouseDown = (event) => {
+    event.preventDefault();
+  };
+
   render() {
     return (
       <div className="home-container" >
@@ -63,7 +82,9 @@ class Home extends Component {
             <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
             <Input id="search" onKeyPress={this.handleSearch} endAdornment={
               <InputAdornment position="end">
-                {this.state.loading && <CircularProgress size={30} /> }
+                <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                  <FilterList size={30} />
+                </IconButton>
               </InputAdornment>
             }>
             </Input>
@@ -75,6 +96,11 @@ class Home extends Component {
         <div className="search-results">
           { this.state.recipes.map(recipe => <SearchResult key={recipe._id} recipe={recipe} />) }
         </div>
+        <Paper className={this.getFilterClassNames()} elevation={5}>
+          <IconButton onClick={this.toggleFilter}>
+            <Close/>
+          </IconButton>
+        </Paper>
       </div>
     );
   }

@@ -9,8 +9,8 @@ class Login extends Component {
     return (
       <form className="login-root">
         <div className="social-buttons">
-          <Button variant="raised" color="primary" id="fb-btn"><img id="fb-logo" src={fbLogo} />Sign up With Facebook</Button>
-          <Button variant="raised" id="google-btn"><img id="gg-logo" src={ggLogo} />Sign up With Google</Button>
+          <Button variant="raised" color="primary" id="fb-btn"><img id="fb-logo" alt="fb-logo" src={fbLogo} />Sign up With Facebook</Button>
+          <Button variant="raised" id="google-btn"><img id="gg-logo" alt = "gg-logo" src={ggLogo} />Sign up With Google</Button>
         </div>
         <TextField label="Email" fullWidth className="email" />
         <TextField label="Username" fullWidth className="username" />

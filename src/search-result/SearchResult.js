@@ -16,7 +16,7 @@ class SearchResult extends Component {
     return (
       <Paper>
         <div className="search-root">
-          <img className="recipe-image" src={this.props.recipe.images[0]} />
+          <img className="recipe-image" alt="recipe" src={this.props.recipe.images[0]} />
         </div>
       </Paper>
     );
