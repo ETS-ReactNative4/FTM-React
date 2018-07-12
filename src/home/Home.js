@@ -89,9 +89,6 @@ class Home extends Component {
             </Input>
           </FormControl>
         </div>
-        <div className="filters">
-          <Filters />
-        </div>
         <div className="search-results">
           { this.state.recipes.map(recipe => <SearchResult key={recipe._id} recipe={recipe} />) }
         </div>
