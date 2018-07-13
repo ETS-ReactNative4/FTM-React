@@ -4,8 +4,8 @@ import { IconButton, Paper } from 'material-ui';
 import { FormControl } from 'material-ui/Form';
 import { FilterList, Close } from '@material-ui/icons';
 import axios from 'axios';
-import Filters from '../filter/Filters';
-import SearchResult from '../search-result/SearchResult';
+import Filters from './Filter/Filters';
+import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 
 class Home extends Component {

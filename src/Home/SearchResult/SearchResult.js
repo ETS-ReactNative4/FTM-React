@@ -3,7 +3,7 @@ import { Paper } from 'material-ui';
 import PropTypes from 'prop-types';
 import './SearchResult.css';
 
-class SearchResult extends Component {
+class HomeSearchResult extends Component {
   static propTypes = {
     recipe: PropTypes.object.isRequired,
   }
@@ -23,9 +23,9 @@ class SearchResult extends Component {
   }
 }
 
-SearchResult.defaultProps = {
+HomeSearchResult.defaultProps = {
   recipes: {},
 };
 
-export default SearchResult;
+export default HomeSearchResult;
 

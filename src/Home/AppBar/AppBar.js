@@ -25,7 +25,7 @@ const styles = {
   },
 };
 
-function MainAppBar(props) {
+function HomeAppBar(props) {
   const { classes } = props;
 
   return (
@@ -48,8 +48,8 @@ function MainAppBar(props) {
   );
 }
 
-MainAppBar.propTypes = {
+HomeAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(MainAppBar);
+export default withStyles(styles)(HomeAppBar);
