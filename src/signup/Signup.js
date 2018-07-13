@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Button, TextField } from 'material-ui';
 import './Signup.css';
-import fbLogo from '../images/fb-logo.png';
-import ggLogo from '../images/g-ico.png';
+import fbLogo from '../assets/images/fb-logo.png';
+import ggLogo from '../assets/images/g-ico.png';
 
 class Login extends Component {
   render() {

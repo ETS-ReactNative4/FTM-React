@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Typography, Paper } from 'material-ui';
 import './Filter.css';
 
-class Filter extends Component {
+class HomeFilter extends Component {
   render() {
     return (
       <Paper>
@@ -19,8 +19,8 @@ class Filter extends Component {
   }
 }
 
-Filter.propTypes = {
+HomeFilter.propTypes = {
   filter: PropTypes.string,
 };
 
-export default Filter;
+export default HomeFilter;

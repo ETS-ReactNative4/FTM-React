@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardMedia } from 'material-ui';
-import './TitleImage.css';
+import './Image.css';
 
 class TitleImage extends Component {
   render() {

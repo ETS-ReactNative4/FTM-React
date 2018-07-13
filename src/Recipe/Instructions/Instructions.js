@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Grid, List, ListItem, Checkbox, Typography } from 'material-ui';
-import './RecipeInstructions.css';
+import './Instructions.css';
 
 class RecipeInstructions extends Component {
 

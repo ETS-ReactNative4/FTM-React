@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Grid } from 'material-ui';
 import axios from 'axios';
 import './Recipe.css';
-import RecipeInstructions from './RecipeInstructions/RecipeInstructions';
-import RecipeInfo from './RecipeInfo/RecipeInfo';
-import RecipeIngredients from './RecipeIngredients/RecipeIngredients';
-import RecipeDescription from './RecipeDescription/RecipeDescription';
-import RecipePicture from './RecipePicture/RecipePicture';
+import RecipeInstructions from './Instructions/Instructions';
+import RecipeInfo from './Info/Info';
+import RecipeIngredients from './Ingredients/Ingredients';
+import RecipeDescription from './Description/Description';
+import RecipePicture from './Picture/Picture';
 
 const styles = {
   spacing: 24,
