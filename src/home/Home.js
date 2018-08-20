@@ -4,7 +4,7 @@ import { IconButton, Paper } from 'material-ui';
 import { FormControl } from 'material-ui/Form';
 import { FilterList, Close } from '@material-ui/icons';
 import axios from 'axios';
-import Filters from './Filter/Filters';
+import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 
@@ -96,6 +96,8 @@ class Home extends Component {
           <IconButton className="close-filters" onClick={this.toggleFilter}>
             <Close/>
           </IconButton>
+          <HomeFilter filter='Time' color='primary'/>
+          <HomeFilter filter='Difficulty' color='secondary'/>
         </Paper>
       </div>
     );

@@ -1,26 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Typography, Paper } from 'material-ui';
+import { Button } from 'material-ui';
 import './Filter.css';
 
 class HomeFilter extends Component {
   render() {
     return (
-      <Paper>
-        <div className="filter-root">
-          <Button variant="raised" color="primary" className="filter-button">
-            <Typography className="filter-title" variant="button">
-              {this.props.filter}
-            </Typography>
-          </Button>
-        </div>
-      </Paper>
+      <Button variant="raised" color={this.props.color} className="filter-button">
+        {this.props.filter}
+      </Button>
     );
   }
 }
 
 HomeFilter.propTypes = {
   filter: PropTypes.string,
+  color: PropTypes.color,
 };
 
 export default HomeFilter;
