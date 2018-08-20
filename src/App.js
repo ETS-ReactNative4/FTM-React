@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme} from 'material-ui/styles';
 import FTMAppBar from './ftmAppBar/FTMAppBar';
-import Home from './Home/Home';
-import Recipe from './Recipe/Recipe';
-import Login from './Login/Login';
+import Home from './home/Home';
+import Recipe from './recipe/Recipe';
+import Login from './login/Login';
+import Logs from './logs/Logs';
 import './App.css';
 
 const theme = createMuiTheme();
@@ -27,6 +28,7 @@ class App extends Component {
               <Route exact path="/recipe/:title" component={Recipe}/>
               <Route exact path="/recipe/:author/:title" component={Recipe}/>
               <Route path="/login" component={Login} />
+              <Route path="/logs" component={Logs} />
             </div>
           </MuiThemeProvider>
         </BrowserRouter>
