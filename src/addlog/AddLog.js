@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
-// import MenuItem from 'material-ui/MenuItem';
+import { MenuItem, Button } from 'material-ui';
 import TextField from 'material-ui/TextField';
 import './AddLog.css';
 
@@ -55,9 +55,8 @@ const authors = [
 class AddLog extends Component {
   state = {
     name: 'Cat in the Hat',
-    age: '',
     multiline: 'Controlled',
-    currency: 'Andrew Tsai',
+    author: 'Andrew Tsai',
   };
 
   handleChange = name => (event) => {
@@ -67,7 +66,6 @@ class AddLog extends Component {
   };
 
   render() {
-    const { classes } = this.props;
     return (
       <div className="container">
         <Paper elevation={4}>
@@ -85,7 +83,29 @@ class AddLog extends Component {
               fullWidth
               className="message"
             />
-            
+            <TextField
+              id="select-author"
+              select
+              label="Select Author"
+              className="author"
+              value={this.state.author}
+              onChange={this.handleChange('author')}
+              SelectProps={{
+                MenuProps: {
+                  className: 'menu-authors',
+                },
+              }}
+              margin="normal"
+            >
+              {authors.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              )) }
+            </TextField><br/>
+            <Button variant="contained" color="primary" className='submit'>
+              Submit
+            </Button>
           </form>
 
         </Paper>
