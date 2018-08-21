@@ -1,0 +1,13 @@
+.container {
+  height: 100%;
+  width: 100%;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  margin-top: 10px;
+  flex: 1;
+}
+
+.form {
+  padding: 25px;
+  margin: 25px;
+}
