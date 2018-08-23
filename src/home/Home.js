@@ -6,7 +6,7 @@ import Filters from '../filter/Filters';
 
 import SearchResult from '../search-result/SearchResult';
 
-import Recipe from '../Recipe/Recipe';
+import Recipe from '../recipe/Recipe';
 
 import './Home.css';
 
