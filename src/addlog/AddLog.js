@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
-import Typography from 'material-ui/Typography';
 import { MenuItem, Button } from 'material-ui';
 import TextField from 'material-ui/TextField';
+import axios from 'axios';
+import ApolloClient from 'apollo-boost';
+import gql from 'graphql-tag';
 import './AddLog.css';
 
+const client = new ApolloClient({
+  uri: 'http://localhost:8081/graphql',
+});
 
 const authors = [
   {
@@ -25,45 +30,62 @@ const authors = [
   },
 ];
 
-
-/*
-
-    <TextField
-      id="select-author"
-      select
-      label="Select"
-      className="author"
-      value={this.state.authors}
-      onChange={this.handleChange('authors')}
-      SelectProps={{
-        MenuProps: {
-          className: 'menu-authors',
-        },
-      }}
-      helperText="Select the author"
-      margin="normal"
-    >
-      {authors.map(option => (
-        <MenuItem key={option.value} value={option.value}>
-          {option.label}
-        </MenuItem>
-      )) }
-      </TextField>
-
-*/
-
 class AddLog extends Component {
-  state = {
-    name: 'Cat in the Hat',
-    multiline: 'Controlled',
-    author: 'Andrew Tsai',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: 'default message log',
+      author: 'default author',
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
 
   handleChange = name => (event) => {
     this.setState({
       [name]: event.target.value,
     });
   };
+
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log('trying submit');
+    const { message, author } = this.state;
+    const { dispatch } = this.props;
+    this.submitLog(message, author);
+  }
+
+  submitLog = async () => {
+    console.log('trying submit log with ', this.state.message, ' ', this.state.author);
+    const data = {
+      message: this.state.message,
+      author: this.state.author,
+    };
+    try {
+      const result = client
+        .mutate({
+          mutation: gql`
+          mutation AddLog {           
+            addLog(
+              message: "${data.message}"
+              author: "${data.author}"
+            ) {
+              id
+              message
+              author
+            }
+          }
+        `,
+        })
+        .then(result => console.log(result));
+      return result.data;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+  }
 
   render() {
     return (
@@ -74,7 +96,7 @@ class AddLog extends Component {
             alt="this is money cat" />
 
 
-          <form className="form" noValidate autoComplete="off">
+          <form className="form" onSubmit={this.handleSubmit}>
 
             <TextField
               id="textarea"
@@ -82,6 +104,7 @@ class AddLog extends Component {
               multiline
               fullWidth
               className="message"
+              onChange={this.handleChange('message')}
             />
             <TextField
               id="select-author"
@@ -103,7 +126,7 @@ class AddLog extends Component {
                 </MenuItem>
               )) }
             </TextField><br/>
-            <Button variant="contained" color="primary" className='submit'>
+            <Button type='submit' value='Submit' color="primary" className='submit'>
               Submit
             </Button>
           </form>
