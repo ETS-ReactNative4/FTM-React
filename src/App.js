@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import blue from 'material-ui/colors/blue';
-import AppBar from './Home/AppBar/AppBar';
-import Home from './Home/Home';
-import Recipe from './Recipe/Recipe';
-import Login from './Login/Login';
-import Signup from './Signup/Signup';
+import AppBar from './home/AppBar/AppBar';
+import Home from './home/Home';
+import Recipe from './recipe/Recipe';
+import Login from './login/Login';
+import Signup from './signup/Signup';
 import './App.css';
 
 const theme = createMuiTheme({
