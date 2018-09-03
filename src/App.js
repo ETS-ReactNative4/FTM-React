@@ -7,6 +7,7 @@ import Recipe from './recipe/Recipe';
 import Login from './login/Login';
 import Logs from './logs/Logs';
 import AddLog from './addlog/AddLog';
+import Profile from './profile/Profile';
 import './App.css';
 
 const theme = createMuiTheme();
@@ -31,6 +32,7 @@ class App extends Component {
               <Route path="/login" component={Login} />
               <Route path="/logs" component={Logs} />
               <Route path="/addlog" component={AddLog} />
+              <Route path="/profile" component={Profile} />
             </div>
           </MuiThemeProvider>
         </BrowserRouter>
