@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import { IconButton, Paper } from 'material-ui';
-import { FormControl } from 'material-ui/Form';
+import { Input, InputAdornment, InputLabel } from '@material-ui/core'
+import { IconButton, Paper } from '@material-ui/core';
+import { FormControl } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import axios from 'axios';
 import HomeFilter from './Filter/Filter';
@@ -97,7 +97,6 @@ class Home extends Component {
             <Close/>
           </IconButton>
           <HomeFilter filter='Time' color='primary'/>
-          <HomeFilter filter='Difficulty' color='secondary'/>
         </Paper>
       </div>
     );

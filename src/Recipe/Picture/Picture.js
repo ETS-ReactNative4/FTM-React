@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardMedia } from 'material-ui';
+import { Card, CardMedia } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
 import './Picture.css';
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid } from 'material-ui';
+import { Grid } from '@material-ui/core';
 import axios from 'axios';
 import './Recipe.css';
 import RecipeInstructions from './Instructions/Instructions';

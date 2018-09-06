@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, TextField } from 'material-ui';
+import { Button, TextField } from '@material-ui/core';
 import './Login.css';
 import fbLogo from '../assets/images/fb-logo.png';
 import ggLogo from '../assets/images/g-ico.png';

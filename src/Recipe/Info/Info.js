@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Avatar, Card, Chip } from 'material-ui';
+import { Avatar, Card, Chip } from '@material-ui/core';
 import TimerIcon from '@material-ui/icons/Timer';
 import './Info.css';
 

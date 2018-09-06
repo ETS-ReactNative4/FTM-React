@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, List, ListItem, Typography } from 'material-ui';
+import { Card, List, ListItem, Typography } from '@material-ui/core';
 import './Ingredients.css';
 
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Paper } from 'material-ui';
+import { Paper } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import './SearchResult.css';
 
