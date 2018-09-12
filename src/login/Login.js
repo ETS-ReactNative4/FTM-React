@@ -1,25 +1,16 @@
 import React, { Component } from 'react';
 import { Button, TextField } from '@material-ui/core';
 import './Login.css';
-import { WebAuth } from 'auth0-js';
+import Auth from '../auth/Auth';
 import fbLogo from '../assets/images/fb-logo.png';
 import ggLogo from '../assets/images/g-ico.png';
 
 class Login extends Component {
 
-  webAuth;
+  auth = new Auth();
 
   login = () => {
-    this.webAuth = new WebAuth({
-      domain: 'foodtomake.auth0.com',
-      clientID: 'Xl3JO8Pwt2fgVmtCr0K6fTo1axSPjCBs',
-      redirectUri: 'http://localhost:3000/login',
-      responseType: 'token id_token',
-      scope: 'openid'
-    });
-    this.webAuth.authorize({
-      connection: 'google-oauth2'
-    })
+    this.auth.login();
   }
 
   render() {

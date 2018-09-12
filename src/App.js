@@ -7,7 +7,11 @@ import Home from './home/Home';
 import Recipe from './recipe/Recipe';
 import Login from './login/Login';
 import Signup from './signup/Signup';
+import Callback from './callback/Callback';
+import Auth from './auth/Auth';
 import './App.css';
+
+const auth = new Auth();
 
 const theme = createMuiTheme({
   palette: {
@@ -30,6 +34,10 @@ class App extends Component {
               <Route exact path="/recipe/:author/:title" component={Recipe}/>
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
+              <Route path="/callback" component={(props) => {
+                auth.handleAuthentication(props);
+                return <Callback />
+              }} />
             </div>
           </MuiThemeProvider>
         </BrowserRouter>
