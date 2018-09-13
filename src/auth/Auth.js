@@ -5,20 +5,26 @@ export default class Auth {
     domain: "foodtomake.auth0.com",
     clientID: "Xl3JO8Pwt2fgVmtCr0K6fTo1axSPjCBs",
     redirectUri: "http://localhost:3000/callback",
-    responseType: "token id_token",
+    responseType: "id_token",
     scope: "openid"
   });
 
-  login = () => {
+  loginGoogle = () => {
     this.auth0.authorize({
       connection: "google-oauth2"
+    });
+  };
+
+  loginFacebook = () => {
+    this.auth0.authorize({
+      connection: "facebook"
     });
   };
 
   handleAuthentication = ({ history }) => {
     this.auth0.parseHash((err, authResult) => {
         console.log(err);
-        console.log(authResult);
+        console.log(authResult); // authResult.idTokenPayload.sub is the unique identifier for the user
         history.replace('/');
     });
   };
