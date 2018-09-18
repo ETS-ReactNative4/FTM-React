@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import { Input, InputAdornment, InputLabel } from '@material-ui/core';
-import { IconButton, Paper } from '@material-ui/core';
-import { FormControl } from '@material-ui/core';
+import {
+  Input,
+  InputAdornment,
+  InputLabel,
+  IconButton,
+  Paper,
+  FormControl,
+} from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
