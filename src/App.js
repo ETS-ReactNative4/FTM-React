@@ -14,6 +14,7 @@ import Callback from './callback/Callback';
 import Auth from './auth/Auth';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
+import { Provider as JwtProvider } from './context/Jwt';
 import './App.css';
 
 const client = new ApolloClient({
@@ -28,33 +29,51 @@ const theme = createMuiTheme({
   }
 });
 class App extends Component {
+  state = {
+    jwt: this.props.jwt,
+    setJwt: jwt => this.setState({ jwt })
+  };
+
   render() {
     return (
       <div className="app-container">
         <ApolloProvider client={client}>
           <BrowserRouter>
             <MuiThemeProvider theme={theme}>
-              <div className="app-bar">
-                <AppBar />
-              </div>
-              <div className="content-area">
-                <Route exact path="/" component={Home} />
-                <Route exact path="/recipe" component={Recipe} />
-                <Route exact path="/recipe/:title" component={Recipe} />
-                <Route exact path="/recipe/:author/:title" component={Recipe} />
-                <Route path="/login" component={Login} />
-                <Route path="/logs" component={Logs} />
-                <Route path="/addlog" component={AddLog} />
-                <Route path="/profile" component={Profile} />
-                <Route path="/signup" component={Signup} />
-                <Route
-                  path="/callback"
-                  component={props => {
-                    auth.handleAuthentication(props);
-                    return <Callback />;
-                  }}
-                />
-              </div>
+              <JwtProvider value={this.state}>
+                <div className="app-bar">
+                  <AppBar />
+                </div>
+                <div className="content-area">
+                  <Route exact path="/" component={Home} />
+                  <Route exact path="/recipe" component={Recipe} />
+                  <Route exact path="/recipe/:title" component={Recipe} />
+                  <Route
+                    exact
+                    path="/recipe/:author/:title"
+                    component={Recipe}
+                  />
+                  <Route path="/login" component={Login} />
+                  <Route path="/logs" component={Logs} />
+                  <Route path="/addlog" component={AddLog} />
+                  <Route path="/profile" component={Profile} />
+                  <Route path="/signup" component={Signup} />
+                  <Route
+                    path="/auth/google/callback"
+                    component={props => {
+                      auth.handleGoogleAuthentication(props);
+                      return <Callback />;
+                    }}
+                  />
+                  <Route
+                    path="/auth/facebook/callback"
+                    component={props => {
+                      auth.handleFacebookAuthentication(props);
+                      return <Callback />;
+                    }}
+                  />
+                </div>
+              </JwtProvider>
             </MuiThemeProvider>
           </BrowserRouter>
         </ApolloProvider>
