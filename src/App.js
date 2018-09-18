@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { MuiThemeProvider, createMuiTheme} from 'material-ui/styles';
-import FTMAppBar from './ftmAppBar/FTMAppBar';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import blue from '@material-ui/core/colors/blue';
+import AppBar from './home/AppBar/AppBar';
 import Home from './home/Home';
 import Recipe from './recipe/Recipe';
 import Login from './login/Login';
 import Logs from './logs/Logs';
 import AddLog from './addlog/AddLog';
 import Profile from './profile/Profile';
+import Signup from './signup/Signup';
+import Callback from './callback/Callback';
+import Auth from './auth/Auth';
 import './App.css';
 
-const theme = createMuiTheme();
+const auth = new Auth();
 
-const data = {
-  title: 'testing title',
-};
+const theme = createMuiTheme({
+  palette: {
+    primary: blue,
+  },
+});
 class App extends Component {
   render() {
     return (
@@ -22,7 +28,7 @@ class App extends Component {
         <BrowserRouter>
           <MuiThemeProvider theme={theme}>
             <div className="app-bar">
-              <FTMAppBar />
+              <AppBar />
             </div>
             <div className="content-area" >
               <Route exact path="/" component={Home} />
@@ -33,6 +39,11 @@ class App extends Component {
               <Route path="/logs" component={Logs} />
               <Route path="/addlog" component={AddLog} />
               <Route path="/profile" component={Profile} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/callback" component={(props) => {
+                auth.handleAuthentication(props);
+                return <Callback />;
+              }} />
             </div>
           </MuiThemeProvider>
         </BrowserRouter>

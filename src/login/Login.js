@@ -1,26 +1,33 @@
-import React, {Component } from 'react';
-import Paper from 'material-ui/Paper';
-import Typography from 'material-ui/Typography';
+import React, { Component } from 'react';
+import { Button, TextField } from '@material-ui/core';
 import './Login.css';
+import Auth from '../auth/Auth';
+import fbLogo from '../assets/images/fb-logo.png';
+import ggLogo from '../assets/images/g-ico.png';
 
 class Login extends Component {
-  
-  render() {
 
+  auth = new Auth();
+
+  loginGoogle = () => {
+    this.auth.loginGoogle();
+  }
+
+  loginFacebook = () => {
+    this.auth.loginFacebook();
+  }
+
+  render() {
     return (
-      <div className="container">
-        <Paper elevation={4}>
-        <Typography className="form" variant="headline" component="h3">
-          Login
-        </Typography>
-        <img
-          src="https://i.imgur.com/4AiXzf8.jpg"
-          alt="this is money cat" />
-        <Typography className="form" component="p">
-          Form
-        </Typography>
-      </Paper>
-      </div>
+      <form className="login-root">
+        <div className="social-buttons">
+          <Button variant="raised" color="primary" id="fb-btn" onClick={this.loginFacebook}><img alt="fb-logo" id="fb-logo" src={fbLogo} />Log in With Facebook</Button>
+          <Button variant="raised" id="google-btn" onClick={this.loginGoogle}><img id="gg-logo" alt="gg-logo" src={ggLogo} />Log in With Google</Button>
+        </div>
+        <TextField label="Username or Email" fullWidth className="username" />
+        <TextField label="Password" fullWidth className="password" />
+        <Button variant="raised" color="primary" className="submit-btn">Submit</Button>
+      </form>
     );
   }
 }

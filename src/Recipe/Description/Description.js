@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Card, Typography } from 'material-ui';
-import './RecipeDescription.css';
+import { Card, Typography } from '@material-ui/core';
+import './Description.css';
 
 class RecipeDescription extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
