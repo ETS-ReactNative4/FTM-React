@@ -38,6 +38,13 @@ class Profile extends Component {
     this.getDataFromAPI();
   }
 
+  async getDataFromAPI() {
+
+  }
+
+  fetchUser = async () => {
+
+  }
   getDataFromAPI = async () => {
     console.log('trying to get user info');
     const data = {
