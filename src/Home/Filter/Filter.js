@@ -1,22 +1,25 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { Button, Tabs, Tab } from "@material-ui/core";
-import "./Filter.css";
+import React, { Component } from 'react';
+import { Tabs, Tab } from '@material-ui/core';
+import './Filter.css';
 
 class HomeFilter extends Component {
+  state = {
+    selectedTab: 'item'
+  };
+
   render() {
     return (
-      <Tabs centered indicatorColor="primary" textColor="primary">
-        <Tab label="item"/>
-        <Tab label="item2"/>
+      <Tabs
+        value={this.state.selectedTab}
+        centered
+        indicatorColor="primary"
+        textColor="primary"
+      >
+        <Tab label="item" value="item" />
+        <Tab label="item2" value="item2" />
       </Tabs>
     );
   }
 }
-
-HomeFilter.propTypes = {
-  filter: PropTypes.string,
-  color: PropTypes.color
-};
 
 export default HomeFilter;
