@@ -3,9 +3,9 @@ import { WebAuth } from 'auth0-js';
 export default class Auth {
   auth0 = new WebAuth({
     domain: 'foodtomake.auth0.com',
-    clientID: 'Xl3JO8Pwt2fgVmtCr0K6fTo1axSPjCBs',
-    redirectUri: 'http://localhost:3000/callback',
-    responseType: 'id_token',
+    clientID: 'Xl3JO8Pwt2fgVmtCr0K6fTo1axSPjCBs', //This is auth0 clientId not google clientId
+    redirectUri: 'http://localhost:3000/auth/google/callback',
+    responseType: 'token id_token',
     scope: 'openid'
   });
 
@@ -21,19 +21,16 @@ export default class Auth {
     });
   };
 
-  handleGoogleAuthentication = ({ history }) => {
-    this.auth0.parseHash((err, authResult) => {
-      console.log(err);
-      console.log(authResult); // authResult.idTokenPayload.sub is the unique identifier for the user
-      history.replace('/', { jwt: "" });
+  handleGoogleAuthentication = async () => {
+    this.auth0.parseHash((error, authResult) => {
+      console.log(error, authResult);
+      return authResult.idTokenPayload.sub; // authResult.idTokenPayload.sub is the unique identifier for the user
     });
   };
 
-  handleFacebookAuthentication = ({ history }) => {
-    this.auth0.parseHash((err, authResult) => {
-      console.log(err);
-      console.log(authResult); // need https for facebook
-      history.replace('/');
+  handleFacebookAuthentication = async () => {
+    this.auth0.parseHash((error, authResult) => {
+      return authResult.idTokenPayload.sub; // authResult.idTokenPayload.sub is the unique identifier for the user
     });
   };
 }

@@ -15,6 +15,7 @@ import Auth from './auth/Auth';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
 import { Provider as JwtProvider } from './context/Jwt';
+import GoogleCallback from './callback/GoogleCallback';
 import './App.css';
 
 const client = new ApolloClient({
@@ -60,17 +61,15 @@ class App extends Component {
                   <Route path="/signup" component={Signup} />
                   <Route
                     path="/auth/google/callback"
-                    component={props => {
-                      auth.handleGoogleAuthentication(props);
-                      return <Callback />;
+                    component={() => {
+                      <GoogleCallback
+                        authPromise={auth.handleGoogleAuthentication}
+                      />;
                     }}
                   />
                   <Route
                     path="/auth/facebook/callback"
-                    component={props => {
-                      auth.handleFacebookAuthentication(props);
-                      return <Callback />;
-                    }}
+                    component={() => <GoogleCallback />}
                   />
                 </div>
               </JwtProvider>
