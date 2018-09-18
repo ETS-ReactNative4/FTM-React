@@ -14,13 +14,13 @@ class Home extends Component {
     query: '',
     recipes: [],
     loading: false,
-    showFilter: false
+    showFilter: false,
   };
 
-  handleSearch = event => {
+  handleSearch = (event) => {
     if (event.key === 'Enter') {
       this.setState({
-        query: event.target.value
+        query: event.target.value,
       });
     }
   };
@@ -39,7 +39,7 @@ class Home extends Component {
     return classes.join(' ');
   };
 
-  handleMouseDown = event => {
+  handleMouseDown = (event) => {
     event.preventDefault();
   };
 
@@ -55,11 +55,7 @@ class Home extends Component {
 
     return (
       <div className="home-container">
-        <img
-          className="logo"
-          src="https://i.imgur.com/XPjGdyV.png"
-          alt="foodtomake logo"
-        />
+        <img className="logo" src="https://i.imgur.com/XPjGdyV.png" alt="foodtomake logo" />
         <div className="search-box">
           <FormControl fullWidth>
             <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
@@ -68,10 +64,7 @@ class Home extends Component {
               onKeyPress={this.handleSearch}
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton
-                    onMouseDown={this.handleMouseDown}
-                    onClick={this.toggleFilter}
-                  >
+                  <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
                     <FilterList size={30} />
                   </IconButton>
                 </InputAdornment>
@@ -85,11 +78,8 @@ class Home extends Component {
               {({ loading, error, data }) => {
                 if (loading) {
                   return 'Loading...';
-                } else {
-                  return data.recipes.map(recipe => (
-                    <SearchResult key={recipe.id} recipe={recipe} />
-                  ));
                 }
+                return data.recipes.map(recipe => <SearchResult key={recipe.id} recipe={recipe} />);
               }}
             </Query>
           )}
