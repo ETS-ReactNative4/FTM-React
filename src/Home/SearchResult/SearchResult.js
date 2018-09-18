@@ -5,27 +5,21 @@ import './SearchResult.css';
 
 class HomeSearchResult extends Component {
   static propTypes = {
-    recipe: PropTypes.object.isRequired,
-  }
-
-  // handleClick = (tile) => {
-  //   tile.defaultPrevented();
-  // }
+    recipe: PropTypes.object.isRequired
+  };
 
   render() {
+    const { name } = this.props.recipe;
     return (
       <Paper>
-        <div className="search-root">
-          <img className="recipe-image" alt="recipe" src={this.props.recipe.images[0]} />
-        </div>
+        <div className="search-root">{name}</div>
       </Paper>
     );
   }
 }
 
 HomeSearchResult.defaultProps = {
-  recipes: {},
+  recipes: {}
 };
 
 export default HomeSearchResult;
-
