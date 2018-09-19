@@ -12,7 +12,7 @@ import { FilterList, Close } from '@material-ui/icons';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
-import SearchResult from './SearchResult/SearchResult';
+import SearchResultCard from './SearchResult/SearchResult';
 import './Home.css';
 
 class Home extends Component {
@@ -47,6 +47,12 @@ class Home extends Component {
     this.setState({ showFilter: !this.state.showFilter });
   };
 
+  toggleLoading = () => {
+    this.setState({
+      loading: !this.state.loading,
+    });
+  };
+
   getFilterClassNames = () => {
     const classes = ['filter-card'];
     if (this.state.showFilter) {
@@ -67,6 +73,7 @@ class Home extends Component {
       searchAllRecipes(query: "${this.state.query}") {
         id
         name
+        description
       }
     }
   `;
@@ -102,10 +109,15 @@ class Home extends Component {
                 if (loading) {
                   return 'Loading...';
                 }
-                console.log(data);
-                return data.searchAllRecipes.map(recipe => (
-                  <SearchResult key={recipe.id} recipe={recipe} />
-                ));
+                return data.searchAllRecipes.map((recipe, index) => {
+                  return (
+                    <SearchResultCard
+                      key={index}
+                      name={recipe.name}
+                      description={recipe.description}
+                    />
+                  );
+                });
               }}
             </Query>
           )}

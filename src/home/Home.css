@@ -3,7 +3,7 @@
   height: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 265px 48px auto;
   grid-template-areas: 
     ". . logo . ."
     ". search search search ."
@@ -30,6 +30,7 @@
 }
 
 .search-results {
+  height: 100%;
   grid-area: results;
 }
 
