@@ -4,8 +4,9 @@ import {
   InputAdornment,
   InputLabel,
   IconButton,
+  Button,
   Paper,
-  FormControl
+  FormControl,
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import { Query } from 'react-apollo';
@@ -19,15 +20,27 @@ class Home extends Component {
     query: '',
     recipes: [],
     loading: false,
-    showFilter: false
+    showFilter: false,
   };
 
-  handleSearch = event => {
+  handleEnterSearch = (event) => {
     if (event.key === 'Enter') {
       this.setState({
-        query: event.target.value
+        loading: true,
       });
     }
+  };
+
+  handleButtonSearch = () => {
+    this.setState({
+      loading: true,
+    });
+  };
+
+  handleQueryChange = (event) => {
+    this.setState({
+      query: event.target.value,
+    });
   };
 
   toggleFilter = () => {
@@ -44,7 +57,7 @@ class Home extends Component {
     return classes.join(' ');
   };
 
-  handleMouseDown = event => {
+  handleMouseDown = (event) => {
     event.preventDefault();
   };
 
@@ -60,32 +73,30 @@ class Home extends Component {
 
     return (
       <div className="home-container">
-        <img
-          className="logo"
-          src="https://i.imgur.com/XPjGdyV.png"
-          alt="foodtomake logo"
-        />
+        <img className="logo" src="https://i.imgur.com/XPjGdyV.png" alt="foodtomake logo" />
         <div className="search-box">
           <FormControl fullWidth>
             <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
             <Input
               id="search"
-              onKeyPress={this.handleSearch}
+              onKeyPress={this.handleEnterSearch}
+              onChange={this.handleQueryChange}
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton
-                    onMouseDown={this.handleMouseDown}
-                    onClick={this.toggleFilter}
-                  >
+                  <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
                     <FilterList size={30} />
                   </IconButton>
+                  <Button id="searchButton" onClick={this.handleButtonSearch}>
+                    Search
+                  </Button>
                 </InputAdornment>
               }
             />
           </FormControl>
         </div>
         <div className="search-results">
-          {this.state.query && (
+          {this.state.query &&
+            this.state.loading && (
             <Query query={RECIPES_QUERY}>
               {({ loading, error, data }) => {
                 if (loading) {
