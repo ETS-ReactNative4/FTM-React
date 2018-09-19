@@ -12,7 +12,7 @@ import { FilterList, Close } from '@material-ui/icons';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
-import SearchResultCard from './SearchResult/SearchResult';
+import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 
 class Home extends Component {
@@ -109,10 +109,10 @@ class Home extends Component {
                 if (loading) {
                   return 'Loading...';
                 }
-                return data.searchAllRecipes.map((recipe, index) => {
+                return data.searchAllRecipes.map((recipe) => {
                   return (
-                    <SearchResultCard
-                      key={index}
+                    <SearchResult
+                      key={recipe.id}
                       name={recipe.name}
                       description={recipe.description}
                     />
