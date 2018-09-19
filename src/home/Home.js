@@ -5,7 +5,7 @@ import {
   InputLabel,
   IconButton,
   Paper,
-  FormControl,
+  FormControl
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import { Query } from 'react-apollo';
@@ -19,13 +19,13 @@ class Home extends Component {
     query: '',
     recipes: [],
     loading: false,
-    showFilter: false,
+    showFilter: false
   };
 
-  handleSearch = (event) => {
+  handleSearch = event => {
     if (event.key === 'Enter') {
       this.setState({
-        query: event.target.value,
+        query: event.target.value
       });
     }
   };
@@ -44,14 +44,14 @@ class Home extends Component {
     return classes.join(' ');
   };
 
-  handleMouseDown = (event) => {
+  handleMouseDown = event => {
     event.preventDefault();
   };
 
   render() {
     const RECIPES_QUERY = gql`
     query {
-      recipes(query: "${this.state.query}") {
+      searchAllRecipes(query: "${this.state.query}") {
         id
         name
       }
@@ -60,7 +60,11 @@ class Home extends Component {
 
     return (
       <div className="home-container">
-        <img className="logo" src="https://i.imgur.com/XPjGdyV.png" alt="foodtomake logo" />
+        <img
+          className="logo"
+          src="https://i.imgur.com/XPjGdyV.png"
+          alt="foodtomake logo"
+        />
         <div className="search-box">
           <FormControl fullWidth>
             <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
@@ -69,7 +73,10 @@ class Home extends Component {
               onKeyPress={this.handleSearch}
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                  <IconButton
+                    onMouseDown={this.handleMouseDown}
+                    onClick={this.toggleFilter}
+                  >
                     <FilterList size={30} />
                   </IconButton>
                 </InputAdornment>
@@ -84,7 +91,10 @@ class Home extends Component {
                 if (loading) {
                   return 'Loading...';
                 }
-                return data.recipes.map(recipe => <SearchResult key={recipe.id} recipe={recipe} />);
+                console.log(data);
+                return data.searchAllRecipes.map(recipe => (
+                  <SearchResult key={recipe.id} recipe={recipe} />
+                ));
               }}
             </Query>
           )}
