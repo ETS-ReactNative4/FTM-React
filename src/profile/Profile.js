@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Grid } from 'material-ui';
-import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
 import { client } from '../App';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
@@ -29,10 +28,14 @@ class Profile extends Component {
     super(props);
     this.state = {
       user_image: 'https://i.imgur.com/4AiXzf8.jpg',
-      username: 'mckay test',
+      username: null,
       user_id: '5b80e5924f300af2ea7f05cd',
       owned_recipes: [],
     };
+    //this.getDataFromAPI();
+  }
+
+  componentWillMount() {
     this.getDataFromAPI();
   }
 
@@ -75,6 +78,11 @@ class Profile extends Component {
   };
 
   render() {
+    // don't render until we have data loaded
+    if (!this.state.username) {
+      return <div />
+    }
+
     return (
       <div>
         <Grid className="user-container" container spacing={styles.spacing} justify={'center'}>
@@ -83,7 +91,7 @@ class Profile extends Component {
           </Grid>
           <Grid className="social" item xs={styles.sizes.xs.social} sm={styles.sizes.sm.social}>
             <Social
-              recipes={this.state.owned_recipes.length}
+              recipes_number={this.state.owned_recipes.length}
               followers_number="234"
               favorites_number="2,451"
             />

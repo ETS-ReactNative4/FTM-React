@@ -51,9 +51,14 @@ class Recipe extends Component {
       servings: null,
       recipe_id: this.props.match.params.id,
     };
-    this.getDataFromAPI();
+    //this.getDataFromAPI();
     // console.log(this.state.recipe_id);
   }
+
+  componentWillMount() {
+    this.getDataFromAPI();
+  }
+
 
   fetchRecipe = async () => {
     console.log('getting recipe from database ');
@@ -131,6 +136,11 @@ class Recipe extends Component {
   }
 
   render() {
+    // don't render until we have data loaded
+    if (!this.state.title) {
+      return <div />
+    }
+
     return (
       <div>
         <Grid className='pic-des-container' container spacing={styles.spacing} justify={'center'}>
