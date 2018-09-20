@@ -8,7 +8,6 @@ import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
 import './Profile.css';
 
-
 const styles = {
   spacing: 24,
   sizes: {
@@ -33,7 +32,6 @@ class Profile extends Component {
       username: 'mckay test',
       user_id: '5b80e5924f300af2ea7f05cd',
       owned_recipes: [],
-
     };
     this.getDataFromAPI();
   }
@@ -74,32 +72,39 @@ class Profile extends Component {
       console.log(err);
       return {};
     }
-  }
+  };
 
   render() {
     return (
       <div>
-        <Grid className='user-container' container spacing={styles.spacing} justify={'center'}>
-          <Grid className='picture' item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
+        <Grid className="user-container" container spacing={styles.spacing} justify={'center'}>
+          <Grid className="picture" item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
             <ProfilePicture name={this.state.username} imageURL={this.state.user_image} />
           </Grid>
-          <Grid className='social' item xs={styles.sizes.xs.social} sm={styles.sizes.sm.social}>
-            <Social recipes={this.state.owned_recipes.length} followers_number='234' favorites_number='2,451' />
+          <Grid className="social" item xs={styles.sizes.xs.social} sm={styles.sizes.sm.social}>
+            <Social
+              recipes={this.state.owned_recipes.length}
+              followers_number="234"
+              favorites_number="2,451"
+            />
           </Grid>
-          <Grid className='users-recipes' item xs={styles.sizes.xs.recipes} sm={styles.sizes.sm.recipes}>
+          <Grid
+            className="users-recipes"
+            item
+            xs={styles.sizes.xs.recipes}
+            sm={styles.sizes.sm.recipes}
+          >
             <div className="search-results">
-              {
-                this.state.owned_recipes.map((recipe) => {
-                  return (
-                    <SearchResult
-                      key={recipe.id}
-                      name={recipe.name}
-                      description={recipe.description}
-                      r_id={recipe.id}
-                    />
-                  );
-                })
-              }
+              {this.state.owned_recipes.map((recipe) => {
+                return (
+                  <SearchResult
+                    key={recipe.id}
+                    name={recipe.name}
+                    description={recipe.description}
+                    r_id={recipe.id}
+                  />
+                );
+              })}
             </div>
           </Grid>
         </Grid>
