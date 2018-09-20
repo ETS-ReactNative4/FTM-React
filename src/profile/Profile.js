@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
 import { client } from '../App';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
-import SearchResult from './SearchResult/SearchResult';
+import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
 import './Profile.css';
 
@@ -95,6 +95,7 @@ class Profile extends Component {
                       key={recipe.id}
                       name={recipe.name}
                       description={recipe.description}
+                      r_id={recipe.id}
                     />
                   );
                 })

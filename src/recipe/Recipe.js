@@ -39,17 +39,17 @@ class Recipe extends Component {
       instructions: [],
       description: null,
       image: null,
-      title: this.props.match.params.title,
+      title: null,
       stars: null,
       tags: [],
-      author: this.props.match.params.author,
+      author: null,
       authorImage: null,
       cookTime: null,
       prepTime: null,
       difficulty: null,
       sourceURL: null,
       servings: null,
-      recipe_id: '5b89de141b5a94397cd01a9b',
+      recipe_id: this.props.match.params.id,
     };
     this.getDataFromAPI();
     // console.log(this.state.recipe_id);

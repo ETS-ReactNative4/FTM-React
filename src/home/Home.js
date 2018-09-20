@@ -108,7 +108,7 @@ class Home extends Component {
           {this.state.recipes &&
             this.state.recipes.map((recipe) => {
               return (
-                <SearchResult key={recipe.id} name={recipe.name} description={recipe.description} />
+                <SearchResult key={recipe.id} name={recipe.name} description={recipe.description} r_id={recipe.id} />
               );
             })}
         </div>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
 import { Spring } from 'react-spring';
+import { Link } from 'react-router-dom';
 import './SearchResult.css';
 
 const styles = {
@@ -21,9 +22,15 @@ const styles = {
 };
 
 function SearchResult(props) {
+  const { r_id } = props;
   const { name } = props;
   const { description } = props;
   const { classes } = props;
+
+  const location = {
+    pathname: '/recipe:',
+    state: { id: r_id },
+  };
 
   return (
     <Spring from={{ marginTop: 1000 }} to={{ marginTop: 20 }}>
@@ -39,7 +46,7 @@ function SearchResult(props) {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small">Learn More</Button>
+            <Button size="small" component={Link} to={`/recipe/${r_id}`}>Learn More</Button>
           </CardActions>
         </Card>
       )}
