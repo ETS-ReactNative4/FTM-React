@@ -26,9 +26,9 @@ function SearchResult(props) {
   const { classes } = props;
 
   return (
-    <Spring from={{ marginTop: 1000 }} to={{ marginTop: 20 }}>
-      {({ marginTop }) => (
-        <Card className={classes.card} style={{ marginTop }}>
+    <Spring from={{ marginTop: 500, opacity: 0 }} to={{ marginTop: 20, opacity: 1 }}>
+      {({ opacity, marginTop }) => (
+        <Card className={classes.card} style={{ opacity, marginTop }}>
           <CardContent>
             <Typography variant="headline" component="h2">
               {name}

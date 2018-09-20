@@ -9,6 +9,7 @@ import {
   FormControl,
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
+import { Spring } from 'react-spring';
 import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
@@ -83,28 +84,82 @@ class Home extends Component {
   render() {
     return (
       <div className="home-container">
-        <img className="logo" src="https://i.imgur.com/XPjGdyV.png" alt="foodtomake logo" />
-        <div className="search-box">
-          <FormControl fullWidth>
-            <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
-            <Input
-              id="search"
-              onKeyPress={this.handleEnterSearch}
-              onChange={this.handleQueryChange}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
-                    <FilterList size={30} />
-                  </IconButton>
-                  <Button id="searchButton" onClick={this.handleButtonSearch}>
-                    Search
-                  </Button>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-        </div>
-        <div className="search-results">
+        {this.state.recipes.length > 0 ? (
+          <Spring from={{ marginTop: 0, opacity: 1 }} to={{ marginTop: -200, opacity: 0 }}>
+            {({ marginTop, opacity }) => (
+              <img
+                className="logo"
+                style={{ marginTop }}
+                src="https://i.imgur.com/XPjGdyV.png"
+                alt="foodtomake logo"
+              />
+            )}
+          </Spring>
+        ) : (
+          <Spring from={{ marginTop: -200, opacity: 0 }} to={{ marginTop: 0, opacity: 1 }}>
+            {({ marginTop, opacity }) => (
+              <img
+                className="logo"
+                style={{ marginTop, opacity }}
+                src="https://i.imgur.com/XPjGdyV.png"
+                alt="foodtomake logo"
+              />
+            )}
+          </Spring>
+        )}
+        {this.state.recipes.length > 0 ? (
+          <Spring from={{ marginTop: 0 }} to={{ marginTop: -200 }}>
+            {({ marginTop }) => (
+              <div className="search-box" style={{ marginTop }}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
+                  <Input
+                    id="search"
+                    onKeyPress={this.handleEnterSearch}
+                    onChange={this.handleQueryChange}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                          <FilterList size={30} />
+                        </IconButton>
+                        <Button id="searchButton" onClick={this.handleButtonSearch}>
+                          Search
+                        </Button>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </div>
+            )}
+          </Spring>
+        ) : (
+          <Spring from={{ marginTop: -200 }} to={{ marginTop: 0 }}>
+            {({ marginTop }) => (
+              <div className="search-box" style={{ marginTop }}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
+                  <Input
+                    id="search"
+                    onKeyPress={this.handleEnterSearch}
+                    onChange={this.handleQueryChange}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                          <FilterList size={30} />
+                        </IconButton>
+                        <Button id="searchButton" onClick={this.handleButtonSearch}>
+                          Search
+                        </Button>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </div>
+            )}
+          </Spring>
+        )}
+
+        <div className="search-results" style={{ marginTop: -200 }}>
           {this.state.recipes &&
             this.state.recipes.map((recipe) => {
               return (
