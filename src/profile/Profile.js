@@ -33,7 +33,7 @@ class Profile extends Component {
       user_image: 'https://i.imgur.com/4AiXzf8.jpg',
       name: 'mckay test',
       description: 'This is a short description of the user. This is a short description of the user. This is a short description of the user. This is a short description of the user. This is a short description of the user.',
-      user_id: null,
+      user_id: '5b80e5924f300af2ea7f05cd',
     };
     this.getDataFromAPI();
   }
@@ -48,14 +48,14 @@ class Profile extends Component {
   getDataFromAPI = async () => {
     console.log('trying to get user info');
     const data = {
-      username: this.state.name,
+      user_id: this.state.user_id,
     };
     try {
       const result = client
         .query({
           query: gql`{           
-            userByUsername(
-              username: "${data.username}"
+            userById(
+              id: "${data.user_id}"
             ) {
               id
               username
@@ -63,7 +63,7 @@ class Profile extends Component {
           }
         `,
         })
-        .then(result => console.log(result.data.userByUsername));
+        .then(result => console.log(result.data.userById));
       return result.data;
     } catch (err) {
       console.log(err);

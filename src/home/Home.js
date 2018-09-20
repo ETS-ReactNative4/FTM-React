@@ -1,92 +1,100 @@
 import React, { Component } from 'react';
-import { Router, Route, Link } from 'react-router-dom';
-import { TextField } from 'material-ui';
-import axios from 'axios';
-import Filters from '../filter/Filters';
-
-import SearchResult from '../search-result/SearchResult';
-
-import Recipe from '../recipe/Recipe';
-
+import {
+  Input,
+  InputAdornment,
+  InputLabel,
+  IconButton,
+  Paper,
+  FormControl,
+} from '@material-ui/core';
+import { FilterList, Close } from '@material-ui/icons';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
+import HomeFilter from './Filter/Filter';
+import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      phrase: '',
-      recipes: null,
-    };
-  }
+  state = {
+    query: '',
+    recipes: [],
+    loading: false,
+    showFilter: false,
+  };
+
   handleSearch = (event) => {
     if (event.key === 'Enter') {
-      // setState is not instant and event.target.value is discarded immediately
-      // therefore the search phrase must be saved to a temporary.
-      const query = event.target.value;
-      this.setState((prevState) => {
-        return {
-          phrase: query,
-        };
-      }, () => {
-        // this is the callback for this.setState()
-        this.getDataFromAPI();
+      this.setState({
+        query: event.target.value,
       });
     }
-  }
+  };
 
-  async getDataFromAPI() {
-    const fetchedRecipes = await this.fetchRecipe();
-    this.setState({
-      recipes: fetchedRecipes,
-    });
-  }
+  toggleFilter = () => {
+    this.setState({ showFilter: !this.state.showFilter });
+  };
 
-  fetchRecipe = async () => {
-    const data = {
-      query: this.state.phrase,
-      limit: '15',
-      offset: '0',
-      filters: [
-        {
-          field: 'name',
-          operator: 'in',
-          values: [],
-        },
-      ],
-    };
-    const options = {
-      headers: {
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJlcm5hcmRjb3NncmlmZkBnbWFpbC5jb20iLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTUyMTM0MzA4MX0.ip_Syjb-CQd2payC0Oo6MS911XQZ3OMdDY1hJjnjZ1s',
-      },
-    };
-    try {
-      const response = await axios.post('http://api.foodtomake.com/public/recipes', data, options);
-      console.log(response.status);
-      return response.data.recipes;
-    } catch (err) {
-      console.log(err);
-      return {};
+  getFilterClassNames = () => {
+    const classes = ['filter-card'];
+    if (this.state.showFilter) {
+      classes.push('showFilter');
+    } else {
+      classes.push('hideFilter');
     }
-  }
+    return classes.join(' ');
+  };
+
+  handleMouseDown = (event) => {
+    event.preventDefault();
+  };
 
   render() {
-    return (
-      <div className="container" >
-        <div className="logo" >
-          <img
-            src="https://i.imgur.com/XPjGdyV.png"
-            alt="foodtomake logo" />
-        </div>
+    const RECIPES_QUERY = gql`
+    query {
+      recipes(query: "${this.state.query}") {
+        id
+        name
+      }
+    }
+  `;
 
-        <div className="search-box" >
-          <TextField fullWidth className="" placeholder="Search for a Recipe..." onKeyPress={this.handleSearch}/>
+    return (
+      <div className="home-container">
+        <img className="logo" src="https://i.imgur.com/XPjGdyV.png" alt="foodtomake logo" />
+        <div className="search-box">
+          <FormControl fullWidth>
+            <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
+            <Input
+              id="search"
+              onKeyPress={this.handleSearch}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                    <FilterList size={30} />
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
         </div>
-        <div className="filters">
-          <Filters />
+        <div className="search-results">
+          {this.state.query && (
+            <Query query={RECIPES_QUERY}>
+              {({ loading, error, data }) => {
+                if (loading) {
+                  return 'Loading...';
+                }
+                return data.recipes.map(recipe => <SearchResult key={recipe.id} recipe={recipe} />);
+              }}
+            </Query>
+          )}
         </div>
-        <div className="search-results" >
-          <SearchResult recipes={this.state.recipes}/>
-        </div>
+        <Paper className={this.getFilterClassNames()} elevation={5}>
+          <IconButton className="close-filters" onClick={this.toggleFilter}>
+            <Close />
+          </IconButton>
+          <HomeFilter filter="Time" color="primary" />
+        </Paper>
       </div>
     );
   }

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Card, CardMedia } from 'material-ui';
+import { Card, CardMedia } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
-import './RecipePicture.css';
+import './Picture.css';
 
 class RecipePicture extends Component {
-
   constructor(props) {
     super(props);
     this.state = {

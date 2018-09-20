@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
-import { Grid } from 'material-ui';
+import { Grid } from '@material-ui/core';
 import axios from 'axios';
 import './Recipe.css';
-import RecipeInstructions from './recipeInstructions/RecipeInstructions';
-import RecipeInfo from './recipeInfo/RecipeInfo';
-import RecipeIngredients from './recipeIngredients/RecipeIngredients';
-import RecipeDescription from './recipeDescription/RecipeDescription';
-import RecipePicture from './recipePicture/RecipePicture';
+import RecipeInstructions from './Recipe/Instructions/Instructions';
+import RecipeInfo from './Recipe/Info/Info';
+import RecipeIngredients from './Recipe/Ingredients/Ingredients';
+import RecipeDescription from './Recipe/Description/Description';
+import RecipePicture from './Recipe/Picture/Picture';
+import ApolloClient from 'apollo-boost';
+import gql from 'graphql-tag';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:8081/graphql'
+});
 
 const styles = {
   spacing: 24,
@@ -48,12 +54,41 @@ class Recipe extends Component {
       difficulty: null,
       sourceURL: null,
       servings: null,
-      // recipe_id: this.props.match.params.recipe_id,
+      recipe_id: '5b89de141b5a94397cd01a9b',
     };
-    this.getDataFromAPI();
+    this.fetchRecipe();
     console.log(this.state.recipe_id);
   }
 
+  fetchRecipe = async () => {
+    console.log('getting recipe from database ');
+    const data = {
+      recipe_id: this.state.recipe_id,
+    };
+    try {
+      const result = client
+        .query({
+          query: gql`
+          query getRecipe {           
+            recipeById(
+              id: "${data.recipe_id}"
+            ) {
+              id
+              name
+              description
+            }
+          }
+        `,
+        })
+        .then(result => console.log(result));
+      return result.data;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+  }
+
+  /*
   async getDataFromAPI() {
     const recipe = await this.fetchRecipe();
     console.log('recipe: \n', recipe);
@@ -80,7 +115,9 @@ class Recipe extends Component {
       });
     }
   }
+  */
 
+  /*
   fetchRecipe = async () => {
     const data = {
       query: this.state.title,
@@ -104,6 +141,7 @@ class Recipe extends Component {
       return {};
     }
   }
+  */
 
   render() {
     return (

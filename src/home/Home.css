@@ -1,29 +1,27 @@
-.container {
-  width: 100vw;
+.home-container {
+  width: 100%;
   height: 100%;
   display: grid;
-  padding: 0 !important;
-  margin: 0 !important;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-rows: 1fr 1fr 1fr;
   grid-template-areas: 
     ". . logo . ."
     ". search search search ."
-    ". filters filters filters ."
     ". results results results .";
 }
 
 .logo {
   grid-area: logo;
-  margin: 70px;
+  padding: 100px 100px 50px 100px;
 }
 
 .search-box {
-  width: 100%;
+  height: 30px;
   grid-area: search;
-  justify-self: center;
-  align-self: end;
-  margin: 10px;
+}
+
+.sspan {
+  padding: 10px;
 }
 
 .filters {
@@ -35,3 +33,29 @@
   grid-area: results;
 }
 
+.test {
+  background-color: black;
+  width: 100%;
+  height: 200px;
+  margin-top: 10px;
+}
+
+.filter-card {
+  width: 100vw;
+  height: 0;
+  bottom: 0;
+  position: absolute;
+  transition: height 0.25s;
+}
+
+.showFilter {
+  height: 70vh;
+}
+
+.hideFilter {
+  height: 0;
+}
+
+.close-filters {
+  float: right;
+}
