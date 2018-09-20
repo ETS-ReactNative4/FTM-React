@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import { Grid } from '@material-ui/core';
-import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
+import { client } from '../App';
 import './Recipe.css';
 import RecipeInstructions from './Instructions/Instructions';
 import RecipeInfo from './Info/Info';
 import RecipeIngredients from './Ingredients/Ingredients';
 import RecipeDescription from './Description/Description';
 import RecipePicture from './Picture/Picture';
-
-const client = new ApolloClient({
-  uri: 'http://localhost:8081/graphql',
-});
 
 const styles = {
   spacing: 24,

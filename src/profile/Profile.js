@@ -2,15 +2,11 @@ import React, { Component } from 'react';
 import { Grid } from 'material-ui';
 import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
+import { client } from '../App';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from './SearchResult/SearchResult';
 import Social from './Social/Social';
 import './Profile.css';
-
-
-const client = new ApolloClient({
-  uri: 'http://localhost:8081/graphql',
-});
 
 
 const styles = {
@@ -71,7 +67,6 @@ class Profile extends Component {
         `,
         })
         .then((result) => {
-          // console.log(result.data);
           return result.data.userById;
         });
       return result;
@@ -103,17 +98,6 @@ class Profile extends Component {
                     />
                   );
                 })
-                /*
-                this.state.owned_recipes.map((recipe) => {
-                  return (
-                    <SearchResult
-                      key={recipe.id}
-                      name={recipe.name}
-                      description={recipe.description}
-                    />
-                  );
-                });
-                */
               }
             </div>
           </Grid>
