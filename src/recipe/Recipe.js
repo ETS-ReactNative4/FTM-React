@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import gql from 'graphql-tag';
 import { client } from '../App';
 import './Recipe.css';
@@ -51,8 +51,42 @@ class Recipe extends Component {
       servings: null,
       recipe_id: this.props.match.params.id,
     };
+    this.saveRecipe = this.saveRecipe.bind(this);
     //this.getDataFromAPI();
     // console.log(this.state.recipe_id);
+  }
+
+  saveRecipe() {
+    console.log('save this recipe');
+    const data = {
+      user_id: '5b80e5924f300af2ea7f05cd',
+      recipe_id: this.state.recipe_id,
+    };
+    try {
+      const result = client
+        .mutate({
+          mutation: gql`
+          mutation SaveRecipe {           
+            addSavedRecipe(
+              userId: "${data.user_id}"
+              recipeId: "${data.recipe_id}"
+            ) {
+              id
+            }
+          }
+        `,
+        })
+        .then((result) => {
+          console.log(result.data);
+          console.log('successfully saved recipe!');
+          return result.data.recipeById;
+        });
+        return result;
+    } catch (err) {
+      console.log(err);
+      console.log('failed to save recipe');
+      return {};
+    }
   }
 
   componentWillMount() {
@@ -158,6 +192,11 @@ class Recipe extends Component {
           </Grid>
           <Grid className='instructions' item xs={styles.sizes.xs.ingredients} sm={styles.sizes.sm.ingredients}>
             <RecipeInstructions value={this.state.instructions} />
+          </Grid>
+          <Grid className='save-recipe' item xs={styles.sizes.xs.ingredients} sm={styles.sizes.sm.ingredients}>
+            <Button variant="contained" color="primary" className='save-recipe-button' onClick={this.saveRecipe}>
+              Save Recipe
+            </Button>
           </Grid>
           <Grid className='source-url' item xs={styles.sizes.xs.ingredients} sm={styles.sizes.sm.ingredients}>
             <span><a href={this.state.sourceURL}>Source</a></span>
