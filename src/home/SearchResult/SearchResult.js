@@ -33,24 +33,26 @@ function SearchResult(props) {
   };
 
   return (
-    <Spring from={{ marginTop: 500, opacity: 0 }} to={{ marginTop: 20, opacity: 1 }}>
-      {({ opacity, marginTop }) => (
-        <Card className={classes.card} style={{ opacity, marginTop }}>
-          <CardContent>
-            <Typography variant="headline" component="h2">
-              {name}
-            </Typography>
-            <Typography component="p">
-              {description}
-              <br />
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small" component={Link} to={`/recipe/${r_id}`}>Learn More</Button>
-          </CardActions>
-        </Card>
-      )}
-    </Spring>
+    // <Spring from={{ marginTop: 500, opacity: 0 }} to={{ marginTop: 20, opacity: 1 }}>
+    //   {({ opacity, marginTop }) => (
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography variant="headline" component="h2">
+          {name}
+        </Typography>
+        <Typography component="p">
+          {description}
+          <br />
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small" component={Link} to={`/recipe/${r_id}`}>
+          Learn More
+        </Button>
+      </CardActions>
+    </Card>
+    //   )}
+    // </Spring>
   );
 }
 

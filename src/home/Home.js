@@ -9,7 +9,7 @@ import {
   FormControl,
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
-import { Spring } from 'react-spring';
+import { Spring, Trail } from 'react-spring';
 import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
@@ -160,12 +160,32 @@ class Home extends Component {
         )}
 
         <div className="search-results" style={{ marginTop: -200 }}>
-          {this.state.recipes &&
+          {this.state.recipes.length > 0 && (
+            <Trail
+              keys={this.state.recipes}
+              from={{ marginTop: 500, opacity: 0 }}
+              to={{ marginTop: 20, opacity: 1 }}
+            >
+              {this.state.recipes.map(recipe => (marginTop) => {
+                return (
+                  <div key={recipe.id} style={marginTop}>
+                    <SearchResult
+                      key={recipe.id}
+                      name={recipe.name}
+                      description={recipe.description}
+                      r_id={recipe.id}
+                    />
+                  </div>
+                );
+              })}
+            </Trail>
+          )}
+          {/* {this.state.recipes &&
             this.state.recipes.map((recipe) => {
               return (
                 <SearchResult key={recipe.id} name={recipe.name} description={recipe.description} r_id={recipe.id} />
               );
-            })}
+            })} */}
         </div>
         <Paper className={this.getFilterClassNames()} elevation={5}>
           <IconButton className="close-filters" onClick={this.toggleFilter}>
