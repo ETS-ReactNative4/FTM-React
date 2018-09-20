@@ -9,31 +9,50 @@ import {
   FormControl,
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
-import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
+import { client } from '../App';
 
 class Home extends Component {
   state = {
     query: '',
     recipes: [],
-    loading: false,
     showFilter: false,
   };
 
-  handleEnterSearch = (event) => {
+  handleEnterSearch = async (event) => {
     if (event.key === 'Enter') {
+      const { data } = await client.query({
+        query: gql`
+                query {
+                  searchAllRecipes(query: "${this.state.query}") {
+                    id
+                    name
+                    description
+                  }
+                }`,
+      });
       this.setState({
-        loading: true,
+        recipes: data.searchAllRecipes,
       });
     }
   };
 
-  handleButtonSearch = () => {
+  handleButtonSearch = async () => {
+    const { data } = await client.query({
+      query: gql`
+                query {
+                  searchAllRecipes(query: "${this.state.query}") {
+                    id
+                    name
+                    description
+                  }
+                }`,
+    });
     this.setState({
-      loading: true,
+      recipes: data.searchAllRecipes,
     });
   };
 
@@ -45,12 +64,6 @@ class Home extends Component {
 
   toggleFilter = () => {
     this.setState({ showFilter: !this.state.showFilter });
-  };
-
-  toggleLoading = () => {
-    this.setState({
-      loading: !this.state.loading,
-    });
   };
 
   getFilterClassNames = () => {
@@ -68,16 +81,6 @@ class Home extends Component {
   };
 
   render() {
-    const RECIPES_QUERY = gql`
-    query {
-      searchAllRecipes(query: "${this.state.query}") {
-        id
-        name
-        description
-      }
-    }
-  `;
-
     return (
       <div className="home-container">
         <img className="logo" src="https://i.imgur.com/XPjGdyV.png" alt="foodtomake logo" />
@@ -102,25 +105,12 @@ class Home extends Component {
           </FormControl>
         </div>
         <div className="search-results">
-          {this.state.query &&
-            this.state.loading && (
-            <Query query={RECIPES_QUERY}>
-              {({ loading, error, data }) => {
-                if (loading) {
-                  return 'Loading...';
-                }
-                return data.searchAllRecipes.map((recipe) => {
-                  return (
-                    <SearchResult
-                      key={recipe.id}
-                      name={recipe.name}
-                      description={recipe.description}
-                    />
-                  );
-                });
-              }}
-            </Query>
-          )}
+          {this.state.recipes &&
+            this.state.recipes.map((recipe) => {
+              return (
+                <SearchResult key={recipe.id} name={recipe.name} description={recipe.description} />
+              );
+            })}
         </div>
         <Paper className={this.getFilterClassNames()} elevation={5}>
           <IconButton className="close-filters" onClick={this.toggleFilter}>
