@@ -20,7 +20,7 @@ import GoogleCallback from './callback/GoogleCallback';
 import './App.css';
 
 const client = new ApolloClient({
-  uri: 'http://api.foodtomake.com/graphql'
+  uri: 'https://api.foodtomake.com/graphql'
 });
 
 const auth = new Auth();

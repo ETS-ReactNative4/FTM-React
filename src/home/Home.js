@@ -4,6 +4,7 @@ import {
   InputAdornment,
   InputLabel,
   IconButton,
+  Button,
   Paper,
   FormControl,
 } from '@material-ui/core';
@@ -22,16 +23,34 @@ class Home extends Component {
     showFilter: false,
   };
 
-  handleSearch = (event) => {
+  handleEnterSearch = (event) => {
     if (event.key === 'Enter') {
       this.setState({
-        query: event.target.value,
+        loading: true,
       });
     }
   };
 
+  handleButtonSearch = () => {
+    this.setState({
+      loading: true,
+    });
+  };
+
+  handleQueryChange = (event) => {
+    this.setState({
+      query: event.target.value,
+    });
+  };
+
   toggleFilter = () => {
     this.setState({ showFilter: !this.state.showFilter });
+  };
+
+  toggleLoading = () => {
+    this.setState({
+      loading: !this.state.loading,
+    });
   };
 
   getFilterClassNames = () => {
@@ -51,9 +70,10 @@ class Home extends Component {
   render() {
     const RECIPES_QUERY = gql`
     query {
-      recipes(query: "${this.state.query}") {
+      searchAllRecipes(query: "${this.state.query}") {
         id
         name
+        description
       }
     }
   `;
@@ -66,25 +86,38 @@ class Home extends Component {
             <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
             <Input
               id="search"
-              onKeyPress={this.handleSearch}
+              onKeyPress={this.handleEnterSearch}
+              onChange={this.handleQueryChange}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
                     <FilterList size={30} />
                   </IconButton>
+                  <Button id="searchButton" onClick={this.handleButtonSearch}>
+                    Search
+                  </Button>
                 </InputAdornment>
               }
             />
           </FormControl>
         </div>
         <div className="search-results">
-          {this.state.query && (
+          {this.state.query &&
+            this.state.loading && (
             <Query query={RECIPES_QUERY}>
               {({ loading, error, data }) => {
                 if (loading) {
                   return 'Loading...';
                 }
-                return data.recipes.map(recipe => <SearchResult key={recipe.id} recipe={recipe} />);
+                return data.searchAllRecipes.map((recipe) => {
+                  return (
+                    <SearchResult
+                      key={recipe.id}
+                      name={recipe.name}
+                      description={recipe.description}
+                    />
+                  );
+                });
               }}
             </Query>
           )}
