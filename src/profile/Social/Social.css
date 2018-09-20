@@ -1,0 +1,17 @@
+.info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.recipe-num > .number,
+.follower-num > .number,
+.favorite-num > .number {
+  font-size: 1.3em;
+}
+
+.recipe-num span:last-child,
+.follower-num span:last-child,
+.favorite-num span:last-child, {
+  font-size: .9em;
+  color: lightgray;
+}
