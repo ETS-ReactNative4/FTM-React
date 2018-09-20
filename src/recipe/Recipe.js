@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Grid } from '@material-ui/core';
-import axios from 'axios';
+import gql from 'graphql-tag';
+import { client } from '../App';
 import './Recipe.css';
 import RecipeInstructions from './Instructions/Instructions';
 import RecipeInfo from './Info/Info';
@@ -38,21 +39,69 @@ class Recipe extends Component {
       instructions: [],
       description: null,
       image: null,
-      title: this.props.match.params.title,
+      title: null,
       stars: null,
       tags: [],
-      author: this.props.match.params.author,
+      author: null,
       authorImage: null,
       cookTime: null,
       prepTime: null,
       difficulty: null,
       sourceURL: null,
       servings: null,
-      // recipe_id: this.props.match.params.recipe_id,
+      recipe_id: this.props.match.params.id,
     };
     this.getDataFromAPI();
-    console.log(this.state.recipe_id);
+    // console.log(this.state.recipe_id);
   }
+
+  fetchRecipe = async () => {
+    console.log('getting recipe from database ');
+    const data = {
+      recipe_id: this.state.recipe_id,
+    };
+    try {
+      const result = client
+        .query({
+          query: gql`
+          query getRecipe {           
+            recipeById(
+              id: "${data.recipe_id}"
+            ) {
+              id
+              created
+              description
+              system
+              images
+              name
+              ingredients {name}
+              instructions
+              sourceURL
+              prepTime
+              cookTime
+              difficulty
+              servings
+              rating
+              notes
+              numReviews
+              numShares
+              tags
+              comments
+            }
+          }
+        `,
+        })
+        .then((result) => {
+          //console.log(result.data.recipeById);
+          return result.data.recipeById;
+        });
+        return result;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+  }
+
 
   async getDataFromAPI() {
     const recipe = await this.fetchRecipe();
@@ -60,7 +109,7 @@ class Recipe extends Component {
     this.setState({
       title: recipe.name,
       author: recipe.author,
-     // authorImage: recipe.author.image,
+      // authorImage: recipe.author.image,
       image: recipe.images[0],
       cookTime: recipe.cookTime,
       prepTime: recipe.prepTime,
@@ -72,36 +121,12 @@ class Recipe extends Component {
       sourceURL: recipe.sourceURL,
       servings: recipe.servings,
       stars: Math.round(recipe.rating),
-      //recipe_id: recipe._id,
+      // recipe_id: recipe._id,
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
         authorImage: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
       });
-    }
-  }
-
-  fetchRecipe = async () => {
-    const data = {
-      query: this.state.title,
-      limit: '1',
-      offset: '0',
-      filters: [
-        {
-          field: 'author',
-          operator: '=',
-          values: [this.state.author],
-        },
-      ],
-    };
-    try {
-      const response = await axios.post('http://api.foodtomake.com/public/recipes', data);
-      console.log('completed GET request');
-      console.log(data);
-      return response.data.recipes[0];
-    } catch (err) {
-      console.log(err);
-      return {};
     }
   }
 

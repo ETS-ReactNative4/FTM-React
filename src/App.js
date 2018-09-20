@@ -9,6 +9,7 @@ import Login from './login/Login';
 import Logs from './logs/Logs';
 import AddLog from './addlog/AddLog';
 import Profile from './profile/Profile';
+import CreateRecipe from './createRecipe/CreateRecipe';
 import Signup from './signup/Signup';
 import Callback from './callback/Callback';
 import Auth from './auth/Auth';
@@ -50,6 +51,7 @@ class App extends Component {
                   <Route exact path="/recipe" component={Recipe} />
                   <Route exact path="/recipe/:title" component={Recipe} />
                   <Route exact path="/recipe/:author/:title" component={Recipe} />
+                  <Route exact path="/recipe/:id" component={Recipe} />
                   <Route path="/login" component={Login} />
                   <Route path="/logs" component={Logs} />
                   <Route path="/addlog" component={AddLog} />
