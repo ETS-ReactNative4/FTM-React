@@ -20,20 +20,20 @@ import GoogleCallback from './callback/GoogleCallback';
 import './App.css';
 
 export const client = new ApolloClient({
-  uri: 'https://api.foodtomake.com/graphql',
+  uri: 'http://localhost:8081/graphql'
 });
 
 const auth = new Auth();
 
 const theme = createMuiTheme({
   palette: {
-    primary: blue,
-  },
+    primary: blue
+  }
 });
 class App extends Component {
   state = {
     jwt: this.props.jwt,
-    setJwt: jwt => this.setState({ jwt }),
+    setJwt: jwt => this.setState({ jwt })
   };
 
   render() {
@@ -50,7 +50,11 @@ class App extends Component {
                   <Route exact path="/" component={Home} />
                   <Route exact path="/recipe" component={Recipe} />
                   <Route exact path="/recipe/:title" component={Recipe} />
-                  <Route exact path="/recipe/:author/:title" component={Recipe} />
+                  <Route
+                    exact
+                    path="/recipe/:author/:title"
+                    component={Recipe}
+                  />
                   <Route exact path="/recipe/:id" component={Recipe} />
                   <Route path="/login" component={Login} />
                   <Route path="/logs" component={Logs} />
@@ -60,10 +64,17 @@ class App extends Component {
                   <Route
                     path="/auth/google/callback"
                     component={() => {
-                      <GoogleCallback authPromise={auth.handleGoogleAuthentication} />;
+                      return (
+                        <GoogleCallback
+                          authMethod={auth.handleGoogleAuthentication}
+                        />
+                      );
                     }}
                   />
-                  <Route path="/auth/facebook/callback" component={() => <GoogleCallback />} />
+                  <Route
+                    path="/auth/facebook/callback"
+                    component={() => <GoogleCallback />}
+                  />
                 </div>
               </JwtProvider>
             </MuiThemeProvider>

@@ -12,17 +12,9 @@ class GoogleCallback extends Component {
     googleId: ''
   };
 
-  componentDidMount() {
-    this.props
-      .authPromise()
-      .then(googleId => {
-        console.log('GID:' + googleId);
-        this.setState({ googleId });
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ googleId: '' });
-      });
+  async componentDidMount() {
+    const googleId = await this.props.authMethod();
+    this.setState({ googleId });
   }
 
   render() {
@@ -30,6 +22,7 @@ class GoogleCallback extends Component {
     query {
       loginGoogle(googleId: "${this.state.googleId}") {
         token
+        error
       }
     }
     `;
@@ -45,7 +38,15 @@ class GoogleCallback extends Component {
                     if (loading) {
                       return 'Waiting on query...';
                     } else {
-                      context.setJwt(data.loginGoogle.token);
+                      console.log(data);
+                      if (data) {
+                        if (data.loginGoogle.token) {
+                          context.setJwt(data.loginGoogle.token);
+                        } else if (data.loginGoogle.error) {
+                          console.log(data.loginGoogle.error);
+                          // return <CreateUsername />;
+                        }
+                      }
                       return <Redirect to="/" />;
                     }
                   }}
@@ -54,7 +55,7 @@ class GoogleCallback extends Component {
             }}
           </JwtConsumer>
         ) : (
-          'Loading...'
+          'Loading Jwt...'
         )}
       </div>
     );

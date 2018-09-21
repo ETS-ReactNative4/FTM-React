@@ -22,9 +22,14 @@ export default class Auth {
   };
 
   handleGoogleAuthentication = async () => {
-    this.auth0.parseHash((error, authResult) => {
-      console.log(error, authResult);
-      return authResult.idTokenPayload.sub; // authResult.idTokenPayload.sub is the unique identifier for the user
+    return new Promise((resolve, reject) => {
+      return this.auth0.parseHash((error, authResult) => {
+        if(error) {
+          reject(error);
+        }
+        console.log(error, authResult);
+        resolve(authResult.idTokenPayload.sub); // authResult.idTokenPayload.sub is the unique identifier for the user
+      });
     });
   };
 
