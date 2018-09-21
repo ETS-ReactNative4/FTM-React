@@ -18,15 +18,15 @@ import './SearchResult.css';
 
 const styles = {
   card: {
-    height: '100%',
-    minHeight: 200,
-    width: '100%',
-    minWidth: 250,
+    height: 350,
+    width: 250,
     marginTop: 20,
-    marginBottom: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
   },
   media: {
-    height: 10,
+    height: 0,
     paddingTop: '56.25%', // 16:9
   },
   actions: {

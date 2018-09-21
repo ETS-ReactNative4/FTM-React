@@ -24,8 +24,8 @@ const styles = {
   gridList: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-start',
     overflow: 'hidden',
   },
 };
@@ -147,7 +147,7 @@ class Home extends Component {
           style={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
         >
           {this.state.recipes.length > 0 && (
-            <GridList cellHeight={200} spacing={1} className={classes.gridList}>
+            <GridList className={classes.gridList}>
               <Trail
                 keys={this.state.recipes}
                 from={{ marginTop: 500, opacity: 1 }}
