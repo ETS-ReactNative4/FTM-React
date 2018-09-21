@@ -30,6 +30,7 @@
 }
 
 .search-results {
+  will-change: opacity;
   height: 100%;
   grid-area: results;
 }

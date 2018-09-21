@@ -49,6 +49,7 @@ class Home extends Component {
                     id
                     name
                     description
+                    created
                   }
                 }`,
     });
@@ -84,82 +85,48 @@ class Home extends Component {
   render() {
     return (
       <div className="home-container">
-        {this.state.recipes.length > 0 ? (
-          <Spring from={{ marginTop: 0, opacity: 1 }} to={{ marginTop: -200, opacity: 0 }}>
-            {({ marginTop, opacity }) => (
-              <img
-                className="logo"
-                style={{ marginTop }}
-                src="https://i.imgur.com/XPjGdyV.png"
-                alt="foodtomake logo"
-              />
-            )}
-          </Spring>
-        ) : (
-          <Spring from={{ marginTop: -200, opacity: 0 }} to={{ marginTop: 0, opacity: 1 }}>
-            {({ marginTop, opacity }) => (
-              <img
-                className="logo"
-                style={{ marginTop, opacity }}
-                src="https://i.imgur.com/XPjGdyV.png"
-                alt="foodtomake logo"
-              />
-            )}
-          </Spring>
-        )}
-        {this.state.recipes.length > 0 ? (
-          <Spring from={{ marginTop: 0 }} to={{ marginTop: -200 }}>
-            {({ marginTop }) => (
-              <div className="search-box" style={{ marginTop }}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
-                  <Input
-                    id="search"
-                    onKeyPress={this.handleEnterSearch}
-                    onChange={this.handleQueryChange}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
-                          <FilterList size={30} />
-                        </IconButton>
-                        <Button id="searchButton" onClick={this.handleButtonSearch}>
-                          Search
-                        </Button>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </div>
-            )}
-          </Spring>
-        ) : (
-          <Spring from={{ marginTop: -200 }} to={{ marginTop: 0 }}>
-            {({ marginTop }) => (
-              <div className="search-box" style={{ marginTop }}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
-                  <Input
-                    id="search"
-                    onKeyPress={this.handleEnterSearch}
-                    onChange={this.handleQueryChange}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
-                          <FilterList size={30} />
-                        </IconButton>
-                        <Button id="searchButton" onClick={this.handleButtonSearch}>
-                          Search
-                        </Button>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </div>
-            )}
-          </Spring>
-        )}
+        <Spring
+          from={{ marginTop: 0, opacity: 1 }}
+          to={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+        >
+          {({ marginTop, opacity }) => (
+            <img
+              className="logo"
+              style={{ marginTop }}
+              src="https://i.imgur.com/XPjGdyV.png"
+              alt="foodtomake logo"
+            />
+          )}
+        </Spring>
+        <Spring
+          from={{ marginTop: 0 }}
+          to={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+        >
+          {({ marginTop }) => (
+            <div className="search-box" style={{ marginTop }}>
+              <FormControl fullWidth>
+                <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
+                <Input
+                  id="search"
+                  onKeyPress={this.handleEnterSearch}
+                  onChange={this.handleQueryChange}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                        <FilterList size={30} />
+                      </IconButton>
+                      <Button id="searchButton" onClick={this.handleButtonSearch}>
+                        Search
+                      </Button>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+            </div>
+          )}
+        </Spring>
 
-        <div className="search-results" style={{ marginTop: -200 }}>
+        <div className="search-results" style={{ marginTop: 20 }}>
           {this.state.recipes.length > 0 && (
             <Trail
               keys={this.state.recipes}
@@ -173,6 +140,7 @@ class Home extends Component {
                       key={recipe.id}
                       name={recipe.name}
                       description={recipe.description}
+                      created={recipe.created}
                       r_id={recipe.id}
                     />
                   </div>
