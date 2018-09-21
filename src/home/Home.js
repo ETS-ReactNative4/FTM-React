@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Input,
   InputAdornment,
@@ -7,6 +8,8 @@ import {
   Button,
   Paper,
   FormControl,
+  withStyles,
+  GridList,
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import { Spring, Trail } from 'react-spring';
@@ -15,6 +18,17 @@ import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 import { client } from '../App';
+import { Card } from 'material-ui';
+
+const styles = {
+  gridList: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+};
 
 class Home extends Component {
   state = {
@@ -32,6 +46,7 @@ class Home extends Component {
                     id
                     name
                     description
+                    images
                   }
                 }`,
       });
@@ -83,6 +98,7 @@ class Home extends Component {
   };
 
   render() {
+    const { classes } = this.props;
     return (
       <div className="home-container">
         <Spring
@@ -126,34 +142,35 @@ class Home extends Component {
           )}
         </Spring>
 
-        <div className="search-results" style={{ marginTop: 20 }}>
+        <div
+          className="search-results"
+          style={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+        >
           {this.state.recipes.length > 0 && (
-            <Trail
-              keys={this.state.recipes}
-              from={{ marginTop: 500, opacity: 0 }}
-              to={{ marginTop: 20, opacity: 1 }}
-            >
-              {this.state.recipes.map(recipe => (marginTop) => {
-                return (
-                  <div key={recipe.id} style={marginTop}>
-                    <SearchResult
-                      key={recipe.id}
-                      name={recipe.name}
-                      description={recipe.description}
-                      created={recipe.created}
-                      r_id={recipe.id}
-                    />
-                  </div>
-                );
-              })}
-            </Trail>
+            <GridList cellHeight={200} spacing={1} className={classes.gridList}>
+              <Trail
+                keys={this.state.recipes}
+                from={{ marginTop: 500, opacity: 1 }}
+                to={{ marginTop: 0, opacity: 1 }}
+              >
+                {this.state.recipes.map(recipe => (marginTop, index) => {
+                  return (
+                    <div key={index} style={marginTop}>
+                      <SearchResult
+                        key={recipe.id}
+                        name={recipe.name}
+                        style={marginTop}
+                        description={recipe.description}
+                        created={recipe.created}
+                        images={recipe.images}
+                        r_id={recipe.id}
+                      />
+                    </div>
+                  );
+                })}
+              </Trail>
+            </GridList>
           )}
-          {/* {this.state.recipes &&
-            this.state.recipes.map((recipe) => {
-              return (
-                <SearchResult key={recipe.id} name={recipe.name} description={recipe.description} r_id={recipe.id} />
-              );
-            })} */}
         </div>
         <Paper className={this.getFilterClassNames()} elevation={5}>
           <IconButton className="close-filters" onClick={this.toggleFilter}>
@@ -166,4 +183,8 @@ class Home extends Component {
   }
 }
 
-export default Home;
+Home.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Home);

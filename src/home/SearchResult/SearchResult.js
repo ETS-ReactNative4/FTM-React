@@ -13,13 +13,15 @@ import {
   CardMedia,
 } from '@material-ui/core';
 import { Favorite, Share, MoreVert } from '@material-ui/icons';
-import red from '@material-ui/core/colors';
 import { Link } from 'react-router-dom';
 import './SearchResult.css';
 
 const styles = {
   card: {
-    maxWidth: 400,
+    height: '100%',
+    minHeight: 200,
+    width: '100%',
+    minWidth: 250,
     marginTop: 20,
     marginBottom: 20,
   },
@@ -52,7 +54,7 @@ class SearchResult extends React.Component {
 
   render() {
     const {
-      classes, name, r_id, description, created,
+      classes, name, r_id, description, created, images,
     } = this.props;
 
     return (
@@ -73,11 +75,7 @@ class SearchResult extends React.Component {
           title={name}
           subheader={created}
         />
-        <CardMedia
-          className={classes.media}
-          image="https://i.imgur.com/KWl6pqT.jpg"
-          title="Fat cat alert"
-        />
+        <CardMedia className={classes.media} image={images[0]} title="Fat cat alert" />
         <CardContent>
           <Typography component="p">{description}</Typography>
         </CardContent>
@@ -101,6 +99,7 @@ SearchResult.propTypes = {
   classes: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   created: PropTypes.string.isRequired,
+  images: PropTypes.array.isRequired,
   r_id: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
 };
