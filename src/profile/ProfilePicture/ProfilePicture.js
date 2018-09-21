@@ -6,19 +6,14 @@ class ProfilePicture extends Component {
     super(props);
     this.state = {
       imageURL: null,
-      name: null,
+      name: null
     };
   }
 
   render() {
     return (
-      <div className='fullSize user-info'>
-
-        <img
-          alt="user image"
-          src={this.props.imageURL}
-          className='profile-pic'
-        />
+      <div className="fullSize user-info">
+        <img alt="user" src={this.props.imageURL} className="profile-pic" />
 
         <div className="info">
           <div className="username">
@@ -31,7 +26,6 @@ class ProfilePicture extends Component {
             <a href="http://www.foodtomake.com">foodtomake</a>
           </div>
         </div>
-
       </div>
     );
   }

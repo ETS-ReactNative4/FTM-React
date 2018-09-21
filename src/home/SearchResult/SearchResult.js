@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
-import { Spring } from 'react-spring';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Button,
+  Typography
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import './SearchResult.css';
 
@@ -10,15 +15,15 @@ const styles = {
   card: {
     minWidth: '100%',
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   title: {
     marginBottom: 16,
-    fontSize: 14,
+    fontSize: 14
   },
   pos: {
-    marginBottom: 12,
-  },
+    marginBottom: 12
+  }
 };
 
 function SearchResult(props) {
@@ -27,10 +32,10 @@ function SearchResult(props) {
   const { description } = props;
   const { classes } = props;
 
-  const location = {
-    pathname: '/recipe:',
-    state: { id: r_id },
-  };
+  // const location = {
+  //   pathname: '/recipe:',
+  //   state: { id: r_id }
+  // };
 
   return (
     // <Spring from={{ marginTop: 500, opacity: 0 }} to={{ marginTop: 20, opacity: 1 }}>
@@ -59,7 +64,7 @@ function SearchResult(props) {
 SearchResult.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(SearchResult);

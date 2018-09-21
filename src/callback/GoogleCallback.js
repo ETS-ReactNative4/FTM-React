@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import Auth from '../auth/Auth';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Consumer as JwtConsumer } from '../context/Jwt';
 import { Redirect } from 'react-router-dom';
-
-const auth0 = new Auth();
+import Username from '../username/Username';
 
 class GoogleCallback extends Component {
   state = {
@@ -44,9 +42,11 @@ class GoogleCallback extends Component {
                       if (data) {
                         if (data.loginGoogle.token) {
                           context.setJwt(data.loginGoogle.token);
-                        } else if (data.loginGoogle.error) {
+                        } else if (
+                          data.loginGoogle.error.code === 'USER_NOT_FOUND'
+                        ) {
                           console.log(data.loginGoogle.error);
-                          // return <CreateUsername />;
+                          return <Username googleId={this.state.googleId} />;
                         }
                       }
                       return <Redirect to="/" />;
