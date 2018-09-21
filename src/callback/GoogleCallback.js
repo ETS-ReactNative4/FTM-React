@@ -22,7 +22,9 @@ class GoogleCallback extends Component {
     query {
       loginGoogle(googleId: "${this.state.googleId}") {
         token
-        error
+        error {
+          code
+        }
       }
     }
     `;
