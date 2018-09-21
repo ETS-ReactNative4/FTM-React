@@ -46,7 +46,7 @@ class GoogleCallback extends Component {
                           data.loginGoogle.error.code === 'USER_NOT_FOUND'
                         ) {
                           console.log(data.loginGoogle.error);
-                          return <Username googleId={this.state.googleId} />;
+                          return <Username setJwt={context.setJwt} googleId={this.state.googleId} />;
                         }
                       }
                       return <Redirect to="/" />;

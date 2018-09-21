@@ -11,7 +11,8 @@ class Username extends Component {
     username: ''
   };
 
-  onSubmit = async () => {
+  onSubmit = async event => {
+    event.preventDefault();
     const { data } = await client.mutate({
       mutation: gql`
       mutation {
@@ -26,22 +27,31 @@ class Username extends Component {
         }
       }`
     });
-    console.log(data);
-    let error = null;
-    if (
-      data.createUserGoogle.error &&
-      data.createUserGoogle.error.code === 'DUPLICATE_USERNAME'
-    ) {
-      error = 'That username already exists.';
+    if (data) {
+      const { error, token } = data.createUserGoogle;
+      if (error) {
+        if (error.code === 'DUPLICATE_USERNAME') {
+          return this.setState({ error: 'That username already exists.' });
+        } else {
+          return this.setState({ error: 'Please try again.' });
+        }
+      } else {
+        return this.setState({ jwt: token });
+      }
+    } else {
+      return this.setState({ error: 'Please try again.' });
     }
-    this.setState({
-      jwt: data.createUserGoogle.token,
-      error
-    });
   };
 
   handleOnChange = event => {
     this.setState({ username: event.target.value });
+  };
+
+  handleOnKeyPress = event => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.onSubmit(event);
+    }
   };
 
   render() {
@@ -50,19 +60,20 @@ class Username extends Component {
         {this.state.jwt ? (
           <Redirect to="/" />
         ) : (
-          <form className="username-root">
+          <form className="username-root" onSubmit={this.onSubmit}>
             <TextField
               label="Username"
               fullWidth
               className="username"
               onChange={this.handleOnChange}
+              error={this.state.error}
+              helperText={this.state.error}
             />
             <Button
               variant="raised"
               color="primary"
               className="submit-btn"
-              error={this.state.error}
-              onClick={this.onSubmit}
+              type="submit"
             >
               Submit
             </Button>
