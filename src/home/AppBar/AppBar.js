@@ -6,6 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 
 const styles = {
   root: {
@@ -25,38 +26,40 @@ const styles = {
   }
 };
 
-function HomeAppBar(props) {
-  const { classes } = props;
+const HomeAppBar = inject('store')(
+  observer(props => {
+    const { classes } = props;
 
-  return (
-    <div className={classes.root}>
-      <AppBar id="main-app-bar" position="fixed">
-        <Toolbar>
-          <Typography
-            variant="title"
-            color="inherit"
-            className={classes.flex}
-            style={{ textDecoration: 'none' }}
-            component={Link}
-            to="/"
-          >
-            FoodtoMake
-          </Typography>
-          {!props.isLoggedIn && (
-            <Button color="inherit" component={Link} to="/signup">
-              Sign Up
-            </Button>
-          )}
-          {!props.isLoggedIn && (
-            <Button color="inherit" component={Link} to="/login">
-              Login
-            </Button>
-          )}
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
-}
+    return (
+      <div className={classes.root}>
+        <AppBar id="main-app-bar" position="fixed">
+          <Toolbar>
+            <Typography
+              variant="title"
+              color="inherit"
+              className={classes.flex}
+              style={{ textDecoration: 'none' }}
+              component={Link}
+              to="/"
+            >
+              FoodtoMake
+            </Typography>
+            {!props.store.authStore.loggedIn && (
+              <Button color="inherit" component={Link} to="/signup">
+                Sign Up
+              </Button>
+            )}
+            {!props.store.authStore.loggedIn && (
+              <Button color="inherit" component={Link} to="/login">
+                Login
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  })
+);
 
 HomeAppBar.propTypes = {
   classes: PropTypes.object.isRequired
