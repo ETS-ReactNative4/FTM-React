@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
 import { Grid } from 'material-ui';
-import ProfilePicture from './profilePicture/ProfilePicture';
-import ProfileDescription from './profileDescription/ProfileDescription';
-import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
+import { client } from '../App';
+import ProfilePicture from './ProfilePicture/ProfilePicture';
+import SearchResult from '../home/SearchResult/SearchResult';
+import Social from './Social/Social';
 import './Profile.css';
-
-const client = new ApolloClient({
-  uri: 'http://localhost:8081/graphql',
-});
 
 const styles = {
   spacing: 24,
   sizes: {
     xs: {
       picture: 12,
-      description: 12,
+      social: 12,
       recipes: 12,
     },
     sm: {
-      picture: 4,
-      description: 4,
+      picture: 8,
+      social: 8,
       recipes: 8,
     },
   },
@@ -31,51 +28,92 @@ class Profile extends Component {
     super(props);
     this.state = {
       user_image: 'https://i.imgur.com/4AiXzf8.jpg',
-      name: 'mckay test',
-      description: 'This is a short description of the user. This is a short description of the user. This is a short description of the user. This is a short description of the user. This is a short description of the user.',
-      user_id: null,
+      username: null,
+      user_id: '5b80e5924f300af2ea7f05cd',
+      owned_recipes: [],
     };
+    //this.getDataFromAPI();
+  }
+
+  componentWillMount() {
     this.getDataFromAPI();
   }
 
-  getDataFromAPI = async () => {
-    console.log('trying to get user info');
+  async getDataFromAPI() {
+    const user = await this.fetchUser();
+    console.log('user: \n', user);
+    this.setState({
+      user_id: user.id,
+      username: user.username,
+      owned_recipes: user.ownedRecipes,
+    });
+  }
+
+  fetchUser = async () => {
     const data = {
-      username: this.state.name,
+      user_id: this.state.user_id,
     };
     try {
       const result = client
         .query({
           query: gql`{           
-            userByUsername(
-              username: "${data.username}"
+            userById(
+              id: "${data.user_id}"
             ) {
               id
               username
+              ownedRecipes {name id description}
             }
           }
         `,
         })
-        .then(result => console.log(result.data.userByUsername));
-      return result.data;
+        .then((result) => {
+          return result.data.userById;
+        });
+      return result;
     } catch (err) {
       console.log(err);
       return {};
     }
-  }
+  };
 
   render() {
+    // don't render until we have data loaded
+    if (!this.state.username) {
+      return <div />
+    }
+
     return (
       <div>
-        <Grid className='user-container' container spacing={styles.spacing} justify={'center'}>
-          <Grid className='picture' item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
-            <ProfilePicture name={this.state.name} imageURL={this.state.user_image} />
+        <Grid className="user-container" container spacing={styles.spacing} justify={'center'}>
+          <Grid className="picture" item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
+            <ProfilePicture name={this.state.username} imageURL={this.state.user_image} />
           </Grid>
-          <Grid className='description' item xs={styles.sizes.xs.description} sm={styles.sizes.sm.description}>
-            <ProfileDescription desc={this.state.description}/>
+          <Grid className="social" item xs={styles.sizes.xs.social} sm={styles.sizes.sm.social}>
+            <Social
+              recipes_number={this.state.owned_recipes.length}
+              followers_number="234"
+              favorites_number="2,451"
+            />
           </Grid>
-          <Grid className='users-recipes' item xs={styles.sizes.xs.recipes} sm={styles.sizes.sm.recipes}>
-            This is a place holder for the users recipes. Can be copied from home page design mostly?
+          <Grid
+            className="users-recipes"
+            item
+            xs={styles.sizes.xs.recipes}
+            sm={styles.sizes.sm.recipes}
+          >
+            <div className="search-results">
+              {this.state.owned_recipes.map((recipe) => {
+                return (
+                  <SearchResult
+                    key={recipe.id}
+                    name={recipe.name}
+                    description={recipe.description}
+                    r_id={recipe.id}
+                  />
+                );
+              })}
+            </div>
           </Grid>
         </Grid>
       </div>

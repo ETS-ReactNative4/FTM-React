@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Input,
   InputAdornment,
@@ -6,14 +7,27 @@ import {
   IconButton,
   Button,
   Paper,
-  FormControl
+  FormControl,
+  withStyles,
+  GridList,
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
-import { Query } from 'react-apollo';
+import { Spring, Trail } from 'react-spring';
 import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
+import { client } from '../App';
+
+const styles = {
+  gridList: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-start',
+    overflow: 'hidden',
+  },
+};
 
 class Home extends Component {
   state = {
@@ -25,15 +39,39 @@ class Home extends Component {
 
   handleEnterSearch = event => {
     if (event.key === 'Enter') {
+      const { data } = await client.query({
+        query: gql`
+                query {
+                  searchAllRecipes(query: "${this.state.query}") {
+                    id
+                    name
+                    description
+                    images
+                  }
+                }`,
+      });
       this.setState({
-        loading: true
+        loading: true,
+        recipes: data.searchAllRecipes,
       });
     }
   };
 
-  handleButtonSearch = () => {
+  handleButtonSearch = async () => {
+    const { data } = await client.query({
+      query: gql`
+                query {
+                  searchAllRecipes(query: "${this.state.query}") {
+                    id
+                    name
+                    description
+                    created
+                  }
+                }`,
+    });
     this.setState({
-      loading: true
+      loading: true,
+      recipes: data.searchAllRecipes,
     });
   };
 
@@ -45,12 +83,6 @@ class Home extends Component {
 
   toggleFilter = () => {
     this.setState({ showFilter: !this.state.showFilter });
-  };
-
-  toggleLoading = () => {
-    this.setState({
-      loading: !this.state.loading
-    });
   };
 
   getFilterClassNames = () => {
@@ -68,66 +100,79 @@ class Home extends Component {
   };
 
   render() {
-    const RECIPES_QUERY = gql`
-    query {
-      searchAllRecipes(query: "${this.state.query}") {
-        id
-        name
-        description
-      }
-    }
-  `;
-
+    const { classes } = this.props;
     return (
       <div className="home-container">
-        <img
-          className="logo"
-          src="https://i.imgur.com/XPjGdyV.png"
-          alt="foodtomake logo"
-        />
-        <div className="search-box">
-          <FormControl fullWidth>
-            <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
-            <Input
-              id="search"
-              onKeyPress={this.handleEnterSearch}
-              onChange={this.handleQueryChange}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onMouseDown={this.handleMouseDown}
-                    onClick={this.toggleFilter}
-                  >
-                    <FilterList size={30} />
-                  </IconButton>
-                  <Button id="searchButton" onClick={this.handleButtonSearch}>
-                    Search
-                  </Button>
-                </InputAdornment>
-              }
+        <Spring
+          from={{ marginTop: 0, opacity: 1 }}
+          to={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+        >
+          {({ marginTop, opacity }) => (
+            <img
+              className="logo"
+              style={{ marginTop }}
+              src="https://i.imgur.com/XPjGdyV.png"
+              alt="foodtomake logo"
             />
-          </FormControl>
-        </div>
-        <div className="search-results">
-          {this.state.query &&
-            this.state.loading && (
-              <Query query={RECIPES_QUERY}>
-                {({ loading, error, data }) => {
-                  if (loading) {
-                    return 'Loading...';
+          )}
+        </Spring>
+        <Spring
+          from={{ marginTop: 0 }}
+          to={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+        >
+          {({ marginTop }) => (
+            <div className="search-box" style={{ marginTop }}>
+              <FormControl fullWidth>
+                <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
+                <Input
+                  id="search"
+                  onKeyPress={this.handleEnterSearch}
+                  onChange={this.handleQueryChange}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                        <FilterList size={30} />
+                      </IconButton>
+                      <Button id="searchButton" onClick={this.handleButtonSearch}>
+                        Search
+                      </Button>
+                    </InputAdornment>
                   }
-                  return data.searchAllRecipes.map(recipe => {
-                    return (
+                />
+              </FormControl>
+            </div>
+          )}
+        </Spring>
+
+        <div
+          className="search-results"
+          style={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+        >
+          {this.state.recipes.length > 0 && (
+            <GridList className={classes.gridList}>
+              <Trail
+                keys={this.state.recipes}
+                from={{ marginTop: 500, opacity: 1 }}
+                to={{ marginTop: 0, opacity: 1 }}
+              >
+                {this.state.recipes.map(recipe => (marginTop, index) => {
+                  return (
+                    <div key={index} style={marginTop}>
                       <SearchResult
                         key={recipe.id}
                         name={recipe.name}
+                        style={marginTop}
                         description={recipe.description}
+                        created={recipe.created}
+                        images={recipe.images}
+                        r_id={recipe.id}
                       />
-                    );
-                  });
-                }}
-              </Query>
-            )}
+                    </div>
+                  );
+                })}
+              </Trail>
+            </GridList>
+          )}
         </div>
         <Paper className={this.getFilterClassNames()} elevation={5}>
           <IconButton className="close-filters" onClick={this.toggleFilter}>
@@ -140,4 +185,8 @@ class Home extends Component {
   }
 }
 
-export default Home;
+Home.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Home);

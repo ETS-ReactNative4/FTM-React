@@ -10,7 +10,6 @@ import Logs from './logs/Logs';
 import AddLog from './addlog/AddLog';
 import Profile from './profile/Profile';
 import Signup from './signup/Signup';
-import Callback from './callback/Callback';
 import Auth from './auth/Auth';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
@@ -18,8 +17,8 @@ import { Provider as JwtProvider } from './context/Jwt';
 import GoogleCallback from './callback/GoogleCallback';
 import './App.css';
 
-const client = new ApolloClient({
-  uri: 'http://api.foodtomake.com/graphql'
+export const client = new ApolloClient({
+  uri: 'https://api.foodtomake.com/graphql'
 });
 
 const auth = new Auth();
@@ -54,6 +53,7 @@ class App extends Component {
                     path="/recipe/:author/:title"
                     component={Recipe}
                   />
+                  <Route exact path="/recipe/:id" component={Recipe} />
                   <Route path="/login" component={Login} />
                   <Route path="/logs" component={Logs} />
                   <Route path="/addlog" component={AddLog} />
@@ -62,9 +62,11 @@ class App extends Component {
                   <Route
                     path="/auth/google/callback"
                     component={() => {
-                      <GoogleCallback
-                        authPromise={auth.handleGoogleAuthentication}
-                      />;
+                      return (
+                        <GoogleCallback
+                          authMethod={auth.handleGoogleAuthentication}
+                        />
+                      );
                     }}
                   />
                   <Route

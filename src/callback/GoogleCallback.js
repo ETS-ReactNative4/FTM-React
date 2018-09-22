@@ -1,28 +1,18 @@
 import React, { Component } from 'react';
-import Auth from '../auth/Auth';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Consumer as JwtConsumer } from '../context/Jwt';
 import { Redirect } from 'react-router-dom';
-
-const auth0 = new Auth();
+import Username from '../username/Username';
 
 class GoogleCallback extends Component {
   state = {
     googleId: ''
   };
 
-  componentDidMount() {
-    this.props
-      .authPromise()
-      .then(googleId => {
-        console.log('GID:' + googleId);
-        this.setState({ googleId });
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ googleId: '' });
-      });
+  async componentDidMount() {
+    const googleId = await this.props.authMethod();
+    this.setState({ googleId });
   }
 
   render() {
@@ -30,6 +20,9 @@ class GoogleCallback extends Component {
     query {
       loginGoogle(googleId: "${this.state.googleId}") {
         token
+        error {
+          code
+        }
       }
     }
     `;
@@ -45,7 +38,17 @@ class GoogleCallback extends Component {
                     if (loading) {
                       return 'Waiting on query...';
                     } else {
-                      context.setJwt(data.loginGoogle.token);
+                      console.log(data);
+                      if (data) {
+                        if (data.loginGoogle.token) {
+                          context.setJwt(data.loginGoogle.token);
+                        } else if (
+                          data.loginGoogle.error.code === 'USER_NOT_FOUND'
+                        ) {
+                          console.log(data.loginGoogle.error);
+                          return <Username setJwt={context.setJwt} googleId={this.state.googleId} />;
+                        }
+                      }
                       return <Redirect to="/" />;
                     }
                   }}
@@ -54,7 +57,7 @@ class GoogleCallback extends Component {
             }}
           </JwtConsumer>
         ) : (
-          'Loading...'
+          'Loading Jwt...'
         )}
       </div>
     );
