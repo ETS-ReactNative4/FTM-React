@@ -9,20 +9,20 @@ import { Link } from 'react-router-dom';
 
 const styles = {
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   flex: {
-    flex: 1,
+    flex: 1
   },
   menuButton: {
-    marginRight: 20,
+    marginRight: 20
   },
   list: {
-    width: 250,
+    width: 250
   },
   fullList: {
-    width: 'auto',
-  },
+    width: 'auto'
+  }
 };
 
 function HomeAppBar(props) {
@@ -37,11 +37,21 @@ function HomeAppBar(props) {
             color="inherit"
             className={classes.flex}
             style={{ textDecoration: 'none' }}
-            component={Link} to="/">
+            component={Link}
+            to="/"
+          >
             FoodtoMake
           </Typography>
-          <Button color="inherit" component={Link} to="/signup">Sign Up</Button>
-          <Button color="inherit" component={Link} to="/login">Login</Button>
+          {!props.isLoggedIn && (
+            <Button color="inherit" component={Link} to="/signup">
+              Sign Up
+            </Button>
+          )}
+          {!props.isLoggedIn && (
+            <Button color="inherit" component={Link} to="/login">
+              Login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </div>
@@ -49,7 +59,7 @@ function HomeAppBar(props) {
 }
 
 HomeAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(HomeAppBar);

@@ -14,7 +14,7 @@ import Auth from './auth/Auth';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
 import { Provider as JwtProvider } from './context/Jwt';
-import GoogleCallback from './callback/GoogleCallback';
+import Callback from './callback/Callback';
 import './App.css';
 
 export const client = new ApolloClient({
@@ -30,11 +30,13 @@ const theme = createMuiTheme({
 });
 class App extends Component {
   state = {
-    jwt: this.props.jwt,
     setJwt: jwt => this.setState({ jwt })
   };
 
+  
+
   render() {
+    console.log(this.state.jwt);
     return (
       <div className="app-container">
         <ApolloProvider client={client}>
@@ -42,7 +44,7 @@ class App extends Component {
             <MuiThemeProvider theme={theme}>
               <JwtProvider value={this.state}>
                 <div className="app-bar">
-                  <AppBar />
+                  <AppBar isLoggedIn={this.state.jwt} />
                 </div>
                 <div className="content-area">
                   <Route exact path="/" component={Home} />
@@ -62,16 +64,14 @@ class App extends Component {
                   <Route
                     path="/auth/google/callback"
                     component={() => {
-                      return (
-                        <GoogleCallback
-                          authMethod={auth.handleGoogleAuthentication}
-                        />
-                      );
+                      return <Callback source={'google'} />;
                     }}
                   />
                   <Route
                     path="/auth/facebook/callback"
-                    component={() => <GoogleCallback />}
+                    component={() => {
+                      return <Callback source={'facebook'} />;
+                    }}
                   />
                 </div>
               </JwtProvider>
