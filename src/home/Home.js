@@ -18,7 +18,6 @@ import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 import { client } from '../App';
-import { Card } from 'material-ui';
 
 const styles = {
   gridList: {
@@ -34,10 +33,11 @@ class Home extends Component {
   state = {
     query: '',
     recipes: [],
-    showFilter: false,
+    loading: false,
+    showFilter: false
   };
 
-  handleEnterSearch = async (event) => {
+  handleEnterSearch = event => {
     if (event.key === 'Enter') {
       const { data } = await client.query({
         query: gql`
@@ -51,6 +51,7 @@ class Home extends Component {
                 }`,
       });
       this.setState({
+        loading: true,
         recipes: data.searchAllRecipes,
       });
     }
@@ -69,13 +70,14 @@ class Home extends Component {
                 }`,
     });
     this.setState({
+      loading: true,
       recipes: data.searchAllRecipes,
     });
   };
 
-  handleQueryChange = (event) => {
+  handleQueryChange = event => {
     this.setState({
-      query: event.target.value,
+      query: event.target.value
     });
   };
 
@@ -93,7 +95,7 @@ class Home extends Component {
     return classes.join(' ');
   };
 
-  handleMouseDown = (event) => {
+  handleMouseDown = event => {
     event.preventDefault();
   };
 
