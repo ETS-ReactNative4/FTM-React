@@ -12,7 +12,7 @@ import {
   GridList,
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
-import { Spring, Trail } from 'react-spring';
+import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
@@ -34,10 +34,10 @@ class Home extends Component {
     query: '',
     recipes: [],
     loading: false,
-    showFilter: false
+    showFilter: false,
   };
 
-  handleEnterSearch = event => {
+  handleEnterSearch = async (event) => {
     if (event.key === 'Enter') {
       const { data } = await client.query({
         query: gql`
@@ -75,9 +75,9 @@ class Home extends Component {
     });
   };
 
-  handleQueryChange = event => {
+  handleQueryChange = (event) => {
     this.setState({
-      query: event.target.value
+      query: event.target.value,
     });
   };
 
@@ -95,7 +95,7 @@ class Home extends Component {
     return classes.join(' ');
   };
 
-  handleMouseDown = event => {
+  handleMouseDown = (event) => {
     event.preventDefault();
   };
 
@@ -133,7 +133,7 @@ class Home extends Component {
                       <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
                         <FilterList size={30} />
                       </IconButton>
-                      <Button id="searchButton" onClick={this.handleButtonSearch}>
+                      <Button id="searchButton" color="primary" onClick={this.handleButtonSearch}>
                         Search
                       </Button>
                     </InputAdornment>
@@ -151,13 +151,14 @@ class Home extends Component {
           {this.state.recipes.length > 0 && (
             <GridList className={classes.gridList}>
               <Trail
+                native
                 keys={this.state.recipes}
                 from={{ marginTop: 500, opacity: 1 }}
                 to={{ marginTop: 0, opacity: 1 }}
               >
                 {this.state.recipes.map(recipe => (marginTop, index) => {
                   return (
-                    <div key={index} style={marginTop}>
+                    <animated.div key={index} style={marginTop}>
                       <SearchResult
                         key={recipe.id}
                         name={recipe.name}
@@ -167,7 +168,7 @@ class Home extends Component {
                         images={recipe.images}
                         r_id={recipe.id}
                       />
-                    </div>
+                    </animated.div>
                   );
                 })}
               </Trail>
