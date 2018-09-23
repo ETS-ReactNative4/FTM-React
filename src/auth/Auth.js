@@ -4,7 +4,7 @@ export default class Auth {
   auth0 = new WebAuth({
     domain: 'foodtomake.auth0.com',
     clientID: 'Xl3JO8Pwt2fgVmtCr0K6fTo1axSPjCBs', //This is auth0 clientId not google or facebook clientId
-    responseType: 'token id_token',
+    responseType: 'id_token',
     scope: 'openid'
   });
 

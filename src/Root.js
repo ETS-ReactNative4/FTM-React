@@ -4,7 +4,9 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
+import './Root.css';
 import App from './App';
+import AppBar from './home/AppBar/AppBar';
 
 export const client = new ApolloClient({
   clientState: {
@@ -35,7 +37,12 @@ class Root extends Component {
         <ApolloProvider client={client}>
           <BrowserRouter>
             <MuiThemeProvider theme={theme}>
-              <App />
+              <div className="app-bar">
+                <AppBar />
+              </div>
+              <div className="content-area">
+                <App />
+              </div>
             </MuiThemeProvider>
           </BrowserRouter>
         </ApolloProvider>
