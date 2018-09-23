@@ -9,7 +9,7 @@ import App from './App';
 export const client = new ApolloClient({
   clientState: {
     defaults: {
-      jwt: ''
+      jwt: 'Hello'
     },
     resolvers: {
       Mutation: {

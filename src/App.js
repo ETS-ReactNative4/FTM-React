@@ -9,13 +9,17 @@ import AddLog from './addlog/AddLog';
 import Profile from './profile/Profile';
 import Signup from './signup/Signup';
 import Callback from './callback/Callback';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { getJwt } from './graphql/queries';
 import './App.css';
 
 class App extends Component {
   render() {
+    console.log(this.props);
+    const { jwt } = this.props;
     return (
       <div>
+        {console.log(jwt)}
         <div className="app-bar">
           <AppBar isLoggedIn={false} />
         </div>
@@ -48,4 +52,6 @@ class App extends Component {
   }
 }
 
-export default App;
+export default graphql(getJwt, {
+  props: ({ data: { jwt } }) => ({ jwt })
+})(App);
