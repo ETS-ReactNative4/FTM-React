@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Consumer as JwtConsumer } from '../context/Jwt';
 import { Redirect } from 'react-router-dom';
 import Username from '../username/Username';
 import Auth from '../auth/Auth';
@@ -32,8 +31,7 @@ class Callback extends Component {
 
     return (
       <div>
-        {this.state.id ? (
-          <JwtConsumer>
+        {/* {this.state.id ? (
             {context => {
               return (
                 <Query query={LOGIN_QUERY}>
@@ -64,10 +62,9 @@ class Callback extends Component {
                 </Query>
               );
             }}
-          </JwtConsumer>
         ) : (
           'Loading Jwt...'
-        )}
+        )} */}
       </div>
     );
   }
