@@ -12,15 +12,16 @@ const client = new ApolloClient({
   clientState: {
     defaults: {
       token: '',
-    },
+      userId: ''
+    }
   },
-  uri: 'https://api.foodtomake.com/graphql',
+  uri: 'https://api.foodtomake.com/graphql'
 });
 
 const theme = createMuiTheme({
   palette: {
-    primary: blue,
-  },
+    primary: blue
+  }
 });
 class Root extends Component {
   render() {

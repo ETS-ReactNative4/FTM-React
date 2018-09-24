@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 export const getToken = gql`
   query {
     token @client
+    userId @client
   }
 `;
 

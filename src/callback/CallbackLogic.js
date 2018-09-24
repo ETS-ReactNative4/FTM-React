@@ -7,6 +7,7 @@ import Username from '../username/Username';
 import { Redirect } from 'react-router-dom';
 import { compose, graphql, withApollo } from 'react-apollo';
 import { loginSocial } from '../graphql/queries';
+import { decode } from 'jsonwebtoken';
 
 class CallbackLogic extends Component {
   render() {
@@ -26,9 +27,11 @@ class CallbackLogic extends Component {
         return <Error />;
       }
     }
+    const payload = decode(token);
     client.writeData({
       data: {
-        token
+        token,
+        userId: payload.id
       }
     });
     return <Redirect to="/" />;

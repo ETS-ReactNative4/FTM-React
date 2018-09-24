@@ -3,6 +3,7 @@ import { Button, TextField } from '@material-ui/core';
 import './Username.css';
 import { withApollo } from 'react-apollo';
 import { createUserSocial as mutation } from '../graphql/mutations';
+import { decode } from 'jsonwebtoken';
 
 class Username extends Component {
   state = {
@@ -38,9 +39,11 @@ class Username extends Component {
           }
         }
       }
+      const payload = decode(token);
       return client.writeData({
         data: {
-          token
+          token,
+          userId: payload.id
         }
       });
     }
