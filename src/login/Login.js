@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Button, TextField } from '@material-ui/core';
+import { withApollo } from 'react-apollo';
+import gql from 'graphql-tag';
 import './Login.css';
 import CustomSnackbar from '../snackbar/CustomSnackbar';
 import Auth from '../auth/Auth';
@@ -22,7 +24,26 @@ class Login extends Component {
   };
 
   handleSubmit = async () => {
-    console.log(`${this.state.account} : ${this.state.password}`);
+    const { client, history } = this.props;
+    const { data } = await client.query({
+      query: gql`
+        query {
+          login(username: "${this.state.account}", password: "${this.state.password}") {
+            token
+            apiError {
+              code
+              message
+            }
+          }
+        }
+      `,
+    });
+    // successful login
+    if (data.login.token) {
+      console.log(data.login);
+      client.writeData({ data: { token: data.login.token } });
+      history.replace('/');
+    }
   };
 
   handleAccountChange = (event) => {
@@ -66,4 +87,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withApollo(Login);
