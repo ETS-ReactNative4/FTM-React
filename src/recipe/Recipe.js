@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Button } from '@material-ui/core';
 import gql from 'graphql-tag';
-import { client } from '../Root';
+import { withApollo } from 'react-apollo';
 import './Recipe.css';
 import RecipeInstructions from './Instructions/Instructions';
 import RecipeInfo from './Info/Info';
@@ -18,7 +18,7 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 8
+      title: 8,
     },
     sm: {
       picture: 4,
@@ -26,9 +26,9 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 8
-    }
-  }
+      title: 8,
+    },
+  },
 };
 
 class Recipe extends Component {
@@ -49,18 +49,19 @@ class Recipe extends Component {
       difficulty: null,
       sourceURL: null,
       servings: null,
-      recipe_id: this.props.match.params.id
+      recipe_id: this.props.match.params.id,
     };
     this.saveRecipe = this.saveRecipe.bind(this);
-    //this.getDataFromAPI();
+    // this.getDataFromAPI();
     // console.log(this.state.recipe_id);
   }
 
   saveRecipe() {
+    const { client } = this.props;
     console.log('save this recipe');
     const data = {
       user_id: '5b80e5924f300af2ea7f05cd',
-      recipe_id: this.state.recipe_id
+      recipe_id: this.state.recipe_id,
     };
     try {
       const result = client
@@ -74,9 +75,9 @@ class Recipe extends Component {
               id
             }
           }
-        `
+        `,
         })
-        .then(result => {
+        .then((result) => {
           console.log(result.data);
           console.log('successfully saved recipe!');
           return result.data.recipeById;
@@ -96,9 +97,10 @@ class Recipe extends Component {
   fetchRecipe = async () => {
     console.log('getting recipe from database ');
     const data = {
-      recipe_id: this.state.recipe_id
+      recipe_id: this.state.recipe_id,
     };
     try {
+      const { client } = this.props;
       const result = client
         .query({
           query: gql`
@@ -127,10 +129,10 @@ class Recipe extends Component {
               comments
             }
           }
-        `
+        `,
         })
-        .then(result => {
-          //console.log(result.data.recipeById);
+        .then((result) => {
+          // console.log(result.data.recipeById);
           return result.data.recipeById;
         });
       return result;
@@ -157,13 +159,12 @@ class Recipe extends Component {
       description: recipe.description,
       sourceURL: recipe.sourceURL,
       servings: recipe.servings,
-      stars: Math.round(recipe.rating)
+      stars: Math.round(recipe.rating),
       // recipe_id: recipe._id,
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
-        authorImage:
-          'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png'
+        authorImage: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
       });
     }
   }
@@ -176,18 +177,8 @@ class Recipe extends Component {
 
     return (
       <div>
-        <Grid
-          className="pic-des-container"
-          container
-          spacing={styles.spacing}
-          justify={'center'}
-        >
-          <Grid
-            className="picture"
-            item
-            xs={styles.sizes.xs.picture}
-            sm={styles.sizes.sm.picture}
-          >
+        <Grid className="pic-des-container" container spacing={styles.spacing} justify={'center'}>
+          <Grid className="picture" item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
             <RecipePicture
               title={this.state.title}
               stars={this.state.stars}
@@ -202,12 +193,7 @@ class Recipe extends Component {
           >
             <RecipeDescription desc={this.state.description} />
           </Grid>
-          <Grid
-            className="info"
-            item
-            xs={styles.sizes.xs.author}
-            sm={styles.sizes.sm.author}
-          >
+          <Grid className="info" item xs={styles.sizes.xs.author} sm={styles.sizes.sm.author}>
             <RecipeInfo
               authorImage={this.state.authorImage}
               authorName={this.state.author}
@@ -267,4 +253,4 @@ class Recipe extends Component {
   }
 }
 
-export default Recipe;
+export default withApollo(Recipe);

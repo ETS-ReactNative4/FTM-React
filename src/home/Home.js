@@ -13,11 +13,11 @@ import {
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
+import { withApollo, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
-import { client } from '../Root';
 
 const styles = {
   gridList: {
@@ -30,14 +30,18 @@ const styles = {
 };
 
 class Home extends Component {
-  state = {
-    query: '',
-    recipes: [],
-    loading: false,
-    showFilter: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      query: '',
+      recipes: [],
+      loading: false,
+      showFilter: false,
+    };
+  }
 
   handleEnterSearch = async (event) => {
+    const { client } = this.props;
     if (event.key === 'Enter') {
       const { data } = await client.query({
         query: gql`
@@ -58,6 +62,7 @@ class Home extends Component {
   };
 
   handleButtonSearch = async () => {
+    const { client } = this.props;
     const { data } = await client.query({
       query: gql`
                 query {
@@ -190,4 +195,7 @@ Home.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Home);
+export default compose(
+  withStyles(styles),
+  withApollo,
+)(Home);
