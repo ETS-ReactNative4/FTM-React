@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Avatar } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -7,24 +7,24 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { compose, graphql } from 'react-apollo';
 import { getToken } from '../../graphql/queries';
-import SignOut from '../../signOut';
+import SignOut from '../../signOut/SignOut';
 
 const styles = {
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   flex: {
-    flex: 1,
+    flex: 1
   },
   menuButton: {
-    marginRight: 20,
+    marginRight: 20
   },
   list: {
-    width: 250,
+    width: 250
   },
   fullList: {
-    width: 'auto',
-  },
+    width: 'auto'
+  }
 };
 
 function HomeAppBar(props) {
@@ -45,27 +45,27 @@ function HomeAppBar(props) {
             FoodtoMake
           </Typography>
           {token ? (
-            <Button color="inherit" component={SignOut}>
-              Sign Out
-            </Button>
+            <Fragment>
+              <Avatar
+                aria-label="Result"
+                className={classes.avatar}
+                src="https://i.imgur.com/KWl6pqT.jpg"
+                component={Link}
+                to="/profile"
+              />
+              <Button color="inherit" component={SignOut}>
+                Sign Out
+              </Button>
+            </Fragment>
           ) : (
             <Fragment>
-              <Button color="inherit" component={Link}>
+              <Button color="inherit" component={Link} to="/signup">
                 Sign Up
               </Button>
-              <Button color="inherit" component={Link}>
+              <Button color="inherit" component={Link} to="/login">
                 Login
               </Button>
             </Fragment>
-          )}
-          {token && (
-            <Avatar
-              aria-label="Result"
-              className={classes.avatar}
-              src="https://i.imgur.com/KWl6pqT.jpg"
-              component={Link}
-              to="/profile"
-            />
           )}
         </Toolbar>
       </AppBar>
@@ -75,7 +75,7 @@ function HomeAppBar(props) {
 
 export default compose(
   graphql(getToken, {
-    props: ({ data: { token } }) => ({ token }),
+    props: ({ data: { token } }) => ({ token })
   }),
-  withStyles(styles),
+  withStyles(styles)
 )(HomeAppBar);
