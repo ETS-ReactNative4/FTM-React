@@ -26,7 +26,7 @@ class SignUp extends Component {
     this.auth.loginFacebook();
   };
 
-  handleSubmit = () => {};
+  handleSubmit = async () => {};
 
   render() {
     return (

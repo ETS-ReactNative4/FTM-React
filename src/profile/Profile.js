@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Grid, GridList } from 'material-ui';
 import { Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
-import { withApollo } from 'react-apollo';
+import { withApollo, compose, graphql } from 'react-apollo';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
+import { getToken } from './graphql/queries';
 import './Profile.css';
 
 const styles = {
@@ -62,7 +63,7 @@ class Profile extends Component {
       user_id: this.state.user_id,
     };
     try {
-      const { client } = this.props;
+      const { client, token } = this.props;
       const result = client
         .query({
           query: gql`{           
@@ -144,4 +145,9 @@ class Profile extends Component {
   }
 }
 
-export default withApollo(Profile);
+export default compose(
+  withApollo,
+  graphql(getToken, {
+    props: ({ data: { token } }) => ({ token }),
+  }),
+)(Profile);
