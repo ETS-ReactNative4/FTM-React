@@ -7,7 +7,7 @@ import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
 import Loading from '../loading/Loading';
-import { getToken } from './graphql/queries';
+import { getToken } from '../graphql/queries';
 import './Profile.css';
 
 const jwt = require('jsonwebtoken');
@@ -68,12 +68,12 @@ class Profile extends Component {
     try {
       const { client, token } = this.props;
       const decoded = jwt.decode(token);
-      console.log('decoded is this: ' , decoded);
+      console.log('decoded is this: ', decoded.id);
       const result = client
         .query({
           query: gql`{           
             userById(
-              id: "${data.user_id}"
+              id: "${decoded.id}"
             ) {
               id
               username
