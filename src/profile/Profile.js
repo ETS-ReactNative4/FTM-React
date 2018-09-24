@@ -112,18 +112,6 @@ class Profile extends Component {
             sm={styles.sizes.sm.recipes}
           >
             <div className="search-results">
-<<<<<<< HEAD
-              {this.state.owned_recipes.map((recipe) => {
-                return (
-                  <SearchResult
-                    key={recipe.id}
-                    name={recipe.name}
-                    description={recipe.description}
-                    r_id={recipe.id}
-                  />
-                );
-              })}
-=======
               <GridList className={styles.gridList}>
                 <Trail
                   native
@@ -148,7 +136,6 @@ class Profile extends Component {
                   })}
                 </Trail>
               </GridList>
->>>>>>> eb46ab87d31f454025c5863779e3bd904368404d
             </div>
           </Grid>
         </Grid>
