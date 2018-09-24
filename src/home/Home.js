@@ -23,7 +23,7 @@ const styles = {
   gridList: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
     alignItems: 'flex-start',
     overflow: 'hidden',
   },
