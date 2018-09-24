@@ -131,7 +131,7 @@ class Home extends Component {
           {({ marginTop }) => (
             <div className="search-box" style={{ marginTop }}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="search">{this.props.token}</InputLabel>
+                <InputLabel htmlFor="search">Search for a recipe...</InputLabel>
                 <Input
                   id="search"
                   onKeyPress={this.handleEnterSearch}

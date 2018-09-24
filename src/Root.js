@@ -8,19 +8,11 @@ import './Root.css';
 import App from './App';
 import AppBar from './home/AppBar/AppBar';
 
-export const client = new ApolloClient({
+const client = new ApolloClient({
   clientState: {
     defaults: {
       token: ''
     }
-    // resolvers: {
-    //   Mutation: {
-    //     setJwt: (_, { token }, { cache }) => {
-    //       cache.writeData({ token });
-    //       return null;
-    //     }
-    //   }
-    // }
   },
   uri: 'https://api.foodtomake.com/graphql'
 });
