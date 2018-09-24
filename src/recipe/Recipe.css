@@ -40,6 +40,10 @@ div.info {
   height: 100%;
 }
 
+.remove-recipe-button {
+  margin-left: 15px !important;
+}
+
 .source-url {
   font-size: .7em;
   color: gray;

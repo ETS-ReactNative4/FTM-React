@@ -55,19 +55,20 @@ class Recipe extends Component {
       recipe_id: this.props.match.params.id,
     };
     this.saveRecipe = this.saveRecipe.bind(this);
+    this.removeRecipe = this.removeRecipe.bind(this);
     // this.getDataFromAPI();
     // console.log(this.state.recipe_id);
   }
 
   saveRecipe() {
-    const { client, token } = this.props;
-    const decoded = jwt.decode(token);
-    console.log('save this recipe');
-    const data = {
-      user_id: decoded.id,
-      recipe_id: this.state.recipe_id,
-    };
     try {
+      const { client, token } = this.props;
+      const decoded = jwt.decode(token);
+      console.log('save this recipe');
+      const data = {
+        user_id: decoded.id,
+        recipe_id: this.state.recipe_id,
+      };
       const result = client
         .mutate({
           mutation: gql`
@@ -90,6 +91,39 @@ class Recipe extends Component {
     } catch (err) {
       console.log(err);
       console.log('failed to save recipe');
+      return {};
+    }
+  }
+
+  removeRecipe() {
+    try {
+      const { client, token } = this.props;
+      const decoded = jwt.decode(token);
+      console.log('remove this recipe');
+      const data = {
+        user_id: decoded.id,
+        recipe_id: this.state.recipe_id,
+      };
+      const result = client
+        .mutate({
+          mutation: gql`
+          mutation RemoveRecipe {           
+            deleteSavedRecipe(
+              userId: "${data.user_id}"
+              recipeId: "${data.recipe_id}"
+            )
+          }
+        `,
+        })
+        .then((result) => {
+          console.log(result.data);
+          console.log('successfully removed recipe for: ', decoded.id);
+          return result.data;
+        });
+      return result;
+    } catch (err) {
+      console.log(err);
+      console.log('failed to remove recipe');
       return {};
     }
   }
@@ -239,6 +273,14 @@ class Recipe extends Component {
               onClick={this.saveRecipe}
             >
               Save Recipe
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              className="remove-recipe-button"
+              onClick={this.removeRecipe}
+            >
+              Remove From Saved
             </Button>
           </Grid>
           <Grid
