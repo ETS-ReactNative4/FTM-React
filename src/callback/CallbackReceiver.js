@@ -12,7 +12,6 @@ class CallbackReceiver extends Component {
 
   async componentDidMount() {
     const id = await auth.handleAuthCallback();
-    console.log(id);
     this.setState({ id });
   }
 

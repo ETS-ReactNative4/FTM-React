@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const getJwt = gql`
+export const getToken = gql`
   query {
-    jwt @client
+    token @client
   }
 `;
 

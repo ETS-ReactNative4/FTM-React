@@ -11,16 +11,16 @@ import AppBar from './home/AppBar/AppBar';
 export const client = new ApolloClient({
   clientState: {
     defaults: {
-      jwt: 'Hello'
-    },
-    resolvers: {
-      Mutation: {
-        setJwt: (_, { jwt }, { cache }) => {
-          cache.writeData({ jwt });
-          return null;
-        }
-      }
+      token: 'Hello'
     }
+    // resolvers: {
+    //   Mutation: {
+    //     setJwt: (_, { token }, { cache }) => {
+    //       cache.writeData({ token });
+    //       return null;
+    //     }
+    //   }
+    // }
   },
   uri: 'https://api.foodtomake.com/graphql'
 });

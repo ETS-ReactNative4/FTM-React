@@ -28,7 +28,6 @@ export default class Auth {
         if (error) {
           reject(error);
         }
-        console.log(error, authResult);
         resolve(authResult.idTokenPayload.sub); // authResult.idTokenPayload.sub is the unique identifier for the user
       });
     });

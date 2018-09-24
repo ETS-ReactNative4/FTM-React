@@ -7,7 +7,6 @@ import { createUserSocial } from '../graphql/mutations';
 
 class Username extends Component {
   state = {
-    usernameExists: false,
     username: '',
     error: ''
   };
@@ -25,6 +24,21 @@ class Username extends Component {
       }
     });
     console.log(data);
+    const { error, createUserSocial } = data;
+    if (error) {
+      return this.setState({ error: 'Please try again' });
+    } else {
+      const { token, apiError } = createUserSocial;
+      const { code } = apiError;
+      if (code) {
+        if (code === 'DUPLICATE_USERNAME') {
+          this.setState({ error: 'That username is in use.' });
+        } else {
+          return this.setState({ error: 'Please try again' });
+        }
+      }
+      // return client.writeData({ token });
+    }
   };
 
   handleOnChange = event => {

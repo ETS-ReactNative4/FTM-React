@@ -8,14 +8,19 @@ import AddLog from './addlog/AddLog';
 import Profile from './profile/Profile';
 import Signup from './signup/Signup';
 import { graphql } from 'react-apollo';
-import { getJwt } from './graphql/queries';
+import { getToken } from './graphql/queries';
 import CallbackReceiver from './callback/CallbackReceiver';
 
 class App extends Component {
   render() {
+    console.log(this.props);
     return (
       <div>
-        <Route exact path="/" component={Home} />
+        <Route
+          exact
+          path="/"
+          component={() => <Home token={this.props.token} />}
+        />
         <Route exact path="/recipe" component={Recipe} />
         <Route exact path="/recipe/:title" component={Recipe} />
         <Route exact path="/recipe/:author/:title" component={Recipe} />
@@ -42,6 +47,6 @@ class App extends Component {
   }
 }
 
-export default graphql(getJwt, {
-  props: ({ data: { jwt } }) => ({ jwt })
+export default graphql(getToken, {
+  props: ({ data: { token } }) => ({ token })
 })(App);

@@ -10,7 +10,6 @@ import { loginSocial } from '../graphql/queries';
 
 class CallbackLogic extends Component {
   render() {
-    console.log(this.props);
     const { res, loading, error, id, source } = this.props;
     if (error) {
       return <Error />;
@@ -27,7 +26,6 @@ class CallbackLogic extends Component {
         return <Error />;
       }
     }
-    console.log(token);
     return <Redirect to="/" />;
   }
 }
