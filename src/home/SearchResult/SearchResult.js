@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {
   Card,
@@ -10,7 +9,7 @@ import {
   Avatar,
   CardHeader,
   IconButton,
-  CardMedia,
+  CardMedia
 } from '@material-ui/core';
 import { Favorite, Share, MoreVert } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
@@ -23,27 +22,27 @@ const styles = {
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '56.25%' // 16:9
   },
   actions: {
-    display: 'flex',
+    display: 'flex'
   },
   avatar: {
     margin: 10,
     width: 45,
-    height: 45,
+    height: 45
   },
   title: {
     marginBottom: 16,
-    fontSize: 14,
+    fontSize: 14
   },
   pos: {
-    marginBottom: 12,
-  },
+    marginBottom: 12
+  }
 };
 class SearchResult extends React.Component {
   state = { expanded: false };
@@ -53,9 +52,7 @@ class SearchResult extends React.Component {
   };
 
   render() {
-    const {
-      classes, name, r_id, description, created, images,
-    } = this.props;
+    const { classes, name, r_id, description, created, images } = this.props;
 
     return (
       <Card className={classes.card}>
@@ -75,7 +72,11 @@ class SearchResult extends React.Component {
           title={name}
           subheader={created}
         />
-        <CardMedia className={classes.media} image={images} title="Fat cat alert" />
+        <CardMedia
+          className={classes.media}
+          image={images}
+          title="Fat cat alert"
+        />
         <CardContent>
           <Typography component="p">{description}</Typography>
         </CardContent>
@@ -94,14 +95,5 @@ class SearchResult extends React.Component {
     );
   }
 }
-
-SearchResult.propTypes = {
-  classes: PropTypes.object.isRequired,
-  name: PropTypes.string.isRequired,
-  created: PropTypes.string.isRequired,
-  images: PropTypes.array.isRequired,
-  r_id: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-};
 
 export default withStyles(styles)(SearchResult);

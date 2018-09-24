@@ -18,21 +18,21 @@ const styles = {
     xs: {
       picture: 12,
       social: 12,
-      recipes: 12,
+      recipes: 12
     },
     sm: {
       picture: 8,
       social: 8,
-      recipes: 8,
-    },
+      recipes: 8
+    }
   },
   gridList: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
     alignItems: 'flex-start',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'
+  }
 };
 
 class Profile extends Component {
@@ -43,13 +43,18 @@ class Profile extends Component {
       username: null,
       //user_id: '5b80e5924f300af2ea7f05cd',
       owned_recipes: [],
-      saved_recipes: [],
+      saved_recipes: []
     };
     // this.getDataFromAPI();
   }
 
   componentWillMount() {
+    console.log('mount');
     this.getDataFromAPI();
+  }
+
+  componentWillUnmount() {
+    console.log('unmount');
   }
 
   async getDataFromAPI() {
@@ -59,7 +64,7 @@ class Profile extends Component {
       //user_id: user.id,
       username: user.username,
       owned_recipes: user.ownedRecipes,
-      saved_recipes: user.savedRecipes,
+      saved_recipes: user.savedRecipes
     });
   }
 
@@ -81,8 +86,9 @@ class Profile extends Component {
             }
           }
         `,
+          fetchPolicy: 'network-only'
         })
-        .then((result) => {
+        .then(result => {
           return result.data.userById;
         });
       return result;
@@ -100,11 +106,29 @@ class Profile extends Component {
 
     return (
       <div>
-        <Grid className="user-container" container spacing={styles.spacing} justify={'center'}>
-          <Grid className="picture" item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
-            <ProfilePicture name={this.state.username} imageURL={this.state.user_image} />
+        <Grid
+          className="user-container"
+          container
+          spacing={styles.spacing}
+          justify={'center'}
+        >
+          <Grid
+            className="picture"
+            item
+            xs={styles.sizes.xs.picture}
+            sm={styles.sizes.sm.picture}
+          >
+            <ProfilePicture
+              name={this.state.username}
+              imageURL={this.state.user_image}
+            />
           </Grid>
-          <Grid className="social" item xs={styles.sizes.xs.social} sm={styles.sizes.sm.social}>
+          <Grid
+            className="social"
+            item
+            xs={styles.sizes.xs.social}
+            sm={styles.sizes.sm.social}
+          >
             <Social
               owned_recipes_number={this.state.owned_recipes.length}
               saved_recipes_number={this.state.saved_recipes.length}
@@ -125,21 +149,23 @@ class Profile extends Component {
                   from={{ marginTop: 500, opacity: 1 }}
                   to={{ marginTop: 0, opacity: 1 }}
                 >
-                  {this.state.saved_recipes.map(recipe => (marginTop, index) => {
-                    return (
-                      <animated.div key={index} style={marginTop}>
-                        <SearchResult
-                          key={recipe.id}
-                          name={recipe.name}
-                          style={marginTop}
-                          description={recipe.description}
-                          created={recipe.created}
-                          images={recipe.images}
-                          r_id={recipe.id}
-                        />
-                      </animated.div>
-                    );
-                  })}
+                  {this.state.saved_recipes.map(
+                    recipe => (marginTop, index) => {
+                      return (
+                        <animated.div key={index} style={marginTop}>
+                          <SearchResult
+                            key={recipe.id}
+                            name={recipe.name}
+                            style={marginTop}
+                            description={recipe.description}
+                            created={recipe.created}
+                            images={recipe.images}
+                            r_id={recipe.id}
+                          />
+                        </animated.div>
+                      );
+                    }
+                  )}
                 </Trail>
               </GridList>
             </div>
@@ -153,6 +179,6 @@ class Profile extends Component {
 export default compose(
   withApollo,
   graphql(getToken, {
-    props: ({ data: { token } }) => ({ token }),
-  }),
+    props: ({ data: { token } }) => ({ token })
+  })
 )(Profile);

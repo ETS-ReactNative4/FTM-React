@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Home from './home/Home';
 import Recipe from './recipe/Recipe';
 import Login from './login/Login';
@@ -17,30 +17,29 @@ class App extends Component {
     const { token } = this.props;
     return (
       <div>
-        <Route exact path="/" component={() => <Home token={token} />} />
-        <Route exact path="/recipe" component={Recipe} />
-        <Route exact path="/recipe/:title" component={Recipe} />
-        <Route exact path="/recipe/:author/:title" component={Recipe} />
-        <Route exact path="/recipe/:id" component={Recipe} />
-        <Route exact path="/login" component={Login} />
-        <Route path="/logs" component={Logs} />
-        <Route path="/addlog" component={AddLog} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/profile/:id" component={Profile} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/signout" component={SignOut} />
-        <Route
-          path="/auth/google/callback"
-          component={() => {
-            return <CallbackReceiver token={token} source={'google'} />;
-          }}
-        />
-        <Route
-          path="/auth/facebook/callback"
-          component={() => {
-            return <CallbackReceiver token={token} source={'facebook'} />;
-          }}
-        />
+        <Switch>
+          <Route exact path="/" component={() => <Home token={token} />} />
+          <Route exact path="/recipe" component={Recipe} />
+          <Route exact path="/recipe/:id" component={Recipe} />
+          <Route exact path="/login" component={Login} />
+          <Route path="/logs" component={Logs} />
+          <Route path="/addlog" component={AddLog} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/signout" component={SignOut} />
+          <Route
+            path="/auth/google/callback"
+            component={() => {
+              return <CallbackReceiver token={token} source={'google'} />;
+            }}
+          />
+          <Route
+            path="/auth/facebook/callback"
+            component={() => {
+              return <CallbackReceiver token={token} source={'facebook'} />;
+            }}
+          />
+        </Switch>
       </div>
     );
   }
