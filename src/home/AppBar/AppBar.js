@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { compose, graphql } from 'react-apollo';
 import { getToken } from '../../graphql/queries';
-import SignOut from '../../signOut/SignOut';
 
 const styles = {
   root: {
@@ -53,7 +52,7 @@ function HomeAppBar(props) {
                 component={Link}
                 to="/profile"
               />
-              <Button color="inherit" component={SignOut}>
+              <Button color="inherit" component={Link} to="/signout">
                 Sign Out
               </Button>
             </Fragment>
