@@ -16,11 +16,7 @@ class App extends Component {
     const { token } = this.props;
     return (
       <div>
-        <Route
-          exact
-          path="/"
-          component={() => <Home token={this.props.token} />}
-        />
+        <Route exact path="/" component={() => <Home token={token} />} />
         <Route exact path="/recipe" component={Recipe} />
         <Route exact path="/recipe/:title" component={Recipe} />
         <Route exact path="/recipe/:author/:title" component={Recipe} />
