@@ -19,12 +19,6 @@ class ProfilePicture extends Component {
           <div className="username">
             <span>{this.props.name}</span>
           </div>
-          <div className="location">
-            <span>San Diego, California</span>
-          </div>
-          <div className="blog">
-            <a href="http://www.foodtomake.com">foodtomake</a>
-          </div>
         </div>
       </div>
     );

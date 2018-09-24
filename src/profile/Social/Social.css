@@ -3,15 +3,24 @@
   flex-direction: row;
   justify-content: space-between;
 }
+.recipe-num,
+.follower-num,
+.favorite-num {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  margin: 10px;
+}
 .recipe-num > .number,
 .follower-num > .number,
 .favorite-num > .number {
-  font-size: 1.3em;
+  font-size: 2em;
+  margin-left: 10px;
 }
 
 .recipe-num span:last-child,
 .follower-num span:last-child,
-.favorite-num span:last-child, {
-  font-size: .9em;
-  color: lightgray;
+.favorite-num span:last-child {
+  font-size: 1em;
+  color: gray;
 }
