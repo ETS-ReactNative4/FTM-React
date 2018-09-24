@@ -114,7 +114,7 @@ class Recipe extends Component {
               system
               images
               name
-              ingredients {name}
+              ingredients {name quantity unit}
               instructions
               sourceURL
               prepTime
