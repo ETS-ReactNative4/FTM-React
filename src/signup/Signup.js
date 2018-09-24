@@ -6,6 +6,16 @@ import ggLogo from '../assets/images/g-ico.png';
 import Auth from '../auth/Auth';
 
 class SignUp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      username: '',
+      password: '',
+      passConfirm: '',
+    };
+  }
+
   auth = new Auth();
 
   loginGoogle = () => {
@@ -16,16 +26,13 @@ class SignUp extends Component {
     this.auth.loginFacebook();
   };
 
+  handleSubmit = async () => {};
+
   render() {
     return (
       <form className="login-root">
         <div className="social-buttons">
-          <Button
-            onClick={this.loginFacebook}
-            variant="raised"
-            color="primary"
-            id="fb-btn"
-          >
+          <Button onClick={this.loginFacebook} variant="raised" color="primary" id="fb-btn">
             <img id="fb-logo" alt="fb-logo" src={fbLogo} />
             Sign up With Facebook
           </Button>
@@ -34,11 +41,31 @@ class SignUp extends Component {
             Sign up With Google
           </Button>
         </div>
-        <TextField label="Email" fullWidth className="email" />
-        <TextField label="Username" fullWidth className="username" />
-        <TextField label="Password" fullWidth className="password" />
-        <TextField label="Verify Password" fullWidth className="verify" />
-        <Button variant="raised" color="primary" className="submit-btn">
+        <TextField
+          label="Email"
+          fullWidth
+          className="email"
+          onChange={event => this.setState({ email: event.target.value })}
+        />
+        <TextField
+          label="Username"
+          fullWidth
+          className="username"
+          onChange={event => this.setState({ username: event.target.value })}
+        />
+        <TextField
+          label="Password"
+          fullWidth
+          className="password"
+          onChange={event => this.setState({ password: event.target.value })}
+        />
+        <TextField
+          label="Verify Password"
+          fullWidth
+          className="verify"
+          onChange={event => this.setState({ passConfirm: event.target.value })}
+        />
+        <Button variant="raised" color="primary" className="submit-btn" onClick={this.handleSubmit}>
           Submit
         </Button>
       </form>
