@@ -9,7 +9,7 @@ import {
   Paper,
   FormControl,
   withStyles,
-  GridList,
+  GridList
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
@@ -17,7 +17,7 @@ import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
-import { client } from '../App';
+import { client } from '../Root';
 
 const styles = {
   gridList: {
@@ -25,8 +25,8 @@ const styles = {
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     alignItems: 'flex-start',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'
+  }
 };
 
 class Home extends Component {
@@ -37,7 +37,7 @@ class Home extends Component {
     showFilter: false,
   };
 
-  handleEnterSearch = async (event) => {
+  handleEnterSearch = async event => {
     if (event.key === 'Enter') {
       const { data } = await client.query({
         query: gql`
@@ -48,11 +48,11 @@ class Home extends Component {
                     description
                     images
                   }
-                }`,
+                }`
       });
       this.setState({
         loading: true,
-        recipes: data.searchAllRecipes,
+        recipes: data.searchAllRecipes
       });
     }
   };
@@ -67,11 +67,11 @@ class Home extends Component {
                     description
                     created
                   }
-                }`,
+                }`
     });
     this.setState({
       loading: true,
-      recipes: data.searchAllRecipes,
+      recipes: data.searchAllRecipes
     });
   };
 
@@ -105,7 +105,11 @@ class Home extends Component {
       <div className="home-container">
         <Spring
           from={{ marginTop: 0, opacity: 1 }}
-          to={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+          to={
+            this.state.recipes.length > 0
+              ? { marginTop: -200 }
+              : { marginTop: 0 }
+          }
         >
           {({ marginTop, opacity }) => (
             <img
@@ -118,22 +122,32 @@ class Home extends Component {
         </Spring>
         <Spring
           from={{ marginTop: 0 }}
-          to={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+          to={
+            this.state.recipes.length > 0
+              ? { marginTop: -200 }
+              : { marginTop: 0 }
+          }
         >
           {({ marginTop }) => (
             <div className="search-box" style={{ marginTop }}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
+                <InputLabel htmlFor="search">Search for a recipe...</InputLabel>
                 <Input
                   id="search"
                   onKeyPress={this.handleEnterSearch}
                   onChange={this.handleQueryChange}
                   endAdornment={
                     <InputAdornment position="end">
-                      <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                      <IconButton
+                        onMouseDown={this.handleMouseDown}
+                        onClick={this.toggleFilter}
+                      >
                         <FilterList size={30} />
                       </IconButton>
-                      <Button id="searchButton" color="primary" onClick={this.handleButtonSearch}>
+                      <Button
+                        id="searchButton"
+                        onClick={this.handleButtonSearch}
+                      >
                         Search
                       </Button>
                     </InputAdornment>
@@ -146,7 +160,11 @@ class Home extends Component {
 
         <div
           className="search-results"
-          style={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+          style={
+            this.state.recipes.length > 0
+              ? { marginTop: -200 }
+              : { marginTop: 0 }
+          }
         >
           {this.state.recipes.length > 0 && (
             <GridList className={classes.gridList}>
@@ -187,7 +205,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Home);
