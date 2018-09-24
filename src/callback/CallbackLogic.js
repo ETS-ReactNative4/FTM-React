@@ -9,12 +9,6 @@ import { graphql } from 'react-apollo';
 import { loginSocial } from '../graphql/queries';
 
 class CallbackLogic extends Component {
-  componentWillReceiveProps() {
-    this.setState({
-      token: this.props.token
-    });
-  }
-
   render() {
     const { res, loading, error, id, source } = this.props;
     if (error) {

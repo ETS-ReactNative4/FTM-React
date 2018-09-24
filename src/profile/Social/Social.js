@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Icon from '@material-ui/core/Icon';
+import { Card, Icon } from '@material-ui/core';
 import './Social.css';
 
 class Social extends Component {
@@ -18,21 +18,21 @@ class Social extends Component {
       <div className='fullSize social-info'>
 
         <div className="info">
-          <div className="recipe-num">
+          <Card className="recipe-num">
             <Icon>library_books</Icon>
             <span className="number">{this.props.recipes_number}</span><br />
             <span>Recipes</span>
-          </div>
-          <div className="follower-num">
+          </Card>
+          <Card className="follower-num">
             <Icon>people</Icon>
             <span className="number">{this.props.followers_number}</span><br />
             <span>Followers</span>
-          </div>
-          <div className="favorite-num">
+          </Card>
+          <Card className="favorite-num">
             <Icon>star</Icon>
             <span className="number">{this.props.favorites_number}</span><br />
             <span>Favorites</span>
-          </div>
+          </Card>
         </div>
 
       </div>

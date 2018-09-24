@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Grid } from 'material-ui';
+import { Grid, GridList } from 'material-ui';
+import { Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
 import { withApollo } from 'react-apollo';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
@@ -21,6 +22,16 @@ const styles = {
       recipes: 8,
     },
   },
+<<<<<<< HEAD
+=======
+  gridList: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-start',
+    overflow: 'hidden',
+  },
+>>>>>>> eb46ab87d31f454025c5863779e3bd904368404d
 };
 
 class Profile extends Component {
@@ -63,7 +74,7 @@ class Profile extends Component {
             ) {
               id
               username
-              ownedRecipes {name id description}
+              ownedRecipes {name id description images}
             }
           }
         `,
@@ -93,8 +104,8 @@ class Profile extends Component {
           <Grid className="social" item xs={styles.sizes.xs.social} sm={styles.sizes.sm.social}>
             <Social
               recipes_number={this.state.owned_recipes.length}
-              followers_number="234"
-              favorites_number="2,451"
+              followers_number="0"
+              favorites_number="0"
             />
           </Grid>
           <Grid
@@ -104,6 +115,7 @@ class Profile extends Component {
             sm={styles.sizes.sm.recipes}
           >
             <div className="search-results">
+<<<<<<< HEAD
               {this.state.owned_recipes.map((recipe) => {
                 return (
                   <SearchResult
@@ -114,6 +126,32 @@ class Profile extends Component {
                   />
                 );
               })}
+=======
+              <GridList className={styles.gridList}>
+                <Trail
+                  native
+                  keys={this.state.owned_recipes}
+                  from={{ marginTop: 500, opacity: 1 }}
+                  to={{ marginTop: 0, opacity: 1 }}
+                >
+                  {this.state.owned_recipes.map(recipe => (marginTop, index) => {
+                    return (
+                      <animated.div key={index} style={marginTop}>
+                        <SearchResult
+                          key={recipe.id}
+                          name={recipe.name}
+                          style={marginTop}
+                          description={recipe.description}
+                          created={recipe.created}
+                          images={recipe.images}
+                          r_id={recipe.id}
+                        />
+                      </animated.div>
+                    );
+                  })}
+                </Trail>
+              </GridList>
+>>>>>>> eb46ab87d31f454025c5863779e3bd904368404d
             </div>
           </Grid>
         </Grid>
