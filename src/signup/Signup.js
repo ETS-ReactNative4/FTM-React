@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Button, TextField } from '@material-ui/core';
+import { withApollo } from 'react-apollo';
+import gql from 'graphql-tag';
 import './Signup.css';
 import fbLogo from '../assets/images/fb-logo.png';
 import ggLogo from '../assets/images/g-ico.png';
@@ -26,7 +29,21 @@ class SignUp extends Component {
     this.auth.loginFacebook();
   };
 
-  handleSubmit = async () => {};
+  handleSubmit = async () => {
+    const { client, history } = this.props;
+    const { data } = await client.mutate({
+      mutation: gql`
+          mutation { createUser(
+            username: "${this.state.username}" 
+            password: "${this.state.password}") {
+              token
+          }
+        }
+      `,
+    });
+    client.writeData({ data: { token: data.createUser.token } });
+    history.replace('/');
+  };
 
   render() {
     return (
@@ -73,4 +90,4 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+export default withApollo(SignUp);
