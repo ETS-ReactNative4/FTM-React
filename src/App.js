@@ -13,7 +13,7 @@ import CallbackReceiver from './callback/CallbackReceiver';
 
 class App extends Component {
   render() {
-    console.log(this.props);
+    const { token } = this.props;
     return (
       <div>
         <Route
@@ -33,13 +33,13 @@ class App extends Component {
         <Route
           path="/auth/google/callback"
           component={() => {
-            return <CallbackReceiver source={'google'} />;
+            return <CallbackReceiver token={token} source={'google'} />;
           }}
         />
         <Route
           path="/auth/facebook/callback"
           component={() => {
-            return <CallbackReceiver source={'facebook'} />;
+            return <CallbackReceiver token={token} source={'facebook'} />;
           }}
         />
       </div>

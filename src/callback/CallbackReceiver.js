@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Auth from '../auth/Auth';
 import CallbackLogic from './CallbackLogic';
 import Loading from '../loading/Loading';
+import { Redirect } from 'react-router-dom';
 
 const auth = new Auth();
 
@@ -11,11 +12,16 @@ class CallbackReceiver extends Component {
   };
 
   async componentDidMount() {
-    const id = await auth.handleAuthCallback();
-    this.setState({ id });
+    if (!this.props.token) {
+      const id = await auth.handleAuthCallback();
+      this.setState({ id });
+    }
   }
 
   render() {
+    if (this.props.token) {
+      return <Redirect to="/" />;
+    }
     return (
       <div>
         {this.state.id ? (

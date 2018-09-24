@@ -9,6 +9,12 @@ import { graphql } from 'react-apollo';
 import { loginSocial } from '../graphql/queries';
 
 class CallbackLogic extends Component {
+  componentWillReceiveProps() {
+    this.setState({
+      token: this.props.token
+    });
+  }
+
   render() {
     const { res, loading, error, id, source } = this.props;
     if (error) {
@@ -17,7 +23,7 @@ class CallbackLogic extends Component {
     if (loading) {
       return <Loading />;
     }
-    const { apiError, token } = res;
+    const { apiError } = res;
     if (apiError) {
       const { code } = apiError;
       if (code === 'USER_NOT_FOUND') {

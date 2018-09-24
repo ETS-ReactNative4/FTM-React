@@ -11,7 +11,7 @@ import AppBar from './home/AppBar/AppBar';
 export const client = new ApolloClient({
   clientState: {
     defaults: {
-      token: 'Hello'
+      token: ''
     }
     // resolvers: {
     //   Mutation: {
