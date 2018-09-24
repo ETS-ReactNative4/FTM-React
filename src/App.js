@@ -7,13 +7,13 @@ import Logs from './logs/Logs';
 import AddLog from './addlog/AddLog';
 import Profile from './profile/Profile';
 import Signup from './signup/Signup';
-import { graphql } from 'react-apollo';
-import { getToken } from './graphql/queries';
 import CallbackReceiver from './callback/CallbackReceiver';
 import SignOut from './signOut/SignOut';
+import withLocalData from './withLocalData';
 
 class App extends Component {
   render() {
+    console.log(this.props);
     const { token } = this.props;
     return (
       <div>
@@ -45,6 +45,4 @@ class App extends Component {
   }
 }
 
-export default graphql(getToken, {
-  props: ({ data: { token } }) => ({ token })
-})(App);
+export default withLocalData(App);

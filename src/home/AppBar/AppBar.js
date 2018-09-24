@@ -5,25 +5,25 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
-import { compose, graphql } from 'react-apollo';
-import { getToken } from '../../graphql/queries';
+import { compose, withApollo } from 'react-apollo';
+import withLocalData from '../../withLocalData';
 
 const styles = {
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   flex: {
-    flex: 1,
+    flex: 1
   },
   menuButton: {
-    marginRight: 20,
+    marginRight: 20
   },
   list: {
-    width: 250,
+    width: 250
   },
   fullList: {
-    width: 'auto',
-  },
+    width: 'auto'
+  }
 };
 
 function HomeAppBar(props) {
@@ -73,8 +73,7 @@ function HomeAppBar(props) {
 }
 
 export default compose(
-  graphql(getToken, {
-    props: ({ data: { token } }) => ({ token }),
-  }),
-  withStyles(styles),
+  withLocalData,
+  withApollo,
+  withStyles(styles)
 )(HomeAppBar);

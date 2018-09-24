@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Grid, GridList } from 'material-ui';
 import { Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
-import { withApollo, compose, graphql } from 'react-apollo';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
 import Loading from '../loading/Loading';
-import { getToken } from '../graphql/queries';
 import './Profile.css';
+import { compose, withApollo } from 'react-apollo';
+import withLocalData from '../withLocalData';
 
 const jwt = require('jsonwebtoken');
 
@@ -177,8 +177,6 @@ class Profile extends Component {
 }
 
 export default compose(
-  withApollo,
-  graphql(getToken, {
-    props: ({ data: { token } }) => ({ token })
-  })
+  withLocalData,
+  withApollo
 )(Profile);
