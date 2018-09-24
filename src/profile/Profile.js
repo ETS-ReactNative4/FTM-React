@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Grid, GridList } from 'material-ui';
 import { Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
-import { client } from '../App';
+import { client } from '../Root';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
@@ -14,7 +14,7 @@ const styles = {
     xs: {
       picture: 12,
       social: 12,
-      recipes: 12,
+      recipes: 12
     },
     sm: {
       picture: 8,
@@ -38,7 +38,7 @@ class Profile extends Component {
       user_image: 'https://i.imgur.com/4AiXzf8.jpg',
       username: null,
       user_id: '5b80e5924f300af2ea7f05cd',
-      owned_recipes: [],
+      owned_recipes: []
     };
     // this.getDataFromAPI();
   }
@@ -53,13 +53,13 @@ class Profile extends Component {
     this.setState({
       user_id: user.id,
       username: user.username,
-      owned_recipes: user.ownedRecipes,
+      owned_recipes: user.ownedRecipes
     });
   }
 
   fetchUser = async () => {
     const data = {
-      user_id: this.state.user_id,
+      user_id: this.state.user_id
     };
     try {
       const result = client
@@ -73,9 +73,9 @@ class Profile extends Component {
               ownedRecipes {name id description images}
             }
           }
-        `,
+        `
         })
-        .then((result) => {
+        .then(result => {
           return result.data.userById;
         });
       return result;
@@ -93,11 +93,29 @@ class Profile extends Component {
 
     return (
       <div>
-        <Grid className="user-container" container spacing={styles.spacing} justify={'center'}>
-          <Grid className="picture" item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
-            <ProfilePicture name={this.state.username} imageURL={this.state.user_image} />
+        <Grid
+          className="user-container"
+          container
+          spacing={styles.spacing}
+          justify={'center'}
+        >
+          <Grid
+            className="picture"
+            item
+            xs={styles.sizes.xs.picture}
+            sm={styles.sizes.sm.picture}
+          >
+            <ProfilePicture
+              name={this.state.username}
+              imageURL={this.state.user_image}
+            />
           </Grid>
-          <Grid className="social" item xs={styles.sizes.xs.social} sm={styles.sizes.sm.social}>
+          <Grid
+            className="social"
+            item
+            xs={styles.sizes.xs.social}
+            sm={styles.sizes.sm.social}
+          >
             <Social
               recipes_number={this.state.owned_recipes.length}
               followers_number="0"

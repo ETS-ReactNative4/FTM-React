@@ -17,13 +17,13 @@ import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
-import { client } from '../App';
+import { client } from '../Root';
 
 const styles = {
   gridList: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
     alignItems: 'flex-start',
     overflow: 'hidden',
   },
@@ -65,7 +65,7 @@ class Home extends Component {
                     id
                     name
                     description
-                    created
+                    images
                   }
                 }`,
     });
@@ -123,7 +123,7 @@ class Home extends Component {
           {({ marginTop }) => (
             <div className="search-box" style={{ marginTop }}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="search">Search for a Recipe...</InputLabel>
+                <InputLabel htmlFor="search">Search for a recipe...</InputLabel>
                 <Input
                   id="search"
                   onKeyPress={this.handleEnterSearch}
@@ -133,7 +133,7 @@ class Home extends Component {
                       <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
                         <FilterList size={30} />
                       </IconButton>
-                      <Button id="searchButton" color="primary" onClick={this.handleButtonSearch}>
+                      <Button id="searchButton" onClick={this.handleButtonSearch}>
                         Search
                       </Button>
                     </InputAdornment>

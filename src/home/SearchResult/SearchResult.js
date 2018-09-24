@@ -75,7 +75,7 @@ class SearchResult extends React.Component {
           title={name}
           subheader={created}
         />
-        <CardMedia className={classes.media} image={images[0]} title="Fat cat alert" />
+        <CardMedia className={classes.media} image={images} title="Fat cat alert" />
         <CardContent>
           <Typography component="p">{description}</Typography>
         </CardContent>
