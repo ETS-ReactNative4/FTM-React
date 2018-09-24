@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { Grid, Button } from '@material-ui/core';
 import gql from 'graphql-tag';
-import { withApollo } from 'react-apollo';
+import { withApollo, compose, graphql } from 'react-apollo';
 import './Recipe.css';
 import RecipeInstructions from './Instructions/Instructions';
 import RecipeInfo from './Info/Info';
 import RecipeIngredients from './Ingredients/Ingredients';
 import RecipeDescription from './Description/Description';
 import RecipePicture from './Picture/Picture';
+import { getToken } from '../graphql/queries';
+
+const jwt = require('jsonwebtoken');
 
 const styles = {
   spacing: 24,
@@ -57,10 +60,11 @@ class Recipe extends Component {
   }
 
   saveRecipe() {
-    const { client } = this.props;
+    const { client, token } = this.props;
+    const decoded = jwt.decode(token);
     console.log('save this recipe');
     const data = {
-      user_id: '5b80e5924f300af2ea7f05cd',
+      user_id: decoded.id,
       recipe_id: this.state.recipe_id,
     };
     try {
@@ -79,7 +83,7 @@ class Recipe extends Component {
         })
         .then((result) => {
           console.log(result.data);
-          console.log('successfully saved recipe!');
+          console.log('successfully saved recipe for: ', decoded.id);
           return result.data.recipeById;
         });
       return result;
@@ -253,4 +257,9 @@ class Recipe extends Component {
   }
 }
 
-export default withApollo(Recipe);
+export default compose(
+  withApollo,
+  graphql(getToken, {
+    props: ({ data: { token } }) => ({ token }),
+  }),
+)(Recipe);

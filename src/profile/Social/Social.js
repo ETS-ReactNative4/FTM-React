@@ -7,9 +7,9 @@ class Social extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipes_number: null,
+      owned_recipes_number: null,
+      saved_recipes_number: null,
       followers_number: null,
-      favorites_number: null,
     };
   }
 
@@ -20,18 +20,18 @@ class Social extends Component {
         <div className="info">
           <Card className="recipe-num">
             <Icon>library_books</Icon>
-            <span className="number">{this.props.recipes_number}</span><br />
-            <span>Recipes</span>
+            <span className="number">{this.props.owned_recipes_number}</span><br />
+            <span>Owned Recipes</span>
           </Card>
           <Card className="follower-num">
+            <Icon>library_books</Icon>
+            <span className="number">{this.props.saved_recipes_number}</span><br />
+            <span>Saved Recipes</span>
+          </Card>
+          <Card className="favorite-num">
             <Icon>people</Icon>
             <span className="number">{this.props.followers_number}</span><br />
             <span>Followers</span>
-          </Card>
-          <Card className="favorite-num">
-            <Icon>star</Icon>
-            <span className="number">{this.props.favorites_number}</span><br />
-            <span>Favorites</span>
           </Card>
         </div>
 

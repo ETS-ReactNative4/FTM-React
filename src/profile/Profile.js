@@ -41,8 +41,9 @@ class Profile extends Component {
     this.state = {
       user_image: 'https://i.imgur.com/4AiXzf8.jpg',
       username: null,
-      user_id: '5b80e5924f300af2ea7f05cd',
+      //user_id: '5b80e5924f300af2ea7f05cd',
       owned_recipes: [],
+      saved_recipes: [],
     };
     // this.getDataFromAPI();
   }
@@ -55,16 +56,14 @@ class Profile extends Component {
     const user = await this.fetchUser();
     console.log('user: \n', user);
     this.setState({
-      user_id: user.id,
+      //user_id: user.id,
       username: user.username,
       owned_recipes: user.ownedRecipes,
+      saved_recipes: user.savedRecipes,
     });
   }
 
   fetchUser = async () => {
-    const data = {
-      user_id: this.state.user_id,
-    };
     try {
       const { client, token } = this.props;
       const decoded = jwt.decode(token);
@@ -78,6 +77,7 @@ class Profile extends Component {
               id
               username
               ownedRecipes {name id description images}
+              savedRecipes {name id description images}
             }
           }
         `,
@@ -106,9 +106,9 @@ class Profile extends Component {
           </Grid>
           <Grid className="social" item xs={styles.sizes.xs.social} sm={styles.sizes.sm.social}>
             <Social
-              recipes_number={this.state.owned_recipes.length}
+              owned_recipes_number={this.state.owned_recipes.length}
+              saved_recipes_number={this.state.saved_recipes.length}
               followers_number="0"
-              favorites_number="0"
             />
           </Grid>
           <Grid
@@ -121,11 +121,11 @@ class Profile extends Component {
               <GridList className={styles.gridList}>
                 <Trail
                   native
-                  keys={this.state.owned_recipes}
+                  keys={this.state.saved_recipes}
                   from={{ marginTop: 500, opacity: 1 }}
                   to={{ marginTop: 0, opacity: 1 }}
                 >
-                  {this.state.owned_recipes.map(recipe => (marginTop, index) => {
+                  {this.state.saved_recipes.map(recipe => (marginTop, index) => {
                     return (
                       <animated.div key={index} style={marginTop}>
                         <SearchResult
