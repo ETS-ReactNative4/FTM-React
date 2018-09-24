@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Avatar } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { compose, graphql } from 'react-apollo';
 import { getToken } from '../../graphql/queries';
-import SignOut from '../../signOut';
+import SignOut from '../../signOut/SignOut';
 
 const styles = {
   root: {
