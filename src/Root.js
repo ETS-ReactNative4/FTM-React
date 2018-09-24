@@ -3,19 +3,31 @@ import { BrowserRouter } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { ApolloProvider } from 'react-apollo';
-import ApolloClient from 'apollo-boost';
 import './Root.css';
 import App from './App';
 import AppBar from './home/AppBar/AppBar';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import { ApolloLink } from 'apollo-link';
+import { withClientState } from 'apollo-link-state';
+
+const cache = new InMemoryCache();
 
 const client = new ApolloClient({
-  clientState: {
-    defaults: {
-      token: '',
-      userId: ''
-    }
-  },
-  uri: 'https://api.foodtomake.com/graphql'
+  link: ApolloLink.from([
+    withClientState({
+      cache,
+      defaults: {
+        token: '',
+        userId: ''
+      }
+    }),
+    new HttpLink({
+      uri: 'https://api.foodtomake.com/graphql'
+    })
+  ]),
+  cache
 });
 
 const theme = createMuiTheme({
