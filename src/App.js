@@ -10,6 +10,7 @@ import Signup from './signup/Signup';
 import { graphql } from 'react-apollo';
 import { getToken } from './graphql/queries';
 import CallbackReceiver from './callback/CallbackReceiver';
+import SignOut from './signOut/SignOut';
 
 class App extends Component {
   render() {
@@ -21,12 +22,13 @@ class App extends Component {
         <Route exact path="/recipe/:title" component={Recipe} />
         <Route exact path="/recipe/:author/:title" component={Recipe} />
         <Route exact path="/recipe/:id" component={Recipe} />
-        <Route path="/login" component={Login} />
+        <Route exact path="/login" component={Login} />
         <Route path="/logs" component={Logs} />
         <Route path="/addlog" component={AddLog} />
         <Route path="/profile" component={Profile} />
         <Route path="/profile/:id" component={Profile} />
         <Route path="/signup" component={Signup} />
+        <Route path="/signout" component={SignOut} />
         <Route
           path="/auth/google/callback"
           component={() => {
