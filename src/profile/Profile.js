@@ -6,7 +6,7 @@ import { withApollo, compose, graphql } from 'react-apollo';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
-import { getToken } from './graphql/queries';
+import { getToken } from '../graphql/queries';
 import './Profile.css';
 
 const styles = {
