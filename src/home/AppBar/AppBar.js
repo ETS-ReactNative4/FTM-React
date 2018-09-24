@@ -11,20 +11,20 @@ import SignOut from '../../signOut/SignOut';
 
 const styles = {
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   flex: {
-    flex: 1
+    flex: 1,
   },
   menuButton: {
-    marginRight: 20
+    marginRight: 20,
   },
   list: {
-    width: 250
+    width: 250,
   },
   fullList: {
-    width: 'auto'
-  }
+    width: 'auto',
+  },
 };
 
 function HomeAppBar(props) {
@@ -75,7 +75,7 @@ function HomeAppBar(props) {
 
 export default compose(
   graphql(getToken, {
-    props: ({ data: { token } }) => ({ token })
+    props: ({ data: { token } }) => ({ token }),
   }),
-  withStyles(styles)
+  withStyles(styles),
 )(HomeAppBar);
