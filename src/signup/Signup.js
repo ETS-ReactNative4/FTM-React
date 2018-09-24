@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Button, TextField } from '@material-ui/core';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -29,7 +30,7 @@ class SignUp extends Component {
   };
 
   handleSubmit = async () => {
-    const { client } = this.props;
+    const { client, history } = this.props;
     const { data } = await client.mutate({
       mutation: gql`
           mutation { createUser(
@@ -40,7 +41,8 @@ class SignUp extends Component {
         }
       `,
     });
-    client.writeData({ data: { token: data.token } });
+    client.writeData({ data: { token: data.createUser.token } });
+    history.replace('/');
   };
 
   render() {

@@ -26,6 +26,7 @@ class App extends Component {
         <Route path="/logs" component={Logs} />
         <Route path="/addlog" component={AddLog} />
         <Route path="/profile" component={Profile} />
+        <Route path="/profile/:id" component={Profile} />
         <Route path="/signup" component={Signup} />
         <Route path="/signout" component={SignOut} />
         <Route

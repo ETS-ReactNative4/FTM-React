@@ -6,8 +6,11 @@ import { withApollo, compose, graphql } from 'react-apollo';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
+import Loading from '../loading/Loading';
 import { getToken } from '../graphql/queries';
 import './Profile.css';
+
+const jwt = require('jsonwebtoken');
 
 const styles = {
   spacing: 24,
@@ -64,11 +67,13 @@ class Profile extends Component {
     };
     try {
       const { client, token } = this.props;
+      const decoded = jwt.decode(token);
+      console.log('decoded is this: ', decoded.id);
       const result = client
         .query({
           query: gql`{           
             userById(
-              id: "${data.user_id}"
+              id: "${decoded.id}"
             ) {
               id
               username
@@ -90,7 +95,7 @@ class Profile extends Component {
   render() {
     // don't render until we have data loaded
     if (!this.state.username) {
-      return <div />;
+      return <Loading />;
     }
 
     return (
