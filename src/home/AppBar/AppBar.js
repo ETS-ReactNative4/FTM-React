@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Avatar } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -11,20 +11,20 @@ import { getToken } from '../../graphql/queries';
 
 const styles = {
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   flex: {
-    flex: 1
+    flex: 1,
   },
   menuButton: {
-    marginRight: 20
+    marginRight: 20,
   },
   list: {
-    width: 250
+    width: 250,
   },
   fullList: {
-    width: 'auto'
-  }
+    width: 'auto',
+  },
 };
 
 function HomeAppBar(props) {
@@ -54,6 +54,15 @@ function HomeAppBar(props) {
               Login
             </Button>
           )}
+          {token && (
+            <Avatar
+              aria-label="Result"
+              className={classes.avatar}
+              src="https://i.imgur.com/KWl6pqT.jpg"
+              component={Link}
+              to="/profile"
+            />
+          )}
         </Toolbar>
       </AppBar>
     </div>
@@ -62,7 +71,7 @@ function HomeAppBar(props) {
 
 export default compose(
   graphql(getToken, {
-    props: ({ data: { token } }) => ({ token })
+    props: ({ data: { token } }) => ({ token }),
   }),
-  withStyles(styles)
+  withStyles(styles),
 )(HomeAppBar);
