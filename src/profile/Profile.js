@@ -22,8 +22,6 @@ const styles = {
       recipes: 8,
     },
   },
-<<<<<<< HEAD
-=======
   gridList: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -31,7 +29,6 @@ const styles = {
     alignItems: 'flex-start',
     overflow: 'hidden',
   },
->>>>>>> eb46ab87d31f454025c5863779e3bd904368404d
 };
 
 class Profile extends Component {
