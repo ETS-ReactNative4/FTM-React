@@ -3,21 +3,21 @@ import React, { Component } from 'react';
 // import gql from 'graphql-tag';
 import Error from '../error/Error';
 import Loading from '../loading/Loading';
-import { Redirect } from 'react-router-dom';
 import Username from '../username/Username';
-import { graphql } from 'react-apollo';
+import { Redirect } from 'react-router-dom';
+import { compose, graphql, withApollo } from 'react-apollo';
 import { loginSocial } from '../graphql/queries';
 
 class CallbackLogic extends Component {
   render() {
-    const { res, loading, error, id, source } = this.props;
+    const { res, loading, error, id, source, client } = this.props;
     if (error) {
       return <Error />;
     }
     if (loading) {
       return <Loading />;
     }
-    const { apiError } = res;
+    const { apiError, token } = res;
     if (apiError) {
       const { code } = apiError;
       if (code === 'USER_NOT_FOUND') {
@@ -26,15 +26,23 @@ class CallbackLogic extends Component {
         return <Error />;
       }
     }
+    client.writeData({
+      data: {
+        token
+      }
+    });
     return <Redirect to="/" />;
   }
 }
 
-export default graphql(loginSocial, {
-  options: props => ({ variables: { id: props.id, source: props.source } }),
-  props: ({ data: { loginSocial, loading, error } }) => ({
-    res: loginSocial,
-    loading,
-    error
-  })
-})(CallbackLogic);
+export default compose(
+  graphql(loginSocial, {
+    options: props => ({ variables: { id: props.id, source: props.source } }),
+    props: ({ data: { loginSocial, loading, error } }) => ({
+      res: loginSocial,
+      loading,
+      error
+    })
+  }),
+  withApollo
+)(CallbackLogic);

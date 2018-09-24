@@ -6,6 +6,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import { compose, graphql } from 'react-apollo';
+import { getToken } from '../../graphql/queries';
 
 const styles = {
   root: {
@@ -26,8 +28,8 @@ const styles = {
 };
 
 function HomeAppBar(props) {
-  const { classes } = props;
-
+  const { classes, token } = props;
+  console.log(token);
   return (
     <div className={classes.root}>
       <AppBar id="main-app-bar" position="fixed">
@@ -42,12 +44,12 @@ function HomeAppBar(props) {
           >
             FoodtoMake
           </Typography>
-          {!props.isLoggedIn && (
+          {!token && (
             <Button color="inherit" component={Link} to="/signup">
               Sign Up
             </Button>
           )}
-          {!props.isLoggedIn && (
+          {!token && (
             <Button color="inherit" component={Link} to="/login">
               Login
             </Button>
@@ -58,8 +60,9 @@ function HomeAppBar(props) {
   );
 }
 
-HomeAppBar.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(HomeAppBar);
+export default compose(
+  graphql(getToken, {
+    props: ({ data: { token } }) => ({ token })
+  }),
+  withStyles(styles)
+)(HomeAppBar);
