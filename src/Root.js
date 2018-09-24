@@ -8,7 +8,7 @@ import './Root.css';
 import App from './App';
 import AppBar from './home/AppBar/AppBar';
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   clientState: {
     defaults: {
       token: ''
