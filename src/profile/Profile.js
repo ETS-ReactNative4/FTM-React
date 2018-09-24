@@ -6,6 +6,7 @@ import { withApollo } from 'react-apollo';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
+import Loading from '../loading/Loading';
 import './Profile.css';
 
 const styles = {
@@ -89,7 +90,7 @@ class Profile extends Component {
   render() {
     // don't render until we have data loaded
     if (!this.state.username) {
-      return <div />;
+      return <Loading />;
     }
 
     return (
