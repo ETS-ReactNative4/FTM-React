@@ -5,7 +5,7 @@ import fbLogo from '../assets/images/fb-logo.png';
 import ggLogo from '../assets/images/g-ico.png';
 import Auth from '../auth/Auth';
 
-class Login extends Component {
+class SignUp extends Component {
   auth = new Auth();
 
   loginGoogle = () => {
@@ -46,4 +46,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default SignUp;

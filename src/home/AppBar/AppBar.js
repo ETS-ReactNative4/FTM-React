@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { withStyles } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { compose, graphql } from 'react-apollo';
 import { getToken } from '../../graphql/queries';
+import SignOut from '../../signOut';
 
 const styles = {
   root: {
@@ -44,15 +44,19 @@ function HomeAppBar(props) {
           >
             FoodtoMake
           </Typography>
-          {!token && (
-            <Button color="inherit" component={Link} to="/signup">
-              Sign Up
+          {token ? (
+            <Button color="inherit" component={SignOut}>
+              Sign Out
             </Button>
-          )}
-          {!token && (
-            <Button color="inherit" component={Link} to="/login">
-              Login
-            </Button>
+          ) : (
+            <Fragment>
+              <Button color="inherit" component={Link}>
+                Sign Up
+              </Button>
+              <Button color="inherit" component={Link}>
+                Login
+              </Button>
+            </Fragment>
           )}
         </Toolbar>
       </AppBar>
