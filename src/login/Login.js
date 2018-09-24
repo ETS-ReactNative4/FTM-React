@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { Button, TextField } from '@material-ui/core';
 import './Login.css';
+import CustomSnackbar from '../snackbar/CustomSnackbar';
 import Auth from '../auth/Auth';
 import fbLogo from '../assets/images/fb-logo.png';
 import ggLogo from '../assets/images/g-ico.png';
 
 class Login extends Component {
+  state = {
+    account: '',
+    password: '',
+  };
   auth = new Auth();
 
   loginGoogle = () => {
@@ -14,6 +19,18 @@ class Login extends Component {
 
   loginFacebook = () => {
     this.auth.loginFacebook();
+  };
+
+  handleSubmit = async () => {
+    console.log(`${this.state.account} : ${this.state.password}`);
+  };
+
+  handleAccountChange = (event) => {
+    this.setState({ account: event.target.value });
+  };
+
+  handlePasswordChange = (event) => {
+    this.setState({ password: event.target.value });
   };
 
   render() {
@@ -29,9 +46,19 @@ class Login extends Component {
             Log in With Google
           </Button>
         </div>
-        <TextField label="Username or Email" fullWidth className="username" />
-        <TextField label="Password" fullWidth className="password" />
-        <Button variant="raised" color="primary" className="submit-btn">
+        <TextField
+          onChange={this.handleAccountChange}
+          label="Username or Email"
+          fullWidth
+          className="username"
+        />
+        <TextField
+          onChange={this.handlePasswordChange}
+          label="Password"
+          fullWidth
+          className="password"
+        />
+        <Button variant="raised" color="primary" className="submit-btn" onClick={this.handleSubmit}>
           Submit
         </Button>
       </form>
