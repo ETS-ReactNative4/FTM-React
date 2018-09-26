@@ -145,7 +145,6 @@ class Home extends Component {
                   files: [file]
                 }
               }) => {
-                console.log(file);
                 validity.valid && uploadFile({ variables: { file } });
               }}
             />
