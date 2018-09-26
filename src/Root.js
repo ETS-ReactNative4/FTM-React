@@ -8,9 +8,9 @@ import App from './App';
 import AppBar from './home/AppBar/AppBar';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
+import { createUploadLink } from 'apollo-upload-client';
 
 const cache = new InMemoryCache();
 
@@ -23,8 +23,8 @@ const client = new ApolloClient({
         userId: ''
       }
     }),
-    new HttpLink({
-      uri: 'https://api.foodtomake.com/graphql'
+    createUploadLink({
+      uri: 'http://localhost:8081/graphql' //'https://api.foodtomake.com/graphql'
     })
   ]),
   cache

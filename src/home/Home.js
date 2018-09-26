@@ -9,11 +9,11 @@ import {
   Paper,
   FormControl,
   withStyles,
-  GridList,
+  GridList
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
-import { withApollo, compose } from 'react-apollo';
+import { withApollo, compose, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
@@ -25,8 +25,8 @@ const styles = {
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     alignItems: 'flex-start',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'
+  }
 };
 
 class Home extends Component {
@@ -36,11 +36,11 @@ class Home extends Component {
       query: '',
       recipes: [],
       loading: false,
-      showFilter: false,
+      showFilter: false
     };
   }
 
-  handleEnterSearch = async (event) => {
+  handleEnterSearch = async event => {
     const { client } = this.props;
     if (event.key === 'Enter') {
       const { data } = await client.query({
@@ -52,11 +52,11 @@ class Home extends Component {
                     description
                     images
                   }
-                }`,
+                }`
       });
       this.setState({
         loading: true,
-        recipes: data.searchAllRecipes,
+        recipes: data.searchAllRecipes
       });
     }
   };
@@ -72,17 +72,17 @@ class Home extends Component {
                     description
                     images
                   }
-                }`,
+                }`
     });
     this.setState({
       loading: true,
-      recipes: data.searchAllRecipes,
+      recipes: data.searchAllRecipes
     });
   };
 
-  handleQueryChange = (event) => {
+  handleQueryChange = event => {
     this.setState({
-      query: event.target.value,
+      query: event.target.value
     });
   };
 
@@ -100,17 +100,65 @@ class Home extends Component {
     return classes.join(' ');
   };
 
-  handleMouseDown = (event) => {
+  handleMouseDown = event => {
     event.preventDefault();
   };
+
+  uploadFile = async e => {
+    const file = e.target.files[0];
+    console.log(file);
+    const { data } = await this.props.client.mutate({
+      mutation: gql`
+        mutation uploadPhtoto($file: Upload!) {
+          uploadPhoto(file: $file) {
+            filename
+          }
+        }
+      `,
+      variables: {
+        file
+      }
+    });
+    console.log(data.uploadPhoto.filename);
+  };
+
+  UPLOAD_FILE = gql`
+    mutation uploadPhoto($file: Upload!) {
+      uploadPhoto(file: $file) {
+        filename
+      }
+    }
+  `;
 
   render() {
     const { classes } = this.props;
     return (
       <div className="home-container">
+        <Mutation mutation={this.UPLOAD_FILE}>
+          {uploadFile => (
+            <input
+              type="file"
+              required
+              onChange={({
+                target: {
+                  validity,
+                  files: [file]
+                }
+              }) => {
+                console.log(file);
+                validity.valid && uploadFile({ variables: { file } });
+              }}
+            />
+          )}
+        </Mutation>
+        {/* <input type="file" required onChange={this.uploadFile} /> */}
         <Spring
           from={{ marginTop: 0, opacity: 1 }}
-          to={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+          to={
+            this.state.recipes.length > 0
+              ? { marginTop: -200 }
+              : { marginTop: 0 }
+          }
         >
           {({ marginTop, opacity }) => (
             <img
@@ -123,7 +171,11 @@ class Home extends Component {
         </Spring>
         <Spring
           from={{ marginTop: 0 }}
-          to={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+          to={
+            this.state.recipes.length > 0
+              ? { marginTop: -200 }
+              : { marginTop: 0 }
+          }
         >
           {({ marginTop }) => (
             <div className="search-box" style={{ marginTop }}>
@@ -135,10 +187,16 @@ class Home extends Component {
                   onChange={this.handleQueryChange}
                   endAdornment={
                     <InputAdornment position="end">
-                      <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                      <IconButton
+                        onMouseDown={this.handleMouseDown}
+                        onClick={this.toggleFilter}
+                      >
                         <FilterList size={30} />
                       </IconButton>
-                      <Button id="searchButton" onClick={this.handleButtonSearch}>
+                      <Button
+                        id="searchButton"
+                        onClick={this.handleButtonSearch}
+                      >
                         Search
                       </Button>
                     </InputAdornment>
@@ -151,7 +209,11 @@ class Home extends Component {
 
         <div
           className="search-results"
-          style={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+          style={
+            this.state.recipes.length > 0
+              ? { marginTop: -200 }
+              : { marginTop: 0 }
+          }
         >
           {this.state.recipes.length > 0 && (
             <GridList className={classes.gridList}>
@@ -192,10 +254,10 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default compose(
   withStyles(styles),
-  withApollo,
+  withApollo
 )(Home);
