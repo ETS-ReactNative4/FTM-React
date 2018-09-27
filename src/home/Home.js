@@ -124,9 +124,7 @@ class Home extends Component {
 
   UPLOAD_FILE = gql`
     mutation uploadPhoto($file: Upload!) {
-      uploadPhoto(file: $file) {
-        filename
-      }
+      uploadPhoto(file: $file)
     }
   `;
 
