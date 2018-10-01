@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Grid, GridList } from 'material-ui';
-import { Trail, animated } from 'react-spring';
+import { Grid, GridList, FormControl, Input, InputLabel, InputAdornment, IconButton, Button } from '@material-ui/core';
+import { FilterList, Close } from '@material-ui/icons';
+import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
+import { compose, withApollo } from 'react-apollo';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
 import Loading from '../loading/Loading';
 import './Profile.css';
-import { compose, withApollo } from 'react-apollo';
 import withLocalData from '../withLocalData';
 
 const jwt = require('jsonwebtoken');
@@ -18,21 +19,21 @@ const styles = {
     xs: {
       picture: 12,
       social: 12,
-      recipes: 12
+      recipes: 12,
     },
     sm: {
       picture: 8,
       social: 8,
-      recipes: 8
-    }
+      recipes: 8,
+    },
   },
   gridList: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
     alignItems: 'flex-start',
-    overflow: 'hidden'
-  }
+    overflow: 'hidden',
+  },
 };
 
 class Profile extends Component {
@@ -41,30 +42,76 @@ class Profile extends Component {
     this.state = {
       user_image: 'https://i.imgur.com/4AiXzf8.jpg',
       username: null,
-      //user_id: '5b80e5924f300af2ea7f05cd',
+      user_id: null,
       owned_recipes: [],
-      saved_recipes: []
+      saved_recipes: [],
+      query: '',
     };
     // this.getDataFromAPI();
   }
 
   componentWillMount() {
-    console.log('mount');
     this.getDataFromAPI();
   }
 
-  componentWillUnmount() {
-    console.log('unmount');
-  }
+  handleQueryChange = (event) => {
+    this.setState({
+      query: event.target.value,
+    });
+  };
+
+  handleMouseDown = (event) => {
+    event.preventDefault();
+  };
+
+  handleEnterSearch = async (event) => {
+    const { client } = this.props;
+    if (event.key === 'Enter') {
+      const { data } = await client.query({
+        query: gql`
+          query {
+            searchSavedRecipes(userId: "${this.state.user_id}" query: "${this.state.query}") {
+              id
+              name
+              description
+              images
+            }
+          }`,
+      });
+      this.setState({
+        loading: true,
+        saved_recipes: data.searchSavedRecipes,
+      });
+    }
+  };
+
+  handleButtonSearch = async () => {
+    const { client } = this.props;
+    const { data } = await client.query({
+      query: gql`
+        query {
+          searchSavedRecipes(userId: "${this.state.user_id}" query: "${this.state.query}") {
+            id
+            name
+            description
+            images
+          }
+        }`,
+    });
+    this.setState({
+      loading: true,
+      saved_recipes: data.searchSavedRecipes,
+    });
+  };
 
   async getDataFromAPI() {
     const user = await this.fetchUser();
     console.log('user: \n', user);
     this.setState({
-      //user_id: user.id,
+      user_id: user.id,
       username: user.username,
       owned_recipes: user.ownedRecipes,
-      saved_recipes: user.savedRecipes
+      saved_recipes: user.savedRecipes,
     });
   }
 
@@ -86,9 +133,9 @@ class Profile extends Component {
             }
           }
         `,
-          fetchPolicy: 'network-only'
+          fetchPolicy: 'network-only',
         })
-        .then(result => {
+        .then((result) => {
           return result.data.userById;
         });
       return result;
@@ -136,6 +183,40 @@ class Profile extends Component {
             />
           </Grid>
           <Grid
+            className='search-box'
+            item
+            xs={styles.sizes.xs.social}
+            sm={styles.sizes.sm.social}
+          >
+            <Spring
+              from={{ marginTop: 0 }}
+              to={this.state.saved_recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
+            >
+              {({ marginTop }) => (
+                <div className="search-box" style={{ marginTop }}>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="search">Search for a recipe...</InputLabel>
+                    <Input
+                      id="search"
+                      onKeyPress={this.handleEnterSearch}
+                      onChange={this.handleQueryChange}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                            <FilterList size={30} />
+                          </IconButton>
+                          <Button id="searchButton" onClick={this.handleButtonSearch}>
+                        Search
+                          </Button>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </div>
+              )}
+            </Spring>
+          </Grid>
+          <Grid
             className="users-recipes"
             item
             xs={styles.sizes.xs.recipes}
@@ -149,23 +230,21 @@ class Profile extends Component {
                   from={{ marginTop: 500, opacity: 1 }}
                   to={{ marginTop: 0, opacity: 1 }}
                 >
-                  {this.state.saved_recipes.map(
-                    recipe => (marginTop, index) => {
-                      return (
-                        <animated.div key={index} style={marginTop}>
-                          <SearchResult
-                            key={recipe.id}
-                            name={recipe.name}
-                            style={marginTop}
-                            description={recipe.description}
-                            created={recipe.created}
-                            images={recipe.images}
-                            r_id={recipe.id}
-                          />
-                        </animated.div>
-                      );
-                    }
-                  )}
+                  {this.state.saved_recipes.map(recipe => (marginTop, index) => {
+                    return (
+                      <animated.div key={index} style={marginTop}>
+                        <SearchResult
+                          key={recipe.id}
+                          name={recipe.name}
+                          style={marginTop}
+                          description={recipe.description}
+                          created={recipe.created}
+                          images={recipe.images}
+                          r_id={recipe.id}
+                        />
+                      </animated.div>
+                    );
+                  } )}
                 </Trail>
               </GridList>
             </div>
@@ -178,5 +257,5 @@ class Profile extends Component {
 
 export default compose(
   withLocalData,
-  withApollo
+  withApollo,
 )(Profile);
