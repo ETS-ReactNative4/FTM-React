@@ -1,10 +1,9 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import { action } from '@storybook/addon-actions';
 
 export default function(props) {
   return (
-    <Button variant="contained" onClick={action('clicked')} color={props.color}>
+    <Button variant="contained" onClick={props.onClick} color="primary">
       {props.text}
     </Button>
   );

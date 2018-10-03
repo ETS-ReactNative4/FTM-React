@@ -2,7 +2,10 @@ import React from 'react';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { muiTheme } from 'storybook-addon-material-ui';
 import { storiesOf, addDecorator } from '@storybook/react';
-import Button from './Button';
+import { action } from '@storybook/addon-actions';
+import PrimaryActionButton from './PrimaryActionButton';
+import CancelButton from './CancelButton';
+import DeleteButton from './DeleteButton';
 
 const siteTheme = createMuiTheme({
   palette: {
@@ -19,7 +22,12 @@ const siteTheme = createMuiTheme({
 addDecorator(muiTheme([siteTheme]));
 
 storiesOf('Button', module)
-  .add('with primary color', () => <Button color="primary" text="primary" />)
-  .add('with secondary color', () => (
-    <Button color="secondary" text="secondary" />
+  .add('Primary Action', () => (
+    <PrimaryActionButton onClick={action('clicked')} text="Save" />
+  ))
+  .add('Cancel', () => (
+    <CancelButton onClick={action('clicked')} text="Cancel" />
+  ))
+  .add('Delete', () => (
+    <DeleteButton onClick={action('clicked')} text="Delete" />
   ));
