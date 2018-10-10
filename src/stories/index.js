@@ -22,12 +22,6 @@ const siteTheme = createMuiTheme({
 addDecorator(muiTheme([siteTheme]));
 
 storiesOf('Button', module)
-  .add('Primary Action', () => (
-    <PrimaryActionButton onClick={action('clicked')} text="Save" />
-  ))
-  .add('Cancel', () => (
-    <CancelButton onClick={action('clicked')} text="Cancel" />
-  ))
-  .add('Delete', () => (
-    <DeleteButton onClick={action('clicked')} text="Delete" />
-  ));
+  .add('Primary Action', () => <PrimaryActionButton text="Save" />)
+  .add('Cancel', () => <CancelButton text="Cancel" />)
+  .add('Delete', () => <DeleteButton text="Delete" />);
