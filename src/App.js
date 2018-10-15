@@ -22,9 +22,10 @@ class App extends Component {
           <Route exact path="/recipe" component={Recipe} />
           <Route exact path="/recipe/:id" component={Recipe} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/profile/:username" component={Profile} />
           <Route path="/logs" component={Logs} />
           <Route path="/addlog" component={AddLog} />
-          <Route path="/profile" component={Profile} />
           <Route path="/signup" component={Signup} />
           <Route path="/signout" component={SignOut} />
           <Route

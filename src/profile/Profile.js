@@ -105,7 +105,14 @@ class Profile extends Component {
   };
 
   async getDataFromAPI() {
-    const user = await this.fetchUser();
+    let user;
+    if (this.props.match.params.username) {
+      user = await this.fetchOtherUser();
+    }
+    else {
+      user = await this.fetchUser();
+    }
+    
     console.log('user: \n', user);
     this.setState({
       user_id: user.id,
@@ -141,6 +148,36 @@ class Profile extends Component {
       return result;
     } catch (err) {
       console.log(err);
+      return {};
+    }
+  };
+
+  fetchOtherUser = async () => {
+    console.log('get other user: ', this.props.match.params.username);
+    try {
+      const { client, token } = this.props;
+      const result = client
+        .query({
+          query: gql`{           
+            userByUsername(
+              username: "${this.props.match.params.username}"
+            ) {
+              id
+              username
+              ownedRecipes {name id description images}
+              savedRecipes {name id description images}
+            }
+          }
+        `,
+          fetchPolicy: 'network-only',
+        })
+        .then((result) => {
+          console.log('data got back: \n', result.data.userByUsername);
+          return result.data.userByUsername;
+        });
+      return result;
+    } catch (err) {
+      console.log('Error: ', err);
       return {};
     }
   };
