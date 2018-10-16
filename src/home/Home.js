@@ -116,7 +116,7 @@ class Home extends Component {
             <img
               className="logo"
               style={{ marginTop }}
-              src="https://i.imgur.com/XPjGdyV.png"
+              src="https://i.imgur.com/aIOwjGE.png"
               alt="foodtomake logo"
             />
           )}
