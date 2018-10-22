@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Home from './home/Home';
 import Recipe from './recipe/Recipe';
+import CreateRecipe from './createRecipe/CreateRecipe';
 import Login from './login/Login';
 import Logs from './logs/Logs';
 import AddLog from './addlog/AddLog';
@@ -28,6 +29,7 @@ class App extends Component {
           <Route path="/addlog" component={AddLog} />
           <Route path="/signup" component={Signup} />
           <Route path="/signout" component={SignOut} />
+          <Route path="/createrecipe" component={CreateRecipe} />
           <Route
             path="/auth/google/callback"
             component={() => {

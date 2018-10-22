@@ -57,11 +57,18 @@ class CreateRecipe extends Component {
     };
 
     this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleTitleChange = title => (event) => {
     this.setState({
       [title]: event.target.value,
+    });
+  };
+  handleChange = name => (event) => {
+    this.setState({
+      [name]: event.target.value,
     });
   };
 
@@ -70,31 +77,56 @@ class CreateRecipe extends Component {
     console.log('trying submit');
     const { title } = this.state.title;
     const { dispatch } = this.props;
-    this.submitRecipe(title);
+    this.submitRecipe();
   }
 
   submitRecipe = async () => {
-    console.log('trying submit log with ', this.state.title);
-    const data = {
-      message: this.state.message,
-      author: this.state.author,
-    };
+    console.log('trying create recipe with ', this.state.title);
     try {
+      const data = {
+        name: this.state.title,
+        description: this.state.description,
+        prepTime: this.state.prepTime,
+        cookTime: this.state.cookTime,
+        difficulty: this.state.difficulty,
+      };
       const result = client
         .mutate({
           mutation: gql`
-          mutation CreateRecipe {           
+          mutation CreateRecipe($recipe: NewRecipeInput!) {           
             createRecipe(
-              name: "${data.title}"
+              recipe: $recipe
             ) {
               id
               name
             }
           }
         `,
+          variables: {
+            recipe: {
+              description: data.description,
+              system: 'test system',
+              images: [],
+              name: data.name,
+              ingredients: [],
+              instructions: [],
+              sourceURL: null,
+              prepTime: data.prepTime,
+              cookTime: data.cookTime,
+              difficulty: data.difficulty,
+              servings: 3,
+              author: '5ba878e2d115b42dee519eb0',
+              tags: null,
+              notes: null,
+            },
+          },
         })
-        .then(result => console.log(result));
-      return result.data;
+        .then((result) => {
+          console.log(result);
+          console.log("Recipe created successfully");
+          return result.data;
+        });
+      return result;
     } catch (err) {
       console.log(err);
       return {};
@@ -106,29 +138,45 @@ class CreateRecipe extends Component {
       <div>
         <Grid className='pic-des-container' container spacing={styles.spacing} justify={'center'}>
           <form className='recipe-form' onSubmit={this.handleSubmitRecipe} >
-            <Grid className='picture' item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
-              {/*<RecipePicture title={this.state.title} stars={this.state.stars} imageURL={this.state.image} />*/}
-              <TextField
-                id="textarea"
-                placeholder="Recipe Title"
-                fullWidth
-                className="title"
-                onChange={this.handleTitleChange('title')}
-              />
-            </Grid>
-            <Grid className='description' item xs={styles.sizes.xs.description} sm={styles.sizes.sm.description}>
-              <RecipeDescription desc={this.state.description}/>
-            </Grid>
-            <Grid className='info' item xs={styles.sizes.xs.author} sm={styles.sizes.sm.author}>
-              {/*<RecipeInfo authorImage={this.state.authorImage} authorName={this.state.author} prepTime={this.state.prepTime} cookTime={this.state.cookTime} difficulty={this.state.difficulty} tags={this.state.tags} />*/}
-            </Grid>
-            <Grid className='ingredients' item xs={styles.sizes.xs.instructions} sm={styles.sizes.sm.instructions}>
-              {/*<RecipeIngredients ingredients={this.state.ingredients} servings={this.state.servings} />*/}
-            </Grid>
-            <Grid className='instructions' item xs={styles.sizes.xs.ingredients} sm={styles.sizes.sm.ingredients}>
-              {/*<RecipeInstructions value={this.state.instructions} />*/}
-            </Grid>
-            <Button type='submit' value='Submit' color="primary" className='submit'>
+
+            <TextField
+              id="textarea"
+              placeholder="Recipe Title"
+              fullWidth
+              className="title"
+              onChange={this.handleChange('title')}
+            />
+            <TextField
+              id="textarea"
+              label="Description"
+              multiline
+              fullWidth
+              className="description"
+              onChange={this.handleChange('description')}
+            />
+            <TextField
+              id="textarea"
+              label="Prep Time"
+              fullWidth
+              className="preptime"
+              onChange={this.handleChange('prepTime')}
+            />
+            <TextField
+              id="textarea"
+              label="Cook Time"
+              fullWidth
+              className="cooktime"
+              onChange={this.handleChange('cookTime')}
+            />
+            <TextField
+              id="textarea"
+              label="Difficulty"
+              fullWidth
+              className="difficulty"
+              onChange={this.handleChange('difficulty')}
+            />
+
+            <Button onClick={this.submitRecipe}>
               Submit
             </Button>
           </form>
