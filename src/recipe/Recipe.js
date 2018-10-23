@@ -298,6 +298,15 @@ class Recipe extends Component {
             >
               Remove From Saved
             </Button>
+
+           <Button
+            variant="contained"
+            color= "tertiary"
+            className="print-recipe-button"
+            onClick={this.printRecipe}
+          >
+            Print Recipe
+          </Button>
           </Grid>
           <Grid
             className="source-url"

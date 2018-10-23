@@ -43,6 +43,9 @@ div.info {
 .remove-recipe-button {
   margin-left: 15px !important;
 }
+.print-recipe-button{
+  margin-left: 15px !important;
+}
 
 .source-url {
   font-size: .7em;
