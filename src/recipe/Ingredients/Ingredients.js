@@ -26,7 +26,7 @@ class RecipeIngredients extends Component {
           <List>
             {
               this.props.ingredients.map((ingredient, index) => {
-                return <ListItem key={index}> {ingredient.quantity} {ingredient.unit} {ingredient.name} </ListItem>;
+                return <ListItem key={index}> {ingredient} {ingredient.quantity} {ingredient.unit} {ingredient.name} </ListItem>;
               })
             }
           </List>

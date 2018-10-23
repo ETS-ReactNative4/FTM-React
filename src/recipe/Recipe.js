@@ -41,7 +41,7 @@ class Recipe extends Component {
       ingredients: [],
       instructions: [],
       description: null,
-      image: null,
+      image: [],
       title: null,
       stars: null,
       tags: [],
@@ -152,7 +152,7 @@ class Recipe extends Component {
               system
               images
               name
-              ingredients {name quantity unit}
+              ingredients
               instructions
               sourceURL
               prepTime
@@ -169,7 +169,7 @@ class Recipe extends Component {
           }
         `
         })
-        .then(result => {
+        .then((result) => {
           // console.log(result.data.recipeById);
           return result.data.recipeById;
         });
