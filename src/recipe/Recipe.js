@@ -299,14 +299,10 @@ class Recipe extends Component {
               Remove From Saved
             </Button>
 
-           <Button
-            variant="contained"
-            color= "tertiary"
-            className="print-recipe-button"
-            onClick={this.printRecipe}
-          >
-            Print Recipe
-          </Button>
+            <a className="print-button" href="javascript:window.print();">
+              <i className="fa fa-print"></i>
+              <span> Print This Recipe</span>
+            </a>
           </Grid>
           <Grid
             className="source-url"
