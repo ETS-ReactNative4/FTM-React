@@ -3,8 +3,8 @@
   height: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 265px 48px auto;
-  grid-template-areas: 
+  grid-template-rows: 365px 48px auto;
+  grid-template-areas:
     ". . logo . ."
     ". search search search ."
     ". results results results .";
@@ -12,7 +12,7 @@
 
 .logo {
   grid-area: logo;
-  padding: 100px 100px 50px 100px;
+  padding: 0px 0px 0px 0px;
 }
 
 .search-box {

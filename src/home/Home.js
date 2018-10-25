@@ -19,6 +19,7 @@ import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 
+
 const styles = {
   gridList: {
     display: 'flex',
@@ -116,7 +117,7 @@ class Home extends Component {
             <img
               className="logo"
               style={{ marginTop }}
-              src="https://i.imgur.com/aIOwjGE.png"
+              src="http://i67.tinypic.com/mkek5f.png"
               alt="foodtomake logo"
             />
           )}
