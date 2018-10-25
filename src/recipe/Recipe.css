@@ -43,8 +43,15 @@ div.info {
 .remove-recipe-button {
   margin-left: 15px !important;
 }
+
 .print-recipe-button{
   margin-left: 15px !important;
+}
+
+.divider{
+    width:5px;
+    height:auto;
+    display:inline-block;
 }
 
 .source-url {

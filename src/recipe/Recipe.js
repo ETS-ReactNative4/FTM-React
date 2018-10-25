@@ -300,8 +300,16 @@ class Recipe extends Component {
             </Button>
 
             <a className="print-button" href="javascript:window.print();">
-              <i className="fa fa-print"></i>
-              <span> Print This Recipe</span>
+              <em className="fa fa-print"></em>
+
+              <Button
+                variant = "contained"
+                color="secondary"
+                className = "print-button"
+                onClick = {this.printRecipe}
+              >
+                Print Recipe
+              </Button>
             </a>
           </Grid>
           <Grid
