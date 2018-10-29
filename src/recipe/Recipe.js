@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, TextField } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Icon from '@material-ui/core/Icon';
 import gql from 'graphql-tag';
 import { withApollo, compose, graphql } from 'react-apollo';
 import './Recipe.css';
@@ -22,7 +28,7 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 8
+      title: 8,
     },
     sm: {
       picture: 4,
@@ -30,9 +36,9 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 8
-    }
-  }
+      title: 8,
+    },
+  },
 };
 
 class Recipe extends Component {
@@ -55,12 +61,31 @@ class Recipe extends Component {
       servings: null,
       recipe_id: this.props.match.params.id,
       notes: null,
+      new_note: null,
+      note_dialog_open: false,
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
+    this.addNote = this.addNote.bind(this);
+    this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.handleDialogOpen = this.handleDialogOpen.bind(this);
     // this.getDataFromAPI();
     // console.log(this.state.recipe_id);
   }
+
+  handleDialogOpen = () => {
+    this.setState({ note_dialog_open: true });
+  };
+
+  handleDialogClose = () => {
+    this.setState({ note_dialog_open: false });
+  };
+
+  handleNoteInput = (event) => {
+    this.setState({
+      new_note: event.target.value,
+    });
+  };
 
   saveRecipe() {
     try {
@@ -69,7 +94,7 @@ class Recipe extends Component {
       console.log('save this recipe');
       const data = {
         user_id: decoded.id,
-        recipe_id: this.state.recipe_id
+        recipe_id: this.state.recipe_id,
       };
       const result = client
         .mutate({
@@ -82,9 +107,9 @@ class Recipe extends Component {
               id
             }
           }
-        `
+        `,
         })
-        .then(result => {
+        .then((result) => {
           console.log(result.data);
           console.log('successfully saved recipe for: ', decoded.id);
           return result.data.recipeById;
@@ -104,7 +129,7 @@ class Recipe extends Component {
       console.log('remove this recipe');
       const data = {
         user_id: decoded.id,
-        recipe_id: this.state.recipe_id
+        recipe_id: this.state.recipe_id,
       };
       const result = client
         .mutate({
@@ -115,9 +140,9 @@ class Recipe extends Component {
               recipeId: "${data.recipe_id}"
             )
           }
-        `
+        `,
         })
-        .then(result => {
+        .then((result) => {
           console.log(result.data);
           console.log('successfully removed recipe for: ', decoded.id);
           return result.data;
@@ -130,6 +155,55 @@ class Recipe extends Component {
     }
   }
 
+  addNote() {
+    console.log('note input: ', this.state.new_note);
+
+    // append the new note to the current ones
+    this.setState(previousState => ({
+      notes: [...previousState.notes, this.state.new_note],
+    }));
+    try {
+      const { client, token } = this.props;
+      const decoded = jwt.decode(token);
+      const data = {
+        notes: this.state.notes,
+        recipe_id: this.state.recipe_id,
+
+      };
+      const result = client
+        .mutate({
+          mutation: gql`
+          mutation UpdateRecipe($recipe: UpdateRecipeInput!) {           
+            updateRecipe(
+              id: "${data.recipe_id}"
+              recipe: $recipe
+            ) {
+              id
+              name
+              notes
+            }
+          }
+        `,
+          variables: {
+            recipe: {
+              notes: data.notes,
+            },
+          },
+        })
+        .then((result) => {
+          console.log(result.data);
+          console.log('successfully added the note');
+          this.handleDialogClose();
+          return result.data;
+        });
+      return result;
+    } catch (err) {
+      console.log(err);
+      console.log('failed to add the note');
+      return {};
+    }
+  }
+
   componentWillMount() {
     this.getDataFromAPI();
   }
@@ -137,7 +211,7 @@ class Recipe extends Component {
   fetchRecipe = async () => {
     console.log('getting recipe from database ');
     const data = {
-      recipe_id: this.state.recipe_id
+      recipe_id: this.state.recipe_id,
     };
     try {
       const { client } = this.props;
@@ -169,7 +243,7 @@ class Recipe extends Component {
               comments
             }
           }
-        `
+        `,
         })
         .then((result) => {
           // console.log(result.data.recipeById);
@@ -206,7 +280,7 @@ class Recipe extends Component {
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
         authorImage:
-          'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png'
+          'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
       });
     }
   }
@@ -302,6 +376,42 @@ class Recipe extends Component {
             >
               Remove From Saved
             </Button>
+            <Button
+              variant="contained"
+              color="default"
+              className="add-note-button"
+              onClick={this.handleDialogOpen}
+            >
+              <Icon>edit_icon</Icon>Add A Note
+            </Button>
+
+            <Dialog
+              open={this.state.note_dialog_open}
+              onClose={this.handleDialogClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">New Note</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  multiline
+                  id="note-input"
+                  label="New Note"
+                  type="text"
+                  fullWidth
+                  onChange={this.handleNoteInput}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleDialogClose} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={this.addNote} color="primary" variant="contained">
+                  Add Note
+                </Button>
+              </DialogActions>
+            </Dialog>
+
 
             <a className="print-button" href="javascript:window.print();">
               <em className="fa fa-print"></em>
@@ -323,7 +433,7 @@ class Recipe extends Component {
             sm={styles.sizes.sm.ingredients}
           >
             <span>
-              <a href={(this.state.sourceURL === null || this.state.sourceURL === "") ? "www.foodtomake.com" : this.state.URL}>Source</a>
+              <a href={(this.state.sourceURL === null || this.state.sourceURL === '') ? 'www.foodtomake.com' : this.state.URL}>Source</a>
             </span>
           </Grid>
         </Grid>
@@ -334,5 +444,5 @@ class Recipe extends Component {
 
 export default compose(
   withLocalData,
-  withApollo
+  withApollo,
 )(Recipe);
