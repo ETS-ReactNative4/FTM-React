@@ -54,6 +54,7 @@ class CreateRecipe extends Component {
       difficulty: null,
       sourceURL: null,
       servings: null,
+      notes: null,
     };
 
     this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -61,6 +62,7 @@ class CreateRecipe extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleIngredients = this.handleIngredients.bind(this);
     this.handleInstructions = this.handleInstructions.bind(this);
+    this.handleNotes = this.handleNotes.bind(this);
   }
 
   handleTitleChange = title => (event) => {
@@ -68,7 +70,7 @@ class CreateRecipe extends Component {
       [title]: event.target.value,
     });
   };
-  handleIngredients = ingredient => (event) => {
+  handleIngredients = ingredients => (event) => {
     this.setState({
       ingredients: [event.target.value],
     });
@@ -78,11 +80,15 @@ class CreateRecipe extends Component {
       instructions: [event.target.value],
     });
   }
+  handleNotes = notes => (event) => {
+    this.setState({
+      notes: event.target.value.split(','),
+    });
+  }
   handleChange = name => (event) => {
-      this.setState({
-        [name]: event.target.value,
-      });
-    
+    this.setState({
+      [name]: event.target.value,
+    });
   };
 
   handleSubmit(e) {
@@ -90,11 +96,13 @@ class CreateRecipe extends Component {
     console.log('trying submit');
     const { title } = this.state.title;
     const { dispatch } = this.props;
+    
     this.submitRecipe();
   }
 
   submitRecipe = async () => {
     console.log('trying create recipe with ', this.state.title);
+    console.log('notes: ', this.state.notes);
     try {
       const data = {
         name: this.state.title,
@@ -104,6 +112,8 @@ class CreateRecipe extends Component {
         difficulty: this.state.difficulty,
         ingredients: this.state.ingredients,
         instructions: this.state.instructions,
+        notes: this.state.notes,
+        sourceURL: "www.foodtomake.com",
       };
       console.log(data.name);
       console.log(data.ingredients);
@@ -127,20 +137,20 @@ class CreateRecipe extends Component {
               name: data.name,
               ingredients: data.ingredients,
               instructions: data.instructions,
-              sourceURL: null,
+              sourceURL: data.sourceURL,
               prepTime: data.prepTime,
               cookTime: data.cookTime,
               difficulty: data.difficulty,
               servings: 3,
               author: '5ba878e2d115b42dee519eb0',
-              tags: null,
-              notes: null,
+              tags: [],
+              notes: data.notes,
             },
           },
         })
         .then((result) => {
           console.log(result);
-          console.log("Recipe created successfully");
+          console.log('Recipe created successfully');
           return result.data;
         });
       return result;
@@ -205,6 +215,13 @@ class CreateRecipe extends Component {
               fullWidth
               className="instructions"
               onChange={this.handleInstructions('Instructions')}
+            />
+            <TextField
+              id="textarea"
+              label="Notes Separated by comma"
+              fullWidth
+              className="notes"
+              onChange={this.handleNotes('Notes')}
             />
 
             <Button onClick={this.submitRecipe}>

@@ -1,0 +1,13 @@
+.container {
+  position: relative;
+}
+.cardPlacement {
+  position: absolute;
+  width: 225px;
+}
+.note-card {
+  margin: 1em;
+}
+.note-card h3 {
+  margin-top: 0;
+}

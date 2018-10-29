@@ -8,6 +8,7 @@ import RecipeInfo from './Info/Info';
 import RecipeIngredients from './Ingredients/Ingredients';
 import RecipeDescription from './Description/Description';
 import RecipePicture from './Picture/Picture';
+import Notes from './Notes/Notes';
 import withLocalData from '../withLocalData';
 
 const jwt = require('jsonwebtoken');
@@ -52,7 +53,8 @@ class Recipe extends Component {
       difficulty: null,
       sourceURL: null,
       servings: null,
-      recipe_id: this.props.match.params.id
+      recipe_id: this.props.match.params.id,
+      notes: null,
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
@@ -197,7 +199,8 @@ class Recipe extends Component {
       description: recipe.description,
       sourceURL: recipe.sourceURL,
       servings: recipe.servings,
-      stars: Math.round(recipe.rating)
+      stars: Math.round(recipe.rating),
+      notes: recipe.notes,
       // recipe_id: recipe._id,
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
@@ -216,6 +219,7 @@ class Recipe extends Component {
 
     return (
       <div>
+        <Notes notes={this.state.notes} />
         <Grid
           className="pic-des-container"
           container
@@ -319,7 +323,7 @@ class Recipe extends Component {
             sm={styles.sizes.sm.ingredients}
           >
             <span>
-              <a href={this.state.sourceURL}>Source</a>
+              <a href={(this.state.sourceURL === null || this.state.sourceURL === "") ? "www.foodtomake.com" : this.state.URL}>Source</a>
             </span>
           </Grid>
         </Grid>
