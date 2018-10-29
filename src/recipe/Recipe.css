@@ -58,3 +58,7 @@ div.info {
   font-size: .7em;
   color: gray;
 }
+
+.comment-dialog {
+  width: 60%;
+}
