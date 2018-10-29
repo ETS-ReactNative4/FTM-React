@@ -59,6 +59,8 @@ class CreateRecipe extends Component {
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleIngredients = this.handleIngredients.bind(this);
+    this.handleInstructions = this.handleInstructions.bind(this);
   }
 
   handleTitleChange = title => (event) => {
@@ -66,10 +68,21 @@ class CreateRecipe extends Component {
       [title]: event.target.value,
     });
   };
-  handleChange = name => (event) => {
+  handleIngredients = ingredient => (event) => {
     this.setState({
-      [name]: event.target.value,
+      ingredients: [event.target.value],
     });
+  }
+  handleInstructions = instructions => (event) => {
+    this.setState({
+      instructions: [event.target.value],
+    });
+  }
+  handleChange = name => (event) => {
+      this.setState({
+        [name]: event.target.value,
+      });
+    
   };
 
   handleSubmit(e) {
@@ -89,7 +102,11 @@ class CreateRecipe extends Component {
         prepTime: this.state.prepTime,
         cookTime: this.state.cookTime,
         difficulty: this.state.difficulty,
+        ingredients: this.state.ingredients,
+        instructions: this.state.instructions,
       };
+      console.log(data.name);
+      console.log(data.ingredients);
       const result = client
         .mutate({
           mutation: gql`
@@ -105,11 +122,11 @@ class CreateRecipe extends Component {
           variables: {
             recipe: {
               description: data.description,
-              system: 'test system',
+              system: 'us',
               images: [],
               name: data.name,
-              ingredients: [],
-              instructions: [],
+              ingredients: data.ingredients,
+              instructions: data.instructions,
               sourceURL: null,
               prepTime: data.prepTime,
               cookTime: data.cookTime,
@@ -174,6 +191,20 @@ class CreateRecipe extends Component {
               fullWidth
               className="difficulty"
               onChange={this.handleChange('difficulty')}
+            />
+            <TextField
+              id="textarea"
+              label="Ingredients"
+              fullWidth
+              className="ingredients"
+              onChange={this.handleIngredients('Ingredients')}
+            />
+            <TextField
+              id="textarea"
+              label="Instructions"
+              fullWidth
+              className="instructions"
+              onChange={this.handleInstructions('Instructions')}
             />
 
             <Button onClick={this.submitRecipe}>
