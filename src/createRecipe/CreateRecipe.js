@@ -72,12 +72,12 @@ class CreateRecipe extends Component {
   };
   handleIngredients = ingredients => (event) => {
     this.setState({
-      ingredients: [event.target.value],
+      ingredients: event.target.value.split(','),
     });
   }
   handleInstructions = instructions => (event) => {
     this.setState({
-      instructions: [event.target.value],
+      instructions: event.target.value.split(','),
     });
   }
   handleNotes = notes => (event) => {
@@ -204,14 +204,14 @@ class CreateRecipe extends Component {
             />
             <TextField
               id="textarea"
-              label="Ingredients"
+              label="Ingredients Separated by comma"
               fullWidth
               className="ingredients"
               onChange={this.handleIngredients('Ingredients')}
             />
             <TextField
               id="textarea"
-              label="Instructions"
+              label="Instructions Separated by comma"
               fullWidth
               className="instructions"
               onChange={this.handleInstructions('Instructions')}
