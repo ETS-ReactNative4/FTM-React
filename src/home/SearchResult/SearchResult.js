@@ -9,10 +9,10 @@ import {
   Avatar,
   CardHeader,
   IconButton,
-  CardMedia
+  CardMedia,
 } from '@material-ui/core';
 import { Favorite, Share, MoreVert } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import './SearchResult.css';
 
 const styles = {
@@ -22,27 +22,28 @@ const styles = {
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    cursor: 'pointer',
   },
   media: {
     height: 0,
-    paddingTop: '56.25%' // 16:9
+    paddingTop: '56.25%', // 16:9
   },
   actions: {
-    display: 'flex'
+    display: 'flex',
   },
   avatar: {
     margin: 10,
     width: 45,
-    height: 45
+    height: 45,
   },
   title: {
     marginBottom: 16,
-    fontSize: 14
+    fontSize: 14,
   },
   pos: {
-    marginBottom: 12
-  }
+    marginBottom: 12,
+  },
 };
 class SearchResult extends React.Component {
   state = { expanded: false };
@@ -52,46 +53,41 @@ class SearchResult extends React.Component {
   };
 
   render() {
-    const { classes, name, r_id, description, created, images } = this.props;
+    const {
+ classes, name, r_id, description, created, images 
+} = this.props;
 
     return (
-      <Card className={classes.card}>
-        <CardHeader
-          avatar={
-            <Avatar
-              aria-label="Result"
-              className={classes.avatar}
-              src="https://i.imgur.com/KWl6pqT.jpg"
+      <Route
+        render={({ history }) => (
+          <Card
+            className={classes.card}
+            onClick={() => {
+              history.push(`/recipe/${r_id}`);
+            }}
+          >
+            <CardHeader
+              avatar={
+                <Avatar
+                  aria-label="Result"
+                  className={classes.avatar}
+                  src="https://i.imgur.com/KWl6pqT.jpg"
+                />
+              }
+              title={name}
+              subheader={created}
             />
-          }
-          action={
-            <IconButton>
-              <MoreVert />
-            </IconButton>
-          }
-          title={name}
-          subheader={created}
-        />
-        <CardMedia
-          className={classes.media}
-          image={images}
-          title="Fat cat alert"
-        />
-        <CardContent>
-          <Typography component="p">{description}</Typography>
-        </CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites">
-            <Favorite />
-          </IconButton>
-          <IconButton aria-label="Share">
-            <Share />
-          </IconButton>
-          <Button size="small" component={Link} to={`/recipe/${r_id}`}>
-            Learn More
-          </Button>
-        </CardActions>
-      </Card>
+            <CardMedia
+              className={classes.media}
+              image={images}
+              title="Fat cat alert"
+            />
+            <CardContent>
+              <Typography component="p">{description}</Typography>
+            </CardContent>
+          </Card>
+        )}
+      />
     );
   }
 }
