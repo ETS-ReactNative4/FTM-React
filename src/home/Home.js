@@ -117,8 +117,8 @@ class Home extends Component {
             <img
               className="logo"
               style={{ marginTop }}
-              src="http://i67.tinypic.com/mkek5f.png"
-              alt="foodtomake logo"
+              src="http://i63.tinypic.com/14joi09.png"
+              alt="logo"
             />
           )}
         </Spring>

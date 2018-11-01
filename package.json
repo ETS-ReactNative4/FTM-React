@@ -20,6 +20,7 @@
     "material-ui": "^1.0.0-beta.47",
     "normalize.css": "^8.0.0",
     "npm-install-peers": "^1.2.1",
+    "openport": "0.0.5",
     "prop-types": "^15.6.2",
     "rc-print": "^1.0.4",
     "react": "^16.5.2",
