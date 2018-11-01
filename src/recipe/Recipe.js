@@ -79,8 +79,11 @@ class Recipe extends Component {
     this.handleCommentClose = this.handleCommentClose.bind(this);
     this.handleCommentOpen = this.handleCommentOpen.bind(this);
     this.handleNoteInput = this.handleNoteInput.bind(this);
-    // this.getDataFromAPI();
-    // console.log(this.state.recipe_id);
+  }
+
+  isUserLoggedIn() {
+    const {userId} = this.props;
+    return !(userId === null || userId === '');
   }
 
   handleDialogOpen = () => {
@@ -116,11 +119,9 @@ class Recipe extends Component {
 
   saveRecipe() {
     try {
-      const { client, token } = this.props;
-      const decoded = jwt.decode(token);
-      console.log('save this recipe');
+      const { client, userId } = this.props;
       const data = {
-        user_id: decoded.id,
+        user_id: userId,
         recipe_id: this.state.recipe_id,
       };
       const result = client
@@ -137,25 +138,19 @@ class Recipe extends Component {
         `,
         })
         .then((result) => {
-          console.log(result.data);
-          console.log('successfully saved recipe for: ', decoded.id);
           return result.data.recipeById;
         });
       return result;
     } catch (err) {
-      console.log(err);
-      console.log('failed to save recipe');
       return {};
     }
   }
 
   removeRecipe() {
     try {
-      const { client, token } = this.props;
-      const decoded = jwt.decode(token);
-      console.log('remove this recipe');
+      const { client, userId } = this.props;
       const data = {
-        user_id: decoded.id,
+        user_id: userId,
         recipe_id: this.state.recipe_id,
       };
       const result = client
@@ -170,36 +165,27 @@ class Recipe extends Component {
         `,
         })
         .then((result) => {
-          console.log(result.data);
-          console.log('successfully removed recipe for: ', decoded.id);
           return result.data;
         });
       return result;
     } catch (err) {
-      console.log(err);
-      console.log('failed to remove recipe');
       return {};
     }
   }
 
   noteSubmit() {
-    console.log('note input: ', this.state.new_note);
-
-    // append the new note to the current ones
+    // append the new note to the current ones, then use callback to make api call
     this.setState(previousState => ({
       notes: [...previousState.notes, this.state.new_note],
     }), this.addNote);
   }
 
   addNote() {
-    console.log('notes: ', this.state.notes);
     try {
-      const { client, token } = this.props;
-      const decoded = jwt.decode(token);
+      const { client } = this.props;
       const data = {
         notes: this.state.notes,
         recipe_id: this.state.recipe_id,
-
       };
       const result = client
         .mutate({
@@ -222,34 +208,25 @@ class Recipe extends Component {
           },
         })
         .then((result) => {
-          console.log(result.data);
-          console.log('successfully added the note');
           this.handleDialogClose();
           return result.data;
         });
       return result;
     } catch (err) {
-      console.log(err);
-      console.log('failed to add the note');
       return {};
     }
   }
 
   commentSubmit() {
-    console.log('trying to post a new comment');
-    console.log('comment input: ', this.state.new_comment);
-
-    // append the new comment to the current ones
+    // append the new comment to the current ones, then use callback to make api call
     this.setState(previousState => ({
       comments: [...previousState.comments, this.state.new_comment],
     }), this.postComment);
   }
 
   postComment() {
-    console.log('comments: ', this.state.comments);
     try {
-      const { client, token } = this.props;
-      const decoded = jwt.decode(token);
+      const { client } = this.props;
       const data = {
         comments: this.state.comments,
         recipe_id: this.state.recipe_id,
@@ -276,15 +253,11 @@ class Recipe extends Component {
           },
         })
         .then((result) => {
-          console.log(result.data);
-          console.log('successfully added the comment');
           this.handleCommentClose();
           return result.data;
         });
       return result;
     } catch (err) {
-      console.log(err);
-      console.log('failed to add the comment');
       return {};
     }
   }
@@ -295,7 +268,6 @@ class Recipe extends Component {
   }
 
   fetchRecipe = async () => {
-    console.log('getting recipe from database ');
     const data = {
       recipe_id: this.state.recipe_id,
     };
@@ -332,23 +304,19 @@ class Recipe extends Component {
         `,
         })
         .then((result) => {
-          // console.log(result.data.recipeById);
           return result.data.recipeById;
         });
       return result;
     } catch (err) {
-      console.log(err);
       return {};
     }
   };
 
   async getDataFromAPI() {
     const recipe = await this.fetchRecipe();
-    console.log('recipe: \n', recipe);
     this.setState({
       title: recipe.name,
       author: recipe.author,
-      // authorImage: recipe.author.image,
       image: recipe.images[0],
       cookTime: recipe.cookTime,
       prepTime: recipe.prepTime,
@@ -362,7 +330,6 @@ class Recipe extends Component {
       stars: Math.round(recipe.rating),
       notes: recipe.notes,
       comments: recipe.comments,
-      // recipe_id: recipe._id,
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
@@ -377,6 +344,9 @@ class Recipe extends Component {
     if (!this.state.title) {
       return <div />;
     }
+
+    let isLoggedIn = this.isUserLoggedIn();
+    console.log('user is logged in: ', isLoggedIn);
 
     return (
       <div>
@@ -441,77 +411,78 @@ class Recipe extends Component {
           >
             <RecipeInstructions value={this.state.instructions} />
           </Grid>
-          <Grid
-            className="save-recipe"
-            item
-            xs={styles.sizes.xs.ingredients}
-            sm={styles.sizes.sm.ingredients}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              className="save-recipe-button btn-margin"
-              onClick={this.saveRecipe}
+
+          {isLoggedIn &&
+            <Grid
+              className="recipe-buttons"
+              item
+              xs={styles.sizes.xs.ingredients}
+              sm={styles.sizes.sm.ingredients}
             >
+              <Button
+                variant="contained"
+                color="primary"
+                className="save-recipe-button btn-margin"
+                onClick={this.saveRecipe}
+              >
               Save Recipe
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              className="remove-recipe-button btn-margin"
-              onClick={this.removeRecipe}
-            >
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                className="remove-recipe-button btn-margin"
+                onClick={this.removeRecipe}
+              >
               Remove From Saved
-            </Button>
-            <Button
-              variant = "contained"
-              color="secondary"
-              className = "print-button btn-margin"
-              onClick = {this.printRecipe}
-            >
+              </Button>
+              <Button
+                variant = "contained"
+                color="secondary"
+                className = "print-button btn-margin"
+                onClick = {this.printRecipe}
+              >
                 Print Recipe
-            </Button>
+              </Button>
 
-            {/* Add a note */}
-            <Button
-              variant="contained"
-              color="default"
-              className="add-note-button btn-margin"
-              onClick={this.handleDialogOpen}
-            >
-              <Icon>edit_icon</Icon>Add A Note
-            </Button>
+              <Button
+                variant="contained"
+                color="default"
+                className="add-note-button btn-margin"
+                onClick={this.handleDialogOpen}
+              >
+                <Icon>edit_icon</Icon>Add A Note
+              </Button>
 
-            <Dialog
-              open={this.state.note_dialog_open}
-              onClose={this.handleDialogClose}
-              aria-labelledby="form-dialog-title"
-              fullWidth={true}
-            >
-              <DialogTitle id="form-dialog-title">New Note</DialogTitle>
-              <DialogContent>
-                <TextField
-                  autoFocus
-                  multiline
-                  fullWidth
-                  id="note-input"
-                  label="New Note"
-                  type="text"
-                  onChange={this.handleNoteInput.bind(this)}
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleDialogClose} color="primary">
+              <Dialog
+                open={this.state.note_dialog_open}
+                onClose={this.handleDialogClose}
+                aria-labelledby="form-dialog-title"
+                fullWidth={true}
+              >
+                <DialogTitle id="form-dialog-title">New Note</DialogTitle>
+                <DialogContent>
+                  <TextField
+                    autoFocus
+                    multiline
+                    fullWidth
+                    id="note-input"
+                    label="New Note"
+                    type="text"
+                    onChange={this.handleNoteInput.bind(this)}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleDialogClose} color="primary">
                   Cancel
-                </Button>
-                <Button onClick={this.noteSubmit} color="primary" variant="contained">
+                  </Button>
+                  <Button onClick={this.noteSubmit} color="primary" variant="contained">
                   Add Note
-                </Button>
-              </DialogActions>
-            </Dialog>
-
-
-          </Grid>
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </Grid>
+            }
+          
           <Grid
             className="source-url"
             item
@@ -529,43 +500,50 @@ class Recipe extends Component {
             sm={styles.sizes.sm.ingredients}
           >
             <Comments comments={this.state.comments} />
-            <Button
-              variant="contained"
-              color="default"
-              className="post-comment-button"
-              onClick={this.handleCommentOpen}
-            >
-              <Icon>add_icon</Icon>Post A Comment
-            </Button>
-
-            <Dialog
-              open={this.state.comment_dialog_open}
-              onClose={this.handleCommentClose}
-              aria-labelledby="comment-dialog-title"
-              className="comment-dialog"
-              fullWidth={true}
-            >
-              <DialogTitle id="comment-dialog-title">New Comment</DialogTitle>
-              <DialogContent>
-                <TextField
-                  autoFocus
-                  multiline
-                  id="comment-input"
-                  label="New Comment"
-                  type="text"
-                  fullWidth
-                  onChange={this.handleCommentInput}
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleCommentClose} color="primary">
-                  Cancel
+            {isLoggedIn ? (
+              <div className="comment-loggedin">
+                <Button
+                  variant="contained"
+                  color="default"
+                  className="post-comment-button"
+                  onClick={this.handleCommentOpen}
+                >
+                  <Icon>add_icon</Icon>Post A Comment
                 </Button>
-                <Button onClick={this.commentSubmit} color="primary" variant="contained">
-                  Post Comment
-                </Button>
-              </DialogActions>
-            </Dialog>
+                <Dialog
+                  open={this.state.comment_dialog_open}
+                  onClose={this.handleCommentClose}
+                  aria-labelledby="comment-dialog-title"
+                  className="comment-dialog"
+                  fullWidth={true}
+                >
+                  <DialogTitle id="comment-dialog-title">New Comment</DialogTitle>
+                  <DialogContent>
+                    <TextField
+                      autoFocus
+                      multiline
+                      id="comment-input"
+                      label="New Comment"
+                      type="text"
+                      fullWidth
+                      onChange={this.handleCommentInput}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={this.handleCommentClose} color="primary">
+                    Cancel
+                    </Button>
+                    <Button onClick={this.commentSubmit} color="primary" variant="contained">
+                    Post Comment
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+            ) : (
+              <h3>Log in to post a comment</h3>
+            )}
+              
+           
           </Grid>
         </Grid>
       </div>
