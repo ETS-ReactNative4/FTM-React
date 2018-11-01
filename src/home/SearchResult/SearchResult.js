@@ -71,7 +71,7 @@ class SearchResult extends React.Component {
                 <Avatar
                   aria-label="Result"
                   className={classes.avatar}
-                  src="https://i.imgur.com/KWl6pqT.jpg"
+                  src="http://i65.tinypic.com/2rnvc7k.png"
                 />
               }
               title={name}

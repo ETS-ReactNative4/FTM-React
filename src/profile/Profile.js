@@ -40,7 +40,7 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_image: 'https://i.imgur.com/4AiXzf8.jpg',
+      user_image: 'http://i65.tinypic.com/2rnvc7k.png',
       username: null,
       user_id: null,
       owned_recipes: [],
