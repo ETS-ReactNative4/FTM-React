@@ -69,6 +69,7 @@ class Recipe extends Component {
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
+    this.printRecipe = this.printRecipe.bind(this);
     this.noteSubmit = this.noteSubmit.bind(this);
     this.commentSubmit = this.commentSubmit.bind(this);
     this.addNote = this.addNote.bind(this);
@@ -102,10 +103,15 @@ class Recipe extends Component {
       new_note: event.target.value,
     });
   };
+
   handleCommentInput = (event) => {
     this.setState({
       new_comment: event.target.value,
     });
+  };
+
+  printRecipe() {
+    window.print();
   }
 
   saveRecipe() {
@@ -444,7 +450,7 @@ class Recipe extends Component {
             <Button
               variant="contained"
               color="primary"
-              className="save-recipe-button"
+              className="save-recipe-button btn-margin"
               onClick={this.saveRecipe}
             >
               Save Recipe
@@ -452,15 +458,25 @@ class Recipe extends Component {
             <Button
               variant="contained"
               color="secondary"
-              className="remove-recipe-button"
+              className="remove-recipe-button btn-margin"
               onClick={this.removeRecipe}
             >
               Remove From Saved
             </Button>
             <Button
+              variant = "contained"
+              color="secondary"
+              className = "print-button btn-margin"
+              onClick = {this.printRecipe}
+            >
+                Print Recipe
+            </Button>
+
+            {/* Add a note */}
+            <Button
               variant="contained"
               color="default"
-              className="add-note-button"
+              className="add-note-button btn-margin"
               onClick={this.handleDialogOpen}
             >
               <Icon>edit_icon</Icon>Add A Note
@@ -470,16 +486,17 @@ class Recipe extends Component {
               open={this.state.note_dialog_open}
               onClose={this.handleDialogClose}
               aria-labelledby="form-dialog-title"
+              fullWidth={true}
             >
               <DialogTitle id="form-dialog-title">New Note</DialogTitle>
               <DialogContent>
                 <TextField
                   autoFocus
                   multiline
+                  fullWidth
                   id="note-input"
                   label="New Note"
                   type="text"
-                  fullWidth
                   onChange={this.handleNoteInput.bind(this)}
                 />
               </DialogContent>
@@ -494,18 +511,6 @@ class Recipe extends Component {
             </Dialog>
 
 
-            <a className="print-button" href="javascript:window.print();">
-              <em className="fa fa-print"></em>
-
-              <Button
-                variant = "contained"
-                color="secondary"
-                className = "print-button"
-                onClick = {this.printRecipe}
-              >
-                Print Recipe
-              </Button>
-            </a>
           </Grid>
           <Grid
             className="source-url"
@@ -538,6 +543,7 @@ class Recipe extends Component {
               onClose={this.handleCommentClose}
               aria-labelledby="comment-dialog-title"
               className="comment-dialog"
+              fullWidth={true}
             >
               <DialogTitle id="comment-dialog-title">New Comment</DialogTitle>
               <DialogContent>
