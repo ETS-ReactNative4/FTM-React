@@ -4,6 +4,7 @@
 .cardPlacement {
   position: absolute;
   width: 225px;
+  margin-top: calc(2em + 12px) !important;
 }
 .note-card {
   margin: 1em;

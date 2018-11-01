@@ -519,7 +519,7 @@ class Recipe extends Component {
             sm={styles.sizes.sm.ingredients}
           >
             <span>
-              <a href={(this.state.sourceURL === null || this.state.sourceURL === '') ? 'www.foodtomake.com' : this.state.URL}>Source</a>
+              <a href={(this.state.sourceURL === '' || this.state.sourceURL === null) ? 'http://www.foodtomake.com' : this.state.sourceURL}>Source</a>
             </span>
           </Grid>
           <Grid
