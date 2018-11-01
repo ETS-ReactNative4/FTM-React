@@ -46,8 +46,19 @@ class Profile extends Component {
       owned_recipes: [],
       saved_recipes: [],
       query: '',
+      currently_viewing: 'saved', /** ********** saved, owned, or followers *************** */
     };
+    this.showResults = this.showResults.bind(this);
     // this.getDataFromAPI();
+  }
+
+  showResults(arg) {
+    this.setState({
+      currently_viewing: arg,
+    }, () => this.printClicked());
+  }
+  printClicked() {
+    console.log('clicked: ', this.state.currently_viewing);
   }
 
   componentWillMount() {
@@ -108,11 +119,10 @@ class Profile extends Component {
     let user;
     if (this.props.match.params.username) {
       user = await this.fetchOtherUser();
-    }
-    else {
+    } else {
       user = await this.fetchUser();
     }
-    
+
     console.log('user: \n', user);
     this.setState({
       user_id: user.id,
@@ -188,6 +198,23 @@ class Profile extends Component {
       return <Loading />;
     }
 
+    let savedShow = true;
+    let ownedShow = false;
+    let followShow = false;
+    if (this.state.currently_viewing === 'saved') {
+      savedShow = true;
+      ownedShow = false;
+      followShow = false;
+    } else if (this.state.currently_viewing === 'owned') {
+      savedShow = false;
+      ownedShow = true;
+      followShow = false;
+    } else if (this.state.currently_viewing === 'followers') {
+      savedShow = false;
+      ownedShow = false;
+      followShow = true;
+    }
+
     return (
       <div>
         <Grid
@@ -217,6 +244,7 @@ class Profile extends Component {
               owned_recipes_number={this.state.owned_recipes.length}
               saved_recipes_number={this.state.saved_recipes.length}
               followers_number="0"
+              showResults = {this.showResults}
             />
           </Grid>
           <Grid
@@ -260,30 +288,66 @@ class Profile extends Component {
             sm={styles.sizes.sm.recipes}
           >
             <div className="search-results">
-              <GridList className={styles.gridList}>
-                <Trail
-                  native
-                  keys={this.state.saved_recipes}
-                  from={{ marginTop: 500, opacity: 1 }}
-                  to={{ marginTop: 0, opacity: 1 }}
-                >
-                  {this.state.saved_recipes.map(recipe => (marginTop, index) => {
-                    return (
-                      <animated.div key={index} style={marginTop}>
-                        <SearchResult
-                          key={recipe.id}
-                          name={recipe.name}
-                          style={marginTop}
-                          description={recipe.description}
-                          created={recipe.created}
-                          images={recipe.images}
-                          r_id={recipe.id}
-                        />
-                      </animated.div>
-                    );
-                  } )}
-                </Trail>
-              </GridList>
+
+              {savedShow &&
+                <GridList className={styles.gridList}>
+                  <Trail
+                    native
+                    keys={this.state.saved_recipes}
+                    from={{ marginTop: 500, opacity: 1 }}
+                    to={{ marginTop: 0, opacity: 1 }}
+                  >
+
+                    {this.state.saved_recipes.map(recipe => (marginTop, index) => {
+                      return (
+                        <animated.div key={index} style={marginTop}>
+                          <SearchResult
+                            key={recipe.id}
+                            name={recipe.name}
+                            style={marginTop}
+                            description={recipe.description}
+                            created={recipe.created}
+                            images={recipe.images}
+                            r_id={recipe.id}
+                          />
+                        </animated.div>
+                      );
+                    })}
+                  </Trail>
+                </GridList>
+              }
+
+              {ownedShow &&
+                <GridList className={styles.gridList}>
+                  <Trail
+                    native
+                    keys={this.state.owned_recipes}
+                    from={{ marginTop: 500, opacity: 1 }}
+                    to={{ marginTop: 0, opacity: 1 }}
+                  >
+
+                    {this.state.owned_recipes.map(recipe => (marginTop, index) => {
+                      return (
+                        <animated.div key={index} style={marginTop}>
+                          <SearchResult
+                            key={recipe.id}
+                            name={recipe.name}
+                            style={marginTop}
+                            description={recipe.description}
+                            created={recipe.created}
+                            images={recipe.images}
+                            r_id={recipe.id}
+                          />
+                        </animated.div>
+                      );
+                    })}
+                  </Trail>
+                </GridList>
+              }
+
+              {followShow &&
+                <h2>Show Followers</h2>
+              }
             </div>
           </Grid>
         </Grid>
