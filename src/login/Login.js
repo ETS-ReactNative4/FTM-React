@@ -3,7 +3,6 @@ import { Button, TextField } from '@material-ui/core';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import './Login.css';
-import CustomSnackbar from '../snackbar/CustomSnackbar';
 import Auth from '../auth/Auth';
 import fbLogo from '../assets/images/fb-logo.png';
 import ggLogo from '../assets/images/g-ico.png';
@@ -11,7 +10,7 @@ import ggLogo from '../assets/images/g-ico.png';
 class Login extends Component {
   state = {
     account: '',
-    password: '',
+    password: ''
   };
   auth = new Auth();
 
@@ -28,7 +27,9 @@ class Login extends Component {
     const { data } = await client.query({
       query: gql`
         query {
-          login(username: "${this.state.account}", password: "${this.state.password}") {
+          login(username: "${this.state.account}", password: "${
+        this.state.password
+      }") {
             token
             apiError {
               code
@@ -36,7 +37,7 @@ class Login extends Component {
             }
           }
         }
-      `,
+      `
     });
     // successful login
     if (data.login.token) {
@@ -46,11 +47,11 @@ class Login extends Component {
     }
   };
 
-  handleAccountChange = (event) => {
+  handleAccountChange = event => {
     this.setState({ account: event.target.value });
   };
 
-  handlePasswordChange = (event) => {
+  handlePasswordChange = event => {
     this.setState({ password: event.target.value });
   };
 
@@ -58,7 +59,12 @@ class Login extends Component {
     return (
       <form className="login-root">
         <div className="social-buttons">
-          <Button variant="raised" color="primary" id="fb-btn" onClick={this.loginFacebook}>
+          <Button
+            variant="raised"
+            color="primary"
+            id="fb-btn"
+            onClick={this.loginFacebook}
+          >
             <img alt="fb-logo" id="fb-logo" src={fbLogo} />
             Log in With Facebook
           </Button>
@@ -79,7 +85,12 @@ class Login extends Component {
           fullWidth
           className="password"
         />
-        <Button variant="raised" color="primary" className="submit-btn" onClick={this.handleSubmit}>
+        <Button
+          variant="raised"
+          color="primary"
+          className="submit-btn"
+          onClick={this.handleSubmit}
+        >
           Submit
         </Button>
       </form>
