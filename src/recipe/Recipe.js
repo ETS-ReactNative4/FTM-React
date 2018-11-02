@@ -82,7 +82,7 @@ class Recipe extends Component {
   }
 
   isUserLoggedIn() {
-    const {userId} = this.props;
+    const { userId } = this.props;
     return !(userId === null || userId === '');
   }
 
@@ -117,6 +117,46 @@ class Recipe extends Component {
     window.print();
   }
 
+  recipeAlreadySaved(recipeId) {
+    try {
+      const { client, userId } = this.props;
+      const data = {
+        user_id: userId,
+        recipe_id: this.state.recipe_id,
+      };
+      console.log(this.state.title);
+      console.log(userId);
+      const result = client
+        .query({
+          query: gql`
+          query {
+            searchSavedRecipes(userId: "${userId}" query: "${this.state.title}") {
+              id
+              name
+            }
+          }`,
+          fetchPolicy: 'network-only',
+        })
+        .then((result) => {
+          if (result.data.searchSavedRecipes.length === 0) {
+            console.log(result.data.searchSavedRecipes);
+            console.log('adding to empty');
+            return false;
+          } else if (
+            result.data.searchSavedRecipes.filter(recipe => recipe.id === data.recipe_id)
+          ) {
+            console.log('already exist');
+            return true;
+          }
+          console.log('addingggg');
+          return false;
+        });
+      return result;
+    } catch (err) {
+      return {};
+    }
+  }
+
   saveRecipe() {
     try {
       const { client, userId } = this.props;
@@ -124,23 +164,32 @@ class Recipe extends Component {
         user_id: userId,
         recipe_id: this.state.recipe_id,
       };
-      const result = client
-        .mutate({
-          mutation: gql`
-          mutation SaveRecipe {           
-            addSavedRecipe(
-              userId: "${data.user_id}"
-              recipeId: "${data.recipe_id}"
-            ) {
-              id
+      this.recipeAlreadySaved().then((result) => {
+        if (result) {
+          console.log('exists');
+        } else {
+          const result = client
+            .mutate({
+              mutation: gql`
+            mutation SaveRecipe {
+              addSavedRecipe(
+                userId: "${data.user_id}"
+                recipeId: "${data.recipe_id}"
+              ) {
+                id
+              }
             }
-          }
-        `,
-        })
-        .then((result) => {
-          return result.data.recipeById;
-        });
-      return result;
+          `,
+          fetchPolicy: 'no-cache',
+            })
+            .then((result) => {
+              return result.data.recipeById;
+            });
+          return result;
+        }
+        return 'yes';
+      });
+      return 'yes';
     } catch (err) {
       return {};
     }
@@ -175,9 +224,12 @@ class Recipe extends Component {
 
   noteSubmit() {
     // append the new note to the current ones, then use callback to make api call
-    this.setState(previousState => ({
-      notes: [...previousState.notes, this.state.new_note],
-    }), this.addNote);
+    this.setState(
+      previousState => ({
+        notes: [...previousState.notes, this.state.new_note],
+      }),
+      this.addNote,
+    );
   }
 
   addNote() {
@@ -219,9 +271,12 @@ class Recipe extends Component {
 
   commentSubmit() {
     // append the new comment to the current ones, then use callback to make api call
-    this.setState(previousState => ({
-      comments: [...previousState.comments, this.state.new_comment],
-    }), this.postComment);
+    this.setState(
+      previousState => ({
+        comments: [...previousState.comments, this.state.new_comment],
+      }),
+      this.postComment,
+    );
   }
 
   postComment() {
@@ -230,7 +285,6 @@ class Recipe extends Component {
       const data = {
         comments: this.state.comments,
         recipe_id: this.state.recipe_id,
-
       };
       const result = client
         .mutate({
@@ -261,7 +315,6 @@ class Recipe extends Component {
       return {};
     }
   }
-
 
   componentWillMount() {
     this.getDataFromAPI();
@@ -335,8 +388,7 @@ class Recipe extends Component {
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
-        authorImage:
-          'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
+        authorImage: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
       });
     }
   }
@@ -347,24 +399,14 @@ class Recipe extends Component {
       return <div />;
     }
 
-    let isLoggedIn = this.isUserLoggedIn();
+    const isLoggedIn = this.isUserLoggedIn();
     console.log('user is logged in: ', isLoggedIn);
 
     return (
       <div>
         <Notes notes={this.state.notes} />
-        <Grid
-          className="pic-des-container"
-          container
-          spacing={styles.spacing}
-          justify={'center'}
-        >
-          <Grid
-            className="picture"
-            item
-            xs={styles.sizes.xs.picture}
-            sm={styles.sizes.sm.picture}
-          >
+        <Grid className="pic-des-container" container spacing={styles.spacing} justify={'center'}>
+          <Grid className="picture" item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
             <RecipePicture
               title={this.state.title}
               stars={this.state.stars}
@@ -379,12 +421,7 @@ class Recipe extends Component {
           >
             <RecipeDescription desc={this.state.description} />
           </Grid>
-          <Grid
-            className="info"
-            item
-            xs={styles.sizes.xs.author}
-            sm={styles.sizes.sm.author}
-          >
+          <Grid className="info" item xs={styles.sizes.xs.author} sm={styles.sizes.sm.author}>
             <RecipeInfo
               authorImage={this.state.authorImage}
               authorName={this.state.author}
@@ -414,7 +451,7 @@ class Recipe extends Component {
             <RecipeInstructions value={this.state.instructions} />
           </Grid>
 
-          {isLoggedIn &&
+          {isLoggedIn && (
             <Grid
               className="recipe-buttons"
               item
@@ -427,7 +464,7 @@ class Recipe extends Component {
                 className="save-recipe-button btn-margin"
                 onClick={this.saveRecipe}
               >
-              Save Recipe
+                Save Recipe
               </Button>
               <Button
                 variant="contained"
@@ -435,13 +472,13 @@ class Recipe extends Component {
                 className="remove-recipe-button btn-margin"
                 onClick={this.removeRecipe}
               >
-              Remove From Saved
+                Remove From Saved
               </Button>
               <Button
-                variant = "contained"
+                variant="contained"
                 color="secondary"
-                className = "print-button btn-margin"
-                onClick = {this.printRecipe}
+                className="print-button btn-margin"
+                onClick={this.printRecipe}
               >
                 Print Recipe
               </Button>
@@ -452,7 +489,8 @@ class Recipe extends Component {
                 className="add-note-button btn-margin"
                 onClick={this.handleDialogOpen}
               >
-                <Icon>edit_icon</Icon>Add A Note
+                <Icon>edit_icon</Icon>
+                Add A Note
               </Button>
 
               <Dialog
@@ -475,16 +513,16 @@ class Recipe extends Component {
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={this.handleDialogClose} color="primary">
-                  Cancel
+                    Cancel
                   </Button>
                   <Button onClick={this.noteSubmit} color="primary" variant="contained">
-                  Add Note
+                    Add Note
                   </Button>
                 </DialogActions>
               </Dialog>
             </Grid>
-            }
-          
+          )}
+
           <Grid
             className="source-url"
             item
@@ -492,7 +530,15 @@ class Recipe extends Component {
             sm={styles.sizes.sm.ingredients}
           >
             <span>
-              <a href={(this.state.sourceURL === '' || this.state.sourceURL === null) ? 'http://www.foodtomake.com' : this.state.sourceURL}>Source</a>
+              <a
+                href={
+                  this.state.sourceURL === '' || this.state.sourceURL === null
+                    ? 'http://www.foodtomake.com'
+                    : this.state.sourceURL
+                }
+              >
+                Source
+              </a>
             </span>
           </Grid>
           <Grid
@@ -510,7 +556,8 @@ class Recipe extends Component {
                   className="post-comment-button"
                   onClick={this.handleCommentOpen}
                 >
-                  <Icon>add_icon</Icon>Post A Comment
+                  <Icon>add_icon</Icon>
+                  Post A Comment
                 </Button>
                 <Dialog
                   open={this.state.comment_dialog_open}
@@ -533,10 +580,10 @@ class Recipe extends Component {
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={this.handleCommentClose} color="primary">
-                    Cancel
+                      Cancel
                     </Button>
                     <Button onClick={this.commentSubmit} color="primary" variant="contained">
-                    Post Comment
+                      Post Comment
                     </Button>
                   </DialogActions>
                 </Dialog>
@@ -544,8 +591,6 @@ class Recipe extends Component {
             ) : (
               <h3>Log in to post a comment</h3>
             )}
-              
-           
           </Grid>
         </Grid>
       </div>
