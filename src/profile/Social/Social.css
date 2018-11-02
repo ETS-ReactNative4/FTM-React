@@ -10,6 +10,7 @@
   text-align: center;
   padding: 10px;
   margin: 10px;
+  cursor: pointer;
 }
 .recipe-num > .number,
 .follower-num > .number,
