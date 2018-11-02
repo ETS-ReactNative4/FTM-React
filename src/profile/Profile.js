@@ -292,9 +292,9 @@ class Profile extends Component {
               {savedShow &&
                 <Grid container>
                   <Trail
-                  native
+                   native
                   keys={this.state.saved_recipes.map(item => item.id)}
-                  from={{ marginTop: 500, opacity: 1 }}
+                  from={{ marginTop: 500, opacity: 0 }}
                   to={{ marginTop: 0, opacity: 1 }}
                   >
                   {this.state.saved_recipes.map(recipe => (marginTop, index) => {

@@ -159,7 +159,7 @@ class Home extends Component {
               <Trail
                 native
                 keys={this.state.recipes.map(item => item.id)}
-                from={{ marginTop: 500, opacity: 1 }}
+                from={{ marginTop: 500, opacity: 0 }}
                 to={{ marginTop: 0, opacity: 1 }}
               >
                 {this.state.recipes.map(recipe => (marginTop, index) => {
@@ -180,29 +180,6 @@ class Home extends Component {
                 })}
               </Trail>
             </Grid>
-            // <GridList className={classes.gridList}>
-            //   <Trail
-            //     native
-            //     keys={this.state.recipes.map(item => item.id)}
-            //     from={{ marginTop: 500, opacity: 1 }}
-            //     to={{ marginTop: 0, opacity: 1 }}
-            //   >
-            //     {this.state.recipes.map(recipe => (marginTop, index) => {
-            //       return (
-            //         <animated.div key={index} style={marginTop}>
-            //           <SearchResult
-            //             key={recipe.id}
-            //             name={recipe.name}
-            //             style={marginTop}
-            //             description={recipe.description}
-            //             images={recipe.images}
-            //             r_id={recipe.id}
-            //           />
-            //         </animated.div>
-            //       );
-            //     })}
-            //   </Trail>
-            // </GridList>
           )}
         </div>
         <Paper className={this.getFilterClassNames()} elevation={5}>
