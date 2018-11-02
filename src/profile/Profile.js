@@ -50,6 +50,7 @@ class Profile extends Component {
       following: [],
       query: '',
       currently_viewing: 'saved', /** ********** saved, owned, or followers *************** */
+      searchSavedOrOwned: true, // search saved by default, so false means search owned
     };
     
     this.showResults = this.showResults.bind(this);
@@ -65,6 +66,16 @@ class Profile extends Component {
   }
   printClicked() {
     console.log('clicked: ', this.state.currently_viewing);
+    if (this.state.currently_viewing === 'saved') {
+      this.setState({
+        searchSavedOrOwned: true,
+      });
+    }
+    else if (this.state.currently_viewing === 'owned') {
+      this.setState({
+        searchSavedOrOwned: false,
+      });
+    }
   }
 
   componentWillMount() {
@@ -84,6 +95,46 @@ class Profile extends Component {
   handleEnterSearch = async (event) => {
     const { client } = this.props;
     if (event.key === 'Enter') {
+      if (this.state.searchSavedOrOwned) { // search trhough saved
+        const { data } = await client.query({
+          query: gql`
+            query {
+              searchSavedRecipes(userId: "${this.state.user_id}" query: "${this.state.query}") {
+                id
+                name
+                description
+                images
+              }
+            }`,
+        });
+        this.setState({
+          loading: true,
+          saved_recipes: data.searchSavedRecipes,
+        });
+      }
+      else { // search through owned
+        const { data } = await client.query({
+          query: gql`
+            query {
+              searchOwnedRecipes(userId: "${this.state.user_id}" query: "${this.state.query}") {
+                id
+                name
+                description
+                images
+              }
+            }`,
+        });
+        this.setState({
+          loading: true,
+          owned_recipes: data.searchOwnedRecipes,
+        });
+      }
+    }
+  };
+
+  handleButtonSearch = async () => {
+    const { client } = this.props;
+    if (this.state.searchSavedOrOwned) { // search trhough saved
       const { data } = await client.query({
         query: gql`
           query {
@@ -100,25 +151,23 @@ class Profile extends Component {
         saved_recipes: data.searchSavedRecipes,
       });
     }
-  };
-
-  handleButtonSearch = async () => {
-    const { client } = this.props;
-    const { data } = await client.query({
-      query: gql`
-        query {
-          searchSavedRecipes(userId: "${this.state.user_id}" query: "${this.state.query}") {
-            id
-            name
-            description
-            images
-          }
-        }`,
-    });
-    this.setState({
-      loading: true,
-      saved_recipes: data.searchSavedRecipes,
-    });
+    else { // search through owned
+      const { data } = await client.query({
+        query: gql`
+          query {
+            searchOwnedRecipes(userId: "${this.state.user_id}" query: "${this.state.query}") {
+              id
+              name
+              description
+              images
+            }
+          }`,
+      });
+      this.setState({
+        loading: true,
+        owned_recipes: data.searchOwnedRecipes,
+      });
+    }
   };
 
 
