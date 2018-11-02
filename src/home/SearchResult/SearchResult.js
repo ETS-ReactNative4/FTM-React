@@ -1,24 +1,12 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  Card,
-  CardActions,
-  CardContent,
-  Button,
-  Typography,
-  Avatar,
-  CardHeader,
-  IconButton,
-  CardMedia,
-} from '@material-ui/core';
-import { Favorite, Share, MoreVert } from '@material-ui/icons';
+import { Card, CardContent, Typography, Avatar, CardHeader, CardMedia } from '@material-ui/core';
 import { Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import './SearchResult.css';
 
 const styles = {
   card: {
-    height: 350,
-    width: 250,
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
@@ -33,13 +21,13 @@ const styles = {
     display: 'flex',
   },
   avatar: {
-    margin: 10,
+    margin: 5,
     width: 45,
     height: 45,
   },
   title: {
-    marginBottom: 16,
-    fontSize: 14,
+    marginBottom: 5,
+    fontSize: 12,
   },
   pos: {
     marginBottom: 12,
@@ -52,10 +40,14 @@ class SearchResult extends React.Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
+  truncateString = (des) => {
+    console.log(des);
+  };
+
   render() {
     const {
- classes, name, r_id, description, created, images 
-} = this.props;
+      classes, name, r_id, description, images,
+    } = this.props;
 
     return (
       <Route
@@ -63,27 +55,25 @@ class SearchResult extends React.Component {
           <Card
             className={classes.card}
             onClick={() => {
+              // console.log(this.props);
               history.push(`/recipe/${r_id}`);
             }}
           >
             <CardHeader
               avatar={
                 <Avatar
-                  aria-label="Result"
+                  alt={name}
                   className={classes.avatar}
                   src="http://i65.tinypic.com/2rnvc7k.png"
                 />
               }
               title={name}
-              subheader={created}
             />
-            <CardMedia
-              className={classes.media}
-              image={images}
-              title="Fat cat alert"
-            />
+            <CardMedia className={classes.media} image={images[0]} />
             <CardContent>
-              <Typography component="p">{description}</Typography>
+              <Typography className="recipe-description" component="p">
+                {description}
+              </Typography>
             </CardContent>
           </Card>
         )}
@@ -91,5 +81,13 @@ class SearchResult extends React.Component {
     );
   }
 }
+
+SearchResult.propTypes = {
+  classes: PropTypes.object.isRequired,
+  name: PropTypes.any.isRequired,
+  r_id: PropTypes.any.isRequired,
+  description: PropTypes.any.isRequired,
+  images: PropTypes.any.isRequired,
+};
 
 export default withStyles(styles)(SearchResult);

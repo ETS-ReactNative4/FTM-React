@@ -17,7 +17,7 @@ class App extends Component {
     console.log(this.props);
     const { token } = this.props;
     return (
-      <div>
+      <div style={{ width: '100vw', height: '100vh' }}>
         <Switch>
           <Route exact path="/" component={() => <Home token={token} />} />
           <Route exact path="/recipe" component={Recipe} />

@@ -10,6 +10,7 @@ import {
   FormControl,
   withStyles,
   GridList,
+  Grid,
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
@@ -19,12 +20,11 @@ import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 
-
 const styles = {
   gridList: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'flex-start',
     overflow: 'hidden',
   },
@@ -155,7 +155,7 @@ class Home extends Component {
           style={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
         >
           {this.state.recipes.length > 0 && (
-            <GridList className={classes.gridList}>
+            <Grid container>
               <Trail
                 native
                 keys={this.state.recipes.map(item => item.id)}
@@ -164,21 +164,45 @@ class Home extends Component {
               >
                 {this.state.recipes.map(recipe => (marginTop, index) => {
                   return (
-                    <animated.div key={index} style={marginTop}>
-                      <SearchResult
-                        key={recipe.id}
-                        name={recipe.name}
-                        style={marginTop}
-                        description={recipe.description}
-                        created={recipe.created}
-                        images={recipe.images}
-                        r_id={recipe.id}
-                      />
-                    </animated.div>
+                    <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                      <animated.div key={index} style={marginTop}>
+                        <SearchResult
+                          key={recipe.id}
+                          name={recipe.name}
+                          style={marginTop}
+                          description={recipe.description}
+                          images={recipe.images}
+                          r_id={recipe.id}
+                        />
+                      </animated.div>
+                    </Grid>
                   );
                 })}
               </Trail>
-            </GridList>
+            </Grid>
+            // <GridList className={classes.gridList}>
+            //   <Trail
+            //     native
+            //     keys={this.state.recipes.map(item => item.id)}
+            //     from={{ marginTop: 500, opacity: 1 }}
+            //     to={{ marginTop: 0, opacity: 1 }}
+            //   >
+            //     {this.state.recipes.map(recipe => (marginTop, index) => {
+            //       return (
+            //         <animated.div key={index} style={marginTop}>
+            //           <SearchResult
+            //             key={recipe.id}
+            //             name={recipe.name}
+            //             style={marginTop}
+            //             description={recipe.description}
+            //             images={recipe.images}
+            //             r_id={recipe.id}
+            //           />
+            //         </animated.div>
+            //       );
+            //     })}
+            //   </Trail>
+            // </GridList>
           )}
         </div>
         <Paper className={this.getFilterClassNames()} elevation={5}>
