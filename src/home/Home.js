@@ -19,7 +19,6 @@ import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 
-
 const styles = {
   gridList: {
     display: 'flex',
@@ -158,7 +157,7 @@ class Home extends Component {
             <GridList className={classes.gridList}>
               <Trail
                 native
-                keys={this.state.recipes}
+                keys={this.state.recipes.map(item => item.id)}
                 from={{ marginTop: 500, opacity: 1 }}
                 to={{ marginTop: 0, opacity: 1 }}
               >
@@ -170,7 +169,6 @@ class Home extends Component {
                         name={recipe.name}
                         style={marginTop}
                         description={recipe.description}
-                        created={recipe.created}
                         images={recipe.images}
                         r_id={recipe.id}
                       />

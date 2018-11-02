@@ -2,9 +2,7 @@
   width: 100%;
   height: 100%;
   margin-top: 10px;
-  /* animation: fade 0.5s; */
   display: grid;
-  /* animation-timing-function: ease-out; */
   grid-template-columns: 325px auto;
   grid-template-areas:
     "pic content content content";
@@ -14,14 +12,16 @@
   grid-area: content;
 }
 
-/* @keyframes fade {
-  from { margin-top: 1000px; }
-  to { margin-top: 10px; }
-} */
-
 .recipe-image {
   max-width: 100%;
   grid-area: pic;
   padding: 5px;
   align-self: center;
+}
+
+.recipe-description {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
