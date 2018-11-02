@@ -56,7 +56,7 @@ class SearchResult extends React.Component {
             className={classes.card}
             onClick={() => {
               // console.log(this.props);
-              // history.push(`/recipe/${r_id}`);
+              history.push(`/recipe/${r_id}`);
             }}
           >
             <CardHeader
