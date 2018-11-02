@@ -45,6 +45,8 @@ class Profile extends Component {
       user_id: null,
       owned_recipes: [],
       saved_recipes: [],
+      owned_recipes_length: null,
+      saved_recipes_length: null,
       following: [],
       query: '',
       currently_viewing: 'saved', /** ********** saved, owned, or followers *************** */
@@ -119,7 +121,8 @@ class Profile extends Component {
     });
   };
 
-  
+
+  /** This whole function is garbage right now. ignore it */
   updateFollowing = async () => {
     console.log('Update Following');
 
@@ -230,8 +233,17 @@ class Profile extends Component {
       owned_recipes: user.ownedRecipes,
       saved_recipes: user.savedRecipes,
       following: user.following,
+    }, () => this.setLengths());
+
+  }
+
+  setLengths() {
+    this.setState({
+      owned_recipes_length: this.state.owned_recipes.length,
+      saved_recipes_length: this.state.saved_recipes.length,
     });
   }
+
 
   fetchUser = async () => {
     try {
@@ -352,8 +364,8 @@ class Profile extends Component {
             sm={styles.sizes.sm.social}
           >
             <Social
-              owned_recipes_number={this.state.owned_recipes.length}
-              saved_recipes_number={this.state.saved_recipes.length}
+              owned_recipes_number={this.state.owned_recipes_length}
+              saved_recipes_number={this.state.saved_recipes_length}
               followers_number="0"
               showResults = {this.showResults}
               my_profile = {myProfile}
