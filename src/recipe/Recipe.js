@@ -299,11 +299,13 @@ class Recipe extends Component {
               numShares
               tags
               comments
+              author {username}
             }
           }
         `,
         })
         .then((result) => {
+          console.log('recipe result: ', result.data.recipeById);
           return result.data.recipeById;
         });
       return result;
@@ -316,7 +318,7 @@ class Recipe extends Component {
     const recipe = await this.fetchRecipe();
     this.setState({
       title: recipe.name,
-      author: recipe.author,
+      author: recipe.author.username,
       image: recipe.images[0],
       cookTime: recipe.cookTime,
       prepTime: recipe.prepTime,

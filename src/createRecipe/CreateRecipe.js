@@ -123,7 +123,7 @@ class CreateRecipe extends Component {
             ) {
               id
               name
-              author
+              author {id username}
             }
           }
         `,

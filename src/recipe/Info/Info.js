@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Avatar, Card, Chip } from '@material-ui/core';
 import TimerIcon from '@material-ui/icons/Timer';
+import { Route } from 'react-router-dom';
 import './Info.css';
 
 
@@ -23,7 +24,6 @@ function handleClick() {
  * This is recipe author, tags, difficulty, cook time...
  */
 class RecipeInfo extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -41,7 +41,13 @@ class RecipeInfo extends Component {
       <Card className="recipeInfo">
         <div className="recipeAuthor">
           <Avatar src={this.props.authorImage} />
-          <span className="authorName">{this.props.authorName}</span>
+          <Route
+            render={({ history }) => (
+              <span className="authorName" onClick={() => {
+                history.push(`/profile/${this.props.authorName}`);
+              }}>{this.props.authorName}</span>
+            )}
+          />
           <span className="time"><TimerIcon /> {this.props.cookTime + this.props.prepTime} mins</span>
           <span className="difficulty">Difficulty: {this.props.difficulty}</span>
         </div>
