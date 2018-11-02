@@ -290,59 +290,59 @@ class Profile extends Component {
             <div className="search-results">
 
               {savedShow &&
-                <GridList className={styles.gridList}>
+                <Grid container>
                   <Trail
-                    native
-                    keys={this.state.saved_recipes}
-                    from={{ marginTop: 500, opacity: 1 }}
-                    to={{ marginTop: 0, opacity: 1 }}
+                  native
+                  keys={this.state.saved_recipes.map(item => item.id)}
+                  from={{ marginTop: 500, opacity: 1 }}
+                  to={{ marginTop: 0, opacity: 1 }}
                   >
-
-                    {this.state.saved_recipes.map(recipe => (marginTop, index) => {
+                  {this.state.saved_recipes.map(recipe => (marginTop, index) => {
                       return (
-                        <animated.div key={index} style={marginTop}>
-                          <SearchResult
-                            key={recipe.id}
-                            name={recipe.name}
-                            style={marginTop}
-                            description={recipe.description}
-                            created={recipe.created}
-                            images={recipe.images}
-                            r_id={recipe.id}
-                          />
-                        </animated.div>
+                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <SearchResult
+                              key={recipe.id}
+                              name={recipe.name}
+                              style={marginTop}
+                              description={recipe.description}
+                              images={recipe.images}
+                              r_id={recipe.id}
+                            />
+                          </animated.div>
+                        </Grid>
                       );
                     })}
                   </Trail>
-                </GridList>
+                </Grid>
               }
 
               {ownedShow &&
-                <GridList className={styles.gridList}>
+                <Grid container>
                   <Trail
                     native
-                    keys={this.state.owned_recipes}
+                  keys={this.state.owned_recipes.map(item => item.id)}
                     from={{ marginTop: 500, opacity: 1 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-
-                    {this.state.owned_recipes.map(recipe => (marginTop, index) => {
+                  {this.state.owned_recipes.map(recipe => (marginTop, index) => {
                       return (
-                        <animated.div key={index} style={marginTop}>
-                          <SearchResult
-                            key={recipe.id}
-                            name={recipe.name}
-                            style={marginTop}
-                            description={recipe.description}
-                            created={recipe.created}
-                            images={recipe.images}
-                            r_id={recipe.id}
-                          />
-                        </animated.div>
+                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <SearchResult
+                              key={recipe.id}
+                              name={recipe.name}
+                              style={marginTop}
+                              description={recipe.description}
+                              images={recipe.images}
+                              r_id={recipe.id}
+                            />
+                          </animated.div>
+                        </Grid>
                       );
                     })}
                   </Trail>
-                </GridList>
+                </Grid>
               }
 
               {followShow &&
