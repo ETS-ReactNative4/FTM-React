@@ -45,10 +45,14 @@ class Profile extends Component {
       user_id: null,
       owned_recipes: [],
       saved_recipes: [],
+      following: [],
       query: '',
       currently_viewing: 'saved', /** ********** saved, owned, or followers *************** */
     };
+    
     this.showResults = this.showResults.bind(this);
+    this.followUser = this.followUser.bind(this);
+    this.updateFollowing = this.updateFollowing.bind(this);
     // this.getDataFromAPI();
   }
 
@@ -115,6 +119,102 @@ class Profile extends Component {
     });
   };
 
+  
+  updateFollowing = async () => {
+    console.log('Update Following');
+
+    
+    // First need to get the logged in users followers 
+    console.log('--------------------- tyring to get following');
+    const { client, userId } = this.props;
+    const info = {
+      user_id: userId,
+    };
+    const result = await client.query({
+      query: gql`
+        query {
+          userById(id: "${info.user_id}") {
+            id
+            username
+            following {id username}
+          }
+        }`,
+    })
+    .then((result) => {
+      console.log('result from getting userByID: ', result.data.userById);
+      this.setState({
+        following: result.data.userById.following,
+      });
+      return result.info;
+    });
+    console.log('------------ after get following');
+
+
+
+    // then get the other users info to follow them.
+    const { data } = await client.query({
+      query: gql`
+        query {
+          userByUsername(username: "${this.state.username}") {
+            id
+            username
+          }
+        }`,
+    })
+    .then((result) => {
+      console.log('result from getting userbyUsername: ', result.data.userByUsername);
+      console.log('current following: ', this.state.following);
+      this.setState(previousState => ({
+        following: [...previousState.following, result.data.userByUserName],
+      }), this.followUser);
+      return result.data;
+    });
+
+    
+  }
+  
+
+  followUser = async () => {
+    
+    try {
+      const { client, userId } = this.props;
+      const data = {
+        user_id: userId,
+        other_user: this.state.username,
+      };
+      console.log('updated following: ', this.state.following);
+      console.log('user: ', data.user_id, ' trying to follow: ', data.other_user);
+      const result = client
+        .mutate({
+          mutation: gql`
+          mutation UpdateUsers($userUpdates: UpdateUserInput!) {           
+            updateUser(
+              userId: "${data.user_id}"
+              userUpdates: $userUpdates
+            ) {
+              id
+              username
+              following {id username}
+            }
+          }
+        `,
+          variables: {
+            userUpdates: {
+              following: this.state.following,
+            },
+          },
+        })
+        .then((result) => {
+          console.log('user followed: ', result.data);
+          return result.data;
+        });
+      return result;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+  }
+
   async getDataFromAPI() {
     let user;
     if (this.props.match.params.username) {
@@ -129,6 +229,7 @@ class Profile extends Component {
       username: user.username,
       owned_recipes: user.ownedRecipes,
       saved_recipes: user.savedRecipes,
+      following: user.following,
     });
   }
 
@@ -147,12 +248,14 @@ class Profile extends Component {
               username
               ownedRecipes {name id description images}
               savedRecipes {name id description images}
+              following {id username}
             }
           }
         `,
           fetchPolicy: 'network-only',
         })
         .then((result) => {
+          console.log('fetchUser: ', result.data.userById);
           return result.data.userById;
         });
       return result;
@@ -214,6 +317,14 @@ class Profile extends Component {
       ownedShow = false;
       followShow = true;
     }
+  
+    let myProfile = true;
+    if (this.props.match.params.username) {
+      myProfile = false; // viewing somebody elses profile
+    }
+    else {
+      myProfile = true;
+    }
 
     return (
       <div>
@@ -245,6 +356,8 @@ class Profile extends Component {
               saved_recipes_number={this.state.saved_recipes.length}
               followers_number="0"
               showResults = {this.showResults}
+              my_profile = {myProfile}
+              followUser = {this.updateFollowing}
             />
           </Grid>
           <Grid
@@ -317,11 +430,11 @@ class Profile extends Component {
                 </Grid>
               }
 
-              {ownedShow &&
+              {ownedShow && myProfile &&
                 <Grid container>
                   <Trail
                     native
-                  keys={this.state.owned_recipes.map(item => item.id)}
+                    keys={this.state.owned_recipes.map(item => item.id)}
                     from={{ marginTop: 500, opacity: 1 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >

@@ -10,14 +10,12 @@ class Social extends Component {
       owned_recipes_number: null,
       saved_recipes_number: null,
       followers_number: null,
+      my_profile: null,
     };
   }
 
-  clickFollowers() {
-    console.log('Followers was clicked');
-  }
-
   render() {
+    console.log('my profile: ', this.state.my_profile);
     return (
       <div className='fullSize social-info'>
 
@@ -32,11 +30,19 @@ class Social extends Component {
             <span className="number">{this.props.saved_recipes_number}</span><br />
             <span>Saved Recipes</span>
           </Card>
-          <Card className="favorite-num" onClick={() => this.props.showResults('followers')}>
-            <Icon>people</Icon>
-            <span className="number">{this.props.followers_number}</span><br />
-            <span>Followers</span>
-          </Card>
+          {this.props.my_profile &&
+            <Card className="favorite-num" onClick={() => this.props.showResults('followers')}>
+              <Icon>people</Icon>
+              <span className="number">{this.props.followers_number}</span><br />
+              <span>Followers</span>
+            </Card>
+          }
+          {!this.props.my_profile &&
+            <Card className="favorite-num" onClick={() => this.props.followUser()}>
+              <Icon>people</Icon>
+              <span>Follow this user</span><br />
+            </Card>
+          }
         </div>
 
       </div>

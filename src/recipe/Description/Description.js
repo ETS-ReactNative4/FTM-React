@@ -13,7 +13,7 @@ class RecipeDescription extends Component {
   render() {
     return (
       <div className="fullSize">
-        <Card className="recipe-description">
+        <Card className="recipe-full-description">
           <Typography>
             {this.props.desc}
           </Typography>
