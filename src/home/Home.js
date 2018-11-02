@@ -109,8 +109,8 @@ class Home extends Component {
     return (
       <div className="home-container">
         <Spring
-          from={{ marginTop: 0, opacity: 1 }}
-          to={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+          from={{ marginTop: 200, opacity: 1 }}
+          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
         >
           {({ marginTop, opacity }) => (
             <img
@@ -122,8 +122,8 @@ class Home extends Component {
           )}
         </Spring>
         <Spring
-          from={{ marginTop: 0 }}
-          to={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+          from={{ marginTop: 200 }}
+          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
         >
           {({ marginTop }) => (
             <div className="search-box" style={{ marginTop }}>
@@ -151,7 +151,7 @@ class Home extends Component {
 
         <div
           className="search-results"
-          style={this.state.recipes.length > 0 ? { marginTop: -200 } : { marginTop: 0 }}
+          style={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
         >
           {this.state.recipes.length > 0 && (
             <GridList className={classes.gridList}>
