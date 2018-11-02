@@ -158,7 +158,7 @@ class Home extends Component {
             <GridList className={classes.gridList}>
               <Trail
                 native
-                keys={this.state.recipes}
+                keys={this.state.recipes.map(item => item.id)}
                 from={{ marginTop: 500, opacity: 1 }}
                 to={{ marginTop: 0, opacity: 1 }}
               >
