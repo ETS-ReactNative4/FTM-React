@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
+import red from '@material-ui/core/colors/red';
 import { ApolloProvider } from 'react-apollo';
 import './Root.css';
 import App from './App';
@@ -32,7 +32,7 @@ const client = new ApolloClient({
 
 const theme = createMuiTheme({
   palette: {
-    primary: blue
+    primary: red
   }
 });
 class Root extends Component {
