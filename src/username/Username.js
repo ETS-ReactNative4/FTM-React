@@ -66,7 +66,7 @@ class Username extends Component {
             helperText={this.state.error}
           />
           <Button
-            variant="raised"
+            variant="contained"
             color="primary"
             className="submit-btn"
             type="submit"

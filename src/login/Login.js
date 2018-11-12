@@ -60,7 +60,7 @@ class Login extends Component {
       <form className="login-root">
         <div className="social-buttons">
           <Button
-            variant="raised"
+            variant="contained"
             color="primary"
             id="fb-btn"
             onClick={this.loginFacebook}
@@ -68,7 +68,7 @@ class Login extends Component {
             <img alt="fb-logo" id="fb-logo" src={fbLogo} />
             Log in With Facebook
           </Button>
-          <Button variant="raised" id="google-btn" onClick={this.loginGoogle}>
+          <Button variant="contained" id="google-btn" onClick={this.loginGoogle}>
             <img id="gg-logo" alt="gg-logo" src={ggLogo} />
             Log in With Google
           </Button>
@@ -78,15 +78,17 @@ class Login extends Component {
           label="Username or Email"
           fullWidth
           className="username"
+          type="text"
         />
         <TextField
           onChange={this.handlePasswordChange}
           label="Password"
           fullWidth
           className="password"
+          type="password"
         />
         <Button
-          variant="raised"
+          variant="contained"
           color="primary"
           className="submit-btn"
           onClick={this.handleSubmit}

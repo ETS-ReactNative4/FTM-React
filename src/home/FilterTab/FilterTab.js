@@ -6,7 +6,7 @@ import './FilterTab.css';
 const FilterTab = ({ filter, color }) => (
   <Paper>
     <div className="filter-root">
-      <Button variant="raised" color="primary" className="filter-button">
+      <Button variant="contained" color="primary" className="filter-button">
         <Typography className="filter-title" variant="button">
           {filter}
         </Typography>
