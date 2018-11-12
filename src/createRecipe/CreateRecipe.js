@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from 'material-ui';
 import './CreateRecipe.css';
-import RecipeInstructions from './recipeInstructions/RecipeInstructions';
-import RecipeInfo from './recipeInfo/RecipeInfo';
-import RecipeIngredients from './recipeIngredients/RecipeIngredients';
-import RecipeDescription from './recipeDescription/RecipeDescription';
-import RecipePicture from './recipePicture/RecipePicture';
 import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
 
@@ -91,19 +86,18 @@ class CreateRecipe extends Component {
     });
   };
 
-  handleSubmit(e) {
-    e.preventDefault();
-    console.log('trying submit');
-    const { title } = this.state.title;
-    const { dispatch } = this.props;
+  async handleSubmit(e) {
+    //e.preventDefault();
+    //const { title } = this.state.title;
+    //const { dispatch } = this.props;
     
-    this.submitRecipe();
+    const res = await this.submitRecipe();
+    //this.addToPublished(res.CreateRecipe.id);
   }
 
   submitRecipe = async () => {
-    console.log('trying create recipe with ', this.state.title);
-    console.log('notes: ', this.state.notes);
     try {
+      const { client, userId } = this.props;
       const data = {
         name: this.state.title,
         description: this.state.description,
@@ -114,6 +108,9 @@ class CreateRecipe extends Component {
         instructions: this.state.instructions,
         notes: this.state.notes,
         sourceURL: "www.foodtomake.com",
+        servings: this.state.servings,
+        user_id: userId,
+        
       };
       console.log(data.name);
       console.log(data.ingredients);
@@ -126,6 +123,7 @@ class CreateRecipe extends Component {
             ) {
               id
               name
+              author {id username}
             }
           }
         `,
@@ -141,16 +139,17 @@ class CreateRecipe extends Component {
               prepTime: data.prepTime,
               cookTime: data.cookTime,
               difficulty: data.difficulty,
-              servings: 3,
-              author: '5ba878e2d115b42dee519eb0',
+              servings: data.servings,
+              author: data.user_id,
               tags: [],
               notes: data.notes,
+              published: false,
             },
           },
         })
         .then((result) => {
-          console.log(result);
-          console.log('Recipe created successfully');
+          console.log('created result: ', result.data);
+          this.addToPublished(result.data.createRecipe.id);
           return result.data;
         });
       return result;
@@ -163,8 +162,8 @@ class CreateRecipe extends Component {
   render() {
     return (
       <div>
-        <Grid className='pic-des-container' container spacing={styles.spacing} justify={'center'}>
-          <form className='recipe-form' onSubmit={this.handleSubmitRecipe} >
+        <Grid className='create-recipe-container' container spacing={styles.spacing} justify={'center'}>
+          <form className='recipe-form' onSubmit={this.submitRecipe} >
 
             <TextField
               id="textarea"
@@ -202,6 +201,13 @@ class CreateRecipe extends Component {
               className="difficulty"
               onChange={this.handleChange('difficulty')}
             />
+             <TextField
+              id="textarea"
+              label="Servings"
+              fullWidth
+              className="servings"
+              onChange={this.handleChange('servings')}
+            />
             <TextField
               id="textarea"
               label="Ingredients Separated by comma"
@@ -224,7 +230,7 @@ class CreateRecipe extends Component {
               onChange={this.handleNotes('Notes')}
             />
 
-            <Button onClick={this.submitRecipe}>
+            <Button onClick={this.handleSubmit}>
               Submit
             </Button>
           </form>

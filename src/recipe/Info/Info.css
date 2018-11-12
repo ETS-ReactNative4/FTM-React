@@ -23,6 +23,11 @@
 
 .authorName {
   margin-left: .5em;
+  
+}
+.authorName:hover {
+  cursor:pointer;
+  color: #3f51b5;
 }
 
 .time,

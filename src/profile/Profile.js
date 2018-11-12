@@ -45,10 +45,17 @@ class Profile extends Component {
       user_id: null,
       owned_recipes: [],
       saved_recipes: [],
+      owned_recipes_length: null,
+      saved_recipes_length: null,
+      following: [],
       query: '',
       currently_viewing: 'saved', /** ********** saved, owned, or followers *************** */
+      searchSavedOrOwned: true, // search saved by default, so false means search owned
     };
+    
     this.showResults = this.showResults.bind(this);
+    this.followUser = this.followUser.bind(this);
+    this.updateFollowing = this.updateFollowing.bind(this);
     // this.getDataFromAPI();
   }
 
@@ -59,6 +66,16 @@ class Profile extends Component {
   }
   printClicked() {
     console.log('clicked: ', this.state.currently_viewing);
+    if (this.state.currently_viewing === 'saved') {
+      this.setState({
+        searchSavedOrOwned: true,
+      });
+    }
+    else if (this.state.currently_viewing === 'owned') {
+      this.setState({
+        searchSavedOrOwned: false,
+      });
+    }
   }
 
   componentWillMount() {
@@ -78,6 +95,46 @@ class Profile extends Component {
   handleEnterSearch = async (event) => {
     const { client } = this.props;
     if (event.key === 'Enter') {
+      if (this.state.searchSavedOrOwned) { // search trhough saved
+        const { data } = await client.query({
+          query: gql`
+            query {
+              searchSavedRecipes(userId: "${this.state.user_id}" query: "${this.state.query}") {
+                id
+                name
+                description
+                images
+              }
+            }`,
+        });
+        this.setState({
+          loading: true,
+          saved_recipes: data.searchSavedRecipes,
+        });
+      }
+      else { // search through owned
+        const { data } = await client.query({
+          query: gql`
+            query {
+              searchOwnedRecipes(userId: "${this.state.user_id}" query: "${this.state.query}") {
+                id
+                name
+                description
+                images
+              }
+            }`,
+        });
+        this.setState({
+          loading: true,
+          owned_recipes: data.searchOwnedRecipes,
+        });
+      }
+    }
+  };
+
+  handleButtonSearch = async () => {
+    const { client } = this.props;
+    if (this.state.searchSavedOrOwned) { // search trhough saved
       const { data } = await client.query({
         query: gql`
           query {
@@ -94,26 +151,121 @@ class Profile extends Component {
         saved_recipes: data.searchSavedRecipes,
       });
     }
+    else { // search through owned
+      const { data } = await client.query({
+        query: gql`
+          query {
+            searchOwnedRecipes(userId: "${this.state.user_id}" query: "${this.state.query}") {
+              id
+              name
+              description
+              images
+            }
+          }`,
+      });
+      this.setState({
+        loading: true,
+        owned_recipes: data.searchOwnedRecipes,
+      });
+    }
   };
 
-  handleButtonSearch = async () => {
-    const { client } = this.props;
+
+  /** This whole function is garbage right now. ignore it */
+  updateFollowing = async () => {
+    console.log('Update Following');
+
+    
+    // First need to get the logged in users followers 
+    console.log('--------------------- tyring to get following');
+    const { client, userId } = this.props;
+    const info = {
+      user_id: userId,
+    };
+    const result = await client.query({
+      query: gql`
+        query {
+          userById(id: "${info.user_id}") {
+            id
+            username
+            following {id username}
+          }
+        }`,
+    })
+    .then((result) => {
+      console.log('result from getting userByID: ', result.data.userById);
+      this.setState({
+        following: result.data.userById.following,
+      });
+      return result.info;
+    });
+    console.log('------------ after get following');
+
+
+
+    // then get the other users info to follow them.
     const { data } = await client.query({
       query: gql`
         query {
-          searchSavedRecipes(userId: "${this.state.user_id}" query: "${this.state.query}") {
+          userByUsername(username: "${this.state.username}") {
             id
-            name
-            description
-            images
+            username
           }
         }`,
+    })
+    .then((result) => {
+      console.log('result from getting userbyUsername: ', result.data.userByUsername);
+      console.log('current following: ', this.state.following);
+      this.setState(previousState => ({
+        following: [...previousState.following, result.data.userByUserName],
+      }), this.followUser);
+      return result.data;
     });
-    this.setState({
-      loading: true,
-      saved_recipes: data.searchSavedRecipes,
-    });
-  };
+
+    
+  }
+  
+
+  followUser = async () => {
+    
+    try {
+      const { client, userId } = this.props;
+      const data = {
+        user_id: userId,
+        other_user: this.state.username,
+      };
+      console.log('updated following: ', this.state.following);
+      console.log('user: ', data.user_id, ' trying to follow: ', data.other_user);
+      const result = client
+        .mutate({
+          mutation: gql`
+          mutation UpdateUsers($userUpdates: UpdateUserInput!) {           
+            updateUser(
+              userId: "${data.user_id}"
+              userUpdates: $userUpdates
+            ) {
+              id
+              username
+              following {id username}
+            }
+          }
+        `,
+          variables: {
+            userUpdates: {
+              following: this.state.following,
+            },
+          },
+        })
+        .then((result) => {
+          console.log('user followed: ', result.data);
+          return result.data;
+        });
+      return result;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+  }
 
   async getDataFromAPI() {
     let user;
@@ -129,8 +281,18 @@ class Profile extends Component {
       username: user.username,
       owned_recipes: user.ownedRecipes,
       saved_recipes: user.savedRecipes,
+      following: user.following,
+    }, () => this.setLengths());
+
+  }
+
+  setLengths() {
+    this.setState({
+      owned_recipes_length: this.state.owned_recipes.length,
+      saved_recipes_length: this.state.saved_recipes.length,
     });
   }
+
 
   fetchUser = async () => {
     try {
@@ -147,12 +309,14 @@ class Profile extends Component {
               username
               ownedRecipes {name id description images}
               savedRecipes {name id description images}
+              following {id username}
             }
           }
         `,
           fetchPolicy: 'network-only',
         })
         .then((result) => {
+          console.log('fetchUser: ', result.data.userById);
           return result.data.userById;
         });
       return result;
@@ -214,6 +378,14 @@ class Profile extends Component {
       ownedShow = false;
       followShow = true;
     }
+  
+    let myProfile = true;
+    if (this.props.match.params.username) {
+      myProfile = false; // viewing somebody elses profile
+    }
+    else {
+      myProfile = true;
+    }
 
     return (
       <div>
@@ -241,10 +413,12 @@ class Profile extends Component {
             sm={styles.sizes.sm.social}
           >
             <Social
-              owned_recipes_number={this.state.owned_recipes.length}
-              saved_recipes_number={this.state.saved_recipes.length}
+              owned_recipes_number={this.state.owned_recipes_length}
+              saved_recipes_number={this.state.saved_recipes_length}
               followers_number="0"
               showResults = {this.showResults}
+              my_profile = {myProfile}
+              followUser = {this.updateFollowing}
             />
           </Grid>
           <Grid
@@ -290,59 +464,59 @@ class Profile extends Component {
             <div className="search-results">
 
               {savedShow &&
-                <GridList className={styles.gridList}>
+                <Grid container>
                   <Trail
-                    native
-                    keys={this.state.saved_recipes}
-                    from={{ marginTop: 500, opacity: 1 }}
-                    to={{ marginTop: 0, opacity: 1 }}
+                   native
+                  keys={this.state.saved_recipes.map(item => item.id)}
+                  from={{ marginTop: 500, opacity: 0 }}
+                  to={{ marginTop: 0, opacity: 1 }}
                   >
-
-                    {this.state.saved_recipes.map(recipe => (marginTop, index) => {
+                  {this.state.saved_recipes.map(recipe => (marginTop, index) => {
                       return (
-                        <animated.div key={index} style={marginTop}>
-                          <SearchResult
-                            key={recipe.id}
-                            name={recipe.name}
-                            style={marginTop}
-                            description={recipe.description}
-                            created={recipe.created}
-                            images={recipe.images}
-                            r_id={recipe.id}
-                          />
-                        </animated.div>
+                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <SearchResult
+                              key={recipe.id}
+                              name={recipe.name}
+                              style={marginTop}
+                              description={recipe.description}
+                              images={recipe.images}
+                              r_id={recipe.id}
+                            />
+                          </animated.div>
+                        </Grid>
                       );
                     })}
                   </Trail>
-                </GridList>
+                </Grid>
               }
 
-              {ownedShow &&
-                <GridList className={styles.gridList}>
+              {ownedShow && myProfile &&
+                <Grid container>
                   <Trail
                     native
-                    keys={this.state.owned_recipes}
+                    keys={this.state.owned_recipes.map(item => item.id)}
                     from={{ marginTop: 500, opacity: 1 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-
-                    {this.state.owned_recipes.map(recipe => (marginTop, index) => {
+                  {this.state.owned_recipes.map(recipe => (marginTop, index) => {
                       return (
-                        <animated.div key={index} style={marginTop}>
-                          <SearchResult
-                            key={recipe.id}
-                            name={recipe.name}
-                            style={marginTop}
-                            description={recipe.description}
-                            created={recipe.created}
-                            images={recipe.images}
-                            r_id={recipe.id}
-                          />
-                        </animated.div>
+                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <SearchResult
+                              key={recipe.id}
+                              name={recipe.name}
+                              style={marginTop}
+                              description={recipe.description}
+                              images={recipe.images}
+                              r_id={recipe.id}
+                            />
+                          </animated.div>
+                        </Grid>
                       );
                     })}
                   </Trail>
-                </GridList>
+                </Grid>
               }
 
               {followShow &&
