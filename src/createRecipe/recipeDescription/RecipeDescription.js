@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Typography } from 'material-ui';
+import { Card, Typography } from '@material-ui/core';
 import './RecipeDescription.css';
 
 class RecipeDescription extends Component {

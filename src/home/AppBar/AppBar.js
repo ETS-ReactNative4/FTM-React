@@ -1,29 +1,32 @@
 import React, { Fragment } from 'react';
-import { withStyles, Avatar } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import {
+  Typography,
+  AppBar,
+  Toolbar,
+  Button,
+  withStyles,
+  Avatar,
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { compose, withApollo } from 'react-apollo';
 import withLocalData from '../../withLocalData';
 
 const styles = {
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   flex: {
-    flex: 1
+    flex: 1,
   },
   menuButton: {
-    marginRight: 20
+    marginRight: 20,
   },
   list: {
-    width: 250
+    width: 250,
   },
   fullList: {
-    width: 'auto'
-  }
+    width: 'auto',
+  },
 };
 
 function HomeAppBar(props) {
@@ -34,7 +37,7 @@ function HomeAppBar(props) {
       <AppBar id="main-app-bar" position="fixed">
         <Toolbar>
           <Typography
-            variant="title"
+            variant="h6"
             color="inherit"
             className={classes.flex}
             style={{ textDecoration: 'none' }}
@@ -75,5 +78,5 @@ function HomeAppBar(props) {
 export default compose(
   withLocalData,
   withApollo,
-  withStyles(styles)
+  withStyles(styles),
 )(HomeAppBar);

@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Icon from '@material-ui/core/Icon';
 import gql from 'graphql-tag';
-import { withApollo, compose, graphql } from 'react-apollo';
+import { withApollo, compose } from 'react-apollo';
 import './Recipe.css';
 import RecipeInstructions from './Instructions/Instructions';
 import RecipeInfo from './Info/Info';
@@ -16,8 +16,6 @@ import RecipePicture from './Picture/Picture';
 import Notes from './Notes/Notes';
 import Comments from './Comments/Comments';
 import withLocalData from '../withLocalData';
-
-const jwt = require('jsonwebtoken');
 
 const styles = {
   spacing: 24,
@@ -130,7 +128,9 @@ class Recipe extends Component {
         .query({
           query: gql`
           query {
-            searchSavedRecipes(userId: "${userId}" query: "${this.state.title}") {
+            searchSavedRecipes(userId: "${userId}" query: "${
+  this.state.title
+}") {
               id
               name
             }
@@ -143,7 +143,7 @@ class Recipe extends Component {
             console.log('adding to empty');
             return false;
           } else if (
-            result.data.searchSavedRecipes.filter(recipe => recipe.id === data.recipe_id)
+            result.data.searchSavedRecipes.filter(recipe => recipe.id === data.recipe_id,)
           ) {
             console.log('already exist');
             return true;
@@ -180,7 +180,7 @@ class Recipe extends Component {
               }
             }
           `,
-          fetchPolicy: 'no-cache',
+              fetchPolicy: 'no-cache',
             })
             .then((result) => {
               return result.data.recipeById;
@@ -388,7 +388,8 @@ class Recipe extends Component {
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
-        authorImage: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
+        authorImage:
+          'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
       });
     }
   }
@@ -405,8 +406,18 @@ class Recipe extends Component {
     return (
       <div>
         <Notes notes={this.state.notes} />
-        <Grid className="pic-des-container" container spacing={styles.spacing} justify={'center'}>
-          <Grid className="picture" item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
+        <Grid
+          className="pic-des-container"
+          container
+          spacing={styles.spacing}
+          justify={'center'}
+        >
+          <Grid
+            className="picture"
+            item
+            xs={styles.sizes.xs.picture}
+            sm={styles.sizes.sm.picture}
+          >
             <RecipePicture
               title={this.state.title}
               stars={this.state.stars}
@@ -421,7 +432,12 @@ class Recipe extends Component {
           >
             <RecipeDescription desc={this.state.description} />
           </Grid>
-          <Grid className="info" item xs={styles.sizes.xs.author} sm={styles.sizes.sm.author}>
+          <Grid
+            className="info"
+            item
+            xs={styles.sizes.xs.author}
+            sm={styles.sizes.sm.author}
+          >
             <RecipeInfo
               authorImage={this.state.authorImage}
               authorName={this.state.author}
@@ -515,7 +531,11 @@ class Recipe extends Component {
                   <Button onClick={this.handleDialogClose} color="primary">
                     Cancel
                   </Button>
-                  <Button onClick={this.noteSubmit} color="primary" variant="contained">
+                  <Button
+                    onClick={this.noteSubmit}
+                    color="primary"
+                    variant="contained"
+                  >
                     Add Note
                   </Button>
                 </DialogActions>
@@ -566,7 +586,9 @@ class Recipe extends Component {
                   className="comment-dialog"
                   fullWidth={true}
                 >
-                  <DialogTitle id="comment-dialog-title">New Comment</DialogTitle>
+                  <DialogTitle id="comment-dialog-title">
+                    New Comment
+                  </DialogTitle>
                   <DialogContent>
                     <TextField
                       autoFocus
@@ -582,7 +604,11 @@ class Recipe extends Component {
                     <Button onClick={this.handleCommentClose} color="primary">
                       Cancel
                     </Button>
-                    <Button onClick={this.commentSubmit} color="primary" variant="contained">
+                    <Button
+                      onClick={this.commentSubmit}
+                      color="primary"
+                      variant="contained"
+                    >
                       Post Comment
                     </Button>
                   </DialogActions>

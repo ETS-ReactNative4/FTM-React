@@ -9,8 +9,7 @@ import {
   Paper,
   FormControl,
   withStyles,
-  GridList,
-  Grid,
+  Grid
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
@@ -26,8 +25,8 @@ const styles = {
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'
+  }
 };
 
 class Home extends Component {
@@ -37,11 +36,11 @@ class Home extends Component {
       query: '',
       recipes: [],
       loading: false,
-      showFilter: false,
+      showFilter: false
     };
   }
 
-  handleEnterSearch = async (event) => {
+  handleEnterSearch = async event => {
     const { client } = this.props;
     if (event.key === 'Enter') {
       const { data } = await client.query({
@@ -53,11 +52,11 @@ class Home extends Component {
                     description
                     images
                   }
-                }`,
+                }`
       });
       this.setState({
         loading: true,
-        recipes: data.searchAllRecipes,
+        recipes: data.searchAllRecipes
       });
     }
   };
@@ -73,17 +72,17 @@ class Home extends Component {
                     description
                     images
                   }
-                }`,
+                }`
     });
     this.setState({
       loading: true,
-      recipes: data.searchAllRecipes,
+      recipes: data.searchAllRecipes
     });
   };
 
-  handleQueryChange = (event) => {
+  handleQueryChange = event => {
     this.setState({
-      query: event.target.value,
+      query: event.target.value
     });
   };
 
@@ -101,17 +100,20 @@ class Home extends Component {
     return classes.join(' ');
   };
 
-  handleMouseDown = (event) => {
+  handleMouseDown = event => {
     event.preventDefault();
   };
 
   render() {
-    const { classes } = this.props;
     return (
       <div className="home-container">
         <Spring
           from={{ marginTop: 200, opacity: 1 }}
-          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
+          to={
+            this.state.recipes.length > 0
+              ? { marginTop: 0 }
+              : { marginTop: 200 }
+          }
         >
           {({ marginTop, opacity }) => (
             <img
@@ -124,7 +126,11 @@ class Home extends Component {
         </Spring>
         <Spring
           from={{ marginTop: 200 }}
-          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
+          to={
+            this.state.recipes.length > 0
+              ? { marginTop: 0 }
+              : { marginTop: 200 }
+          }
         >
           {({ marginTop }) => (
             <div className="search-box" style={{ marginTop }}>
@@ -136,10 +142,16 @@ class Home extends Component {
                   onChange={this.handleQueryChange}
                   endAdornment={
                     <InputAdornment position="end">
-                      <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
+                      <IconButton
+                        onMouseDown={this.handleMouseDown}
+                        onClick={this.toggleFilter}
+                      >
                         <FilterList size={30} />
                       </IconButton>
-                      <Button id="searchButton" onClick={this.handleButtonSearch}>
+                      <Button
+                        id="searchButton"
+                        onClick={this.handleButtonSearch}
+                      >
                         Search
                       </Button>
                     </InputAdornment>
@@ -152,7 +164,11 @@ class Home extends Component {
 
         <div
           className="search-results"
-          style={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
+          style={
+            this.state.recipes.length > 0
+              ? { marginTop: 0 }
+              : { marginTop: 200 }
+          }
         >
           {this.state.recipes.length > 0 && (
             <Grid container>
@@ -194,10 +210,10 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default compose(
   withStyles(styles),
-  withApollo,
+  withApollo
 )(Home);

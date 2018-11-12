@@ -20,20 +20,23 @@ const client = new ApolloClient({
       cache,
       defaults: {
         token: '',
-        userId: ''
-      }
+        userId: '',
+      },
     }),
     new HttpLink({
-      uri: 'https://api.foodtomake.com/graphql'
-    })
+      uri: 'https://api.foodtomake.com/graphql',
+    }),
   ]),
-  cache
+  cache,
 });
 
 const theme = createMuiTheme({
   palette: {
-    primary: red
-  }
+    primary: red,
+  },
+  typography: {
+    useNextVariants: true,
+  },
 });
 class Root extends Component {
   render() {

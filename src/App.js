@@ -4,8 +4,6 @@ import Home from './home/Home';
 import Recipe from './recipe/Recipe';
 import CreateRecipe from './createRecipe/CreateRecipe';
 import Login from './login/Login';
-import Logs from './logs/Logs';
-import AddLog from './addlog/AddLog';
 import Profile from './profile/Profile';
 import Signup from './signup/Signup';
 import CallbackReceiver from './callback/CallbackReceiver';
@@ -25,8 +23,6 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/profile/:username" component={Profile} />
-          <Route path="/logs" component={Logs} />
-          <Route path="/addlog" component={AddLog} />
           <Route path="/signup" component={Signup} />
           <Route path="/signout" component={SignOut} />
           <Route path="/createrecipe" component={CreateRecipe} />
