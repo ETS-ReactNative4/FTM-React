@@ -1,24 +1,29 @@
 import { WebAuth } from 'auth0-js';
 
+const host =
+  process.env.NODE_ENV === 'production'
+    ? 'https://www.foodtomake.com'
+    : 'http://localhost:3000';
+
 export default class Auth {
   auth0 = new WebAuth({
     domain: 'foodtomake.auth0.com',
-    clientID: 'Xl3JO8Pwt2fgVmtCr0K6fTo1axSPjCBs', //This is auth0 clientId not google or facebook clientId
+    clientID: 'Xl3JO8Pwt2fgVmtCr0K6fTo1axSPjCBs', // This is auth0 clientId not google or facebook clientId
     responseType: 'id_token',
-    scope: 'openid'
+    scope: 'openid',
   });
 
   loginGoogle = () => {
     this.auth0.authorize({
       connection: 'google-oauth2',
-      redirectUri: 'http://localhost:3000/auth/google/callback'
+      redirectUri: `${host}/auth/google/callback`,
     });
   };
 
   loginFacebook = () => {
     this.auth0.authorize({
       connection: 'facebook',
-      redirectUri: 'http://localhost:3000/auth/facebook/callback'
+      redirectUri: `${host}/auth/facebook/callback`,
     });
   };
 
