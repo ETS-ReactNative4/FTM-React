@@ -9,6 +9,7 @@ import Signup from './signup/Signup';
 import CallbackReceiver from './callback/CallbackReceiver';
 import SignOut from './signOut/SignOut';
 import withLocalData from './withLocalData';
+import helpPage from './helpPage/helpPage';
 
 class App extends Component {
   render() {
@@ -26,6 +27,7 @@ class App extends Component {
           <Route path="/signup" component={Signup} />
           <Route path="/signout" component={SignOut} />
           <Route path="/createrecipe" component={CreateRecipe} />
+          <Route path="/helpPage" component={helpPage} />
           <Route
             path="/auth/google/callback"
             component={() => {
