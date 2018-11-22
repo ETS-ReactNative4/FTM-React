@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 class SignOut extends Component {
   componentDidMount() {
+    localStorage.removeItem('FTM_TOKEN');
     this.props.client.writeData({ data: { token: '' } });
   }
 
