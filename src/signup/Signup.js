@@ -40,6 +40,7 @@ class SignUp extends Component {
         }
       `,
     });
+    localStorage.setItem('FTM_TOKEN', data.createUser.token);
     client.writeData({ data: { token: data.createUser.token } });
     history.replace('/');
   };
@@ -48,11 +49,20 @@ class SignUp extends Component {
     return (
       <form className="login-root">
         <div className="social-buttons">
-          <Button onClick={this.loginFacebook} variant="contained" color="primary" id="fb-btn">
+          <Button
+            onClick={this.loginFacebook}
+            variant="contained"
+            color="primary"
+            id="fb-btn"
+          >
             <img id="fb-logo" alt="fb-logo" src={fbLogo} />
             Sign up With Facebook
           </Button>
-          <Button onClick={this.loginGoogle} variant="contained" id="google-btn">
+          <Button
+            onClick={this.loginGoogle}
+            variant="contained"
+            id="google-btn"
+          >
             <img id="gg-logo" alt="gg-logo" src={ggLogo} />
             Sign up With Google
           </Button>
@@ -85,7 +95,12 @@ class SignUp extends Component {
           className="verify"
           onChange={event => this.setState({ passConfirm: event.target.value })}
         />
-        <Button variant="contained" color="primary" className="submit-btn" onClick={this.handleSubmit}>
+        <Button
+          variant="contained"
+          color="primary"
+          className="submit-btn"
+          onClick={this.handleSubmit}
+        >
           Submit
         </Button>
       </form>

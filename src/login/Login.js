@@ -10,7 +10,7 @@ import ggLogo from '../assets/images/g-ico.png';
 class Login extends Component {
   state = {
     account: '',
-    password: ''
+    password: '',
   };
   auth = new Auth();
 
@@ -37,21 +37,22 @@ class Login extends Component {
             }
           }
         }
-      `
+      `,
     });
     // successful login
     if (data.login.token) {
       console.log(data.login);
+      localStorage.setItem('FTM_TOKEN', data.login.token);
       client.writeData({ data: { token: data.login.token } });
       history.replace('/');
     }
   };
 
-  handleAccountChange = event => {
+  handleAccountChange = (event) => {
     this.setState({ account: event.target.value });
   };
 
-  handlePasswordChange = event => {
+  handlePasswordChange = (event) => {
     this.setState({ password: event.target.value });
   };
 
@@ -68,7 +69,11 @@ class Login extends Component {
             <img alt="fb-logo" id="fb-logo" src={fbLogo} />
             Log in With Facebook
           </Button>
-          <Button variant="contained" id="google-btn" onClick={this.loginGoogle}>
+          <Button
+            variant="contained"
+            id="google-btn"
+            onClick={this.loginGoogle}
+          >
             <img id="gg-logo" alt="gg-logo" src={ggLogo} />
             Log in With Google
           </Button>

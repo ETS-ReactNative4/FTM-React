@@ -8,48 +8,48 @@ import { decode } from 'jsonwebtoken';
 class Username extends Component {
   state = {
     username: '',
-    error: ''
+    error: '',
   };
 
-  onSubmit = async event => {
+  onSubmit = async (event) => {
     event.preventDefault();
     console.log(this.props);
     const { client, id, source } = this.props;
     const { data } = await client.mutate({
-      mutation: mutation,
+      mutation,
       variables: {
-        id: id,
+        id,
         type: source,
-        username: this.state.username
-      }
+        username: this.state.username,
+      },
     });
     console.log(data);
     const { error, createUserSocial } = data;
     if (error) {
       return this.setState({ error: 'Please try again' });
-    } else {
-      const { token, apiError } = createUserSocial;
-      if (apiError) {
-        const { code } = apiError;
-        if (code) {
-          if (code === 'DUPLICATE_USERNAME') {
-            this.setState({ error: 'That username is in use.' });
-          } else {
-            return this.setState({ error: 'Please try again' });
-          }
+    }
+    const { token, apiError } = createUserSocial;
+    if (apiError) {
+      const { code } = apiError;
+      if (code) {
+        if (code === 'DUPLICATE_USERNAME') {
+          this.setState({ error: 'That username is in use.' });
+        } else {
+          return this.setState({ error: 'Please try again' });
         }
       }
-      const payload = decode(token);
-      return client.writeData({
-        data: {
-          token,
-          userId: payload.id
-        }
-      });
     }
+    const payload = decode(token);
+    localStorage.setItem('FTM_TOKEN', token);
+    return client.writeData({
+      data: {
+        token,
+        userId: payload.id,
+      },
+    });
   };
 
-  handleOnChange = event => {
+  handleOnChange = (event) => {
     this.setState({ username: event.target.value });
   };
 

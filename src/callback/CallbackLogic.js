@@ -23,11 +23,11 @@ class CallbackLogic extends Component {
       const { code } = apiError;
       if (code === 'USER_NOT_FOUND') {
         return <Username id={id} source={source} />;
-      } else {
-        return <Error />;
       }
+      return <Error />;
     }
     const payload = decode(token);
+    localStorage.setItem('FTM_TOKEN', token);
     client.writeData({
       data: {
         token,

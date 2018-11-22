@@ -15,16 +15,16 @@ import { decode } from 'jsonwebtoken';
 
 const theme = createMuiTheme({
   palette: {
-    primary: red
+    primary: red,
   },
   typography: {
-    useNextVariants: true
-  }
+    useNextVariants: true,
+  },
 });
 class Root extends Component {
   constructor(props) {
     super(props);
-    let token = localStorage.getItem('FTM_TOKEN') || '';
+    const token = localStorage.getItem('FTM_TOKEN') || '';
     let userId = '';
     if (token) {
       userId = decode(token).id;
@@ -36,14 +36,14 @@ class Root extends Component {
           cache,
           defaults: {
             token,
-            userId
-          }
+            userId,
+          },
         }),
         new HttpLink({
-          uri: 'https://api.foodtomake.com/graphql'
-        })
+          uri: 'https://api.foodtomake.com/graphql',
+        }),
       ]),
-      cache
+      cache,
     });
   }
 
