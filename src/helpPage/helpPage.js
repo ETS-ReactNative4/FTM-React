@@ -46,10 +46,6 @@ class ControlledExpansionPanels extends React.Component {
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="title"  className={classes.heading}>About</Typography>
             <Typography variant="subheading" className={classes.secondaryHeading}>Welcome to Food to Make
-            <Grid container justify="right" alignItems="right">
-      <Avatar alt="logo" src="http://i63.tinypic.com/2wd348w.jpg" class="about" 
-          width="794" height="497" srcset="http://i63.tinypic.com/2wd348w.jpg" className={classes.avatar} />
-         </Grid> 
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
@@ -97,9 +93,9 @@ class ControlledExpansionPanels extends React.Component {
 
              <b>Food to Make wants to make it as easy as possible </b>for you to find what you are looking for, so we have created several ways to search for recipes to ensure that you do!
 
-             <Grid container justify="center" alignItems="left">
-             <img alt="" src="http://i65.tinypic.com/156afep.jpg" class="login" 
-          width="794" height="497" srcset="http://i65.tinypic.com/156afep.jpg2x"
+             <Grid container justify="right" alignItems="right">
+             <img alt="" src="http://i68.tinypic.com/8zekoz.jpg" class="Finding Recipe" 
+          width="953" height="495" srcset="http://i68.tinypic.com/8zekoz.jpg"
           data-pin-nopin="true"></img>
             </Grid>
              
