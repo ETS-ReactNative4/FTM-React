@@ -23,9 +23,6 @@ class RecipeIngredients extends Component {
         <Card>
           <Typography component="p" className="ingredients-title">
             Ingredients
-            <span className="servings">
-              This amount produces <b>{this.props.servings}</b> servings.
-            </span>
           </Typography>
           <List>
             {this.props.ingredients.map((ingredient, index) => {

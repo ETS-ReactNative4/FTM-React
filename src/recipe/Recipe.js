@@ -386,6 +386,7 @@ class Recipe extends Component {
       description: recipe.description,
       sourceURL: recipe.sourceURL,
       servings: recipe.servings,
+      scale: recipe.servings,
       stars: Math.round(recipe.rating),
       notes: recipe.notes,
       comments: recipe.comments
@@ -398,7 +399,7 @@ class Recipe extends Component {
     }
   }
 
-  handleScaleInput = ({ target: { value } }) => {
+  handleScaleChange = ({ target: { value } }) => {
     if (!value || Number(value) < 1) {
       this.setState({ scale: 1 });
       return;
@@ -408,10 +409,14 @@ class Recipe extends Component {
 
   getScaledIngredients = () => {
     return this.state.ingredients.map(ingredient => {
+      // eslint-disable-next-line
       const reg = /[0-9]+[0-9]*([\/][0-9]+[0-9]*)*/g;
       let result;
       let newIngredient = ingredient;
-      const scale = this.state.scale;
+      const scale = new Fraction(
+        this.state.scale,
+        this.state.servings
+      ).valueOf();
       while ((result = reg.exec(ingredient)) !== null) {
         const num = result[0];
         const newNum = new Fraction(num).mul(scale).toFraction(true);
@@ -472,6 +477,8 @@ class Recipe extends Component {
               cookTime={this.state.cookTime}
               difficulty={this.state.difficulty}
               tags={this.state.tags}
+              onScaleChange={this.handleScaleChange}
+              servings={this.state.scale}
             />
           </Grid>
           <Grid
@@ -483,11 +490,6 @@ class Recipe extends Component {
             <RecipeIngredients
               ingredients={this.getScaledIngredients()}
               servings={this.state.servings}
-            />
-            <input
-              type="number"
-              value={this.state.scale}
-              onChange={this.handleScaleInput}
             />
           </Grid>
           <Grid
