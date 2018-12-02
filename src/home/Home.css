@@ -7,6 +7,7 @@
   grid-template-areas:
     ". . logo . ."
     ". search search search ."
+    ". filters filters filters ."
     ". results results results .";
 }
 
@@ -33,6 +34,11 @@
   will-change: opacity;
   height: 100%;
   grid-area: results;
+}
+
+.search-filters {
+  height: 40px;
+  grid-area: filters;
 }
 
 .test {

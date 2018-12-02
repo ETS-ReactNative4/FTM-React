@@ -9,7 +9,7 @@ import {
   Paper,
   FormControl,
   withStyles,
-  Grid
+  Grid,
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
@@ -18,6 +18,8 @@ import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
+import { Menu } from 'material-ui';
+import FilterButton from './FilterButton/FilterButton';
 
 const styles = {
   gridList: {
@@ -25,8 +27,14 @@ const styles = {
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    overflow: 'hidden'
-  }
+    overflow: 'hidden',
+  },
+  heading: {},
+  secondaryHeading: {},
+  column: {
+    flexBasis: '33.33%',
+    width: '30%',
+  },
 };
 
 class Home extends Component {
@@ -36,11 +44,16 @@ class Home extends Component {
       query: '',
       recipes: [],
       loading: false,
-      showFilter: false
+      showFilter: false,
+      anchorElCookTime: null,
+      anchorElPrepTime: null,
+      anchorElDifficulty: null,
+      anchorElRating: null,
+      anchorElIngredients: null,
     };
   }
 
-  handleEnterSearch = async event => {
+  handleEnterSearch = async (event) => {
     const { client } = this.props;
     if (event.key === 'Enter') {
       const { data } = await client.query({
@@ -52,11 +65,11 @@ class Home extends Component {
                     description
                     images
                   }
-                }`
+                }`,
       });
       this.setState({
         loading: true,
-        recipes: data.searchAllRecipes
+        recipes: data.searchAllRecipes,
       });
     }
   };
@@ -72,17 +85,17 @@ class Home extends Component {
                     description
                     images
                   }
-                }`
+                }`,
     });
     this.setState({
       loading: true,
-      recipes: data.searchAllRecipes
+      recipes: data.searchAllRecipes,
     });
   };
 
-  handleQueryChange = event => {
+  handleQueryChange = (event) => {
     this.setState({
-      query: event.target.value
+      query: event.target.value,
     });
   };
 
@@ -100,7 +113,7 @@ class Home extends Component {
     return classes.join(' ');
   };
 
-  handleMouseDown = event => {
+  handleMouseDown = (event) => {
     event.preventDefault();
   };
 
@@ -109,11 +122,7 @@ class Home extends Component {
       <div className="home-container">
         <Spring
           from={{ marginTop: 200, opacity: 1 }}
-          to={
-            this.state.recipes.length > 0
-              ? { marginTop: 0 }
-              : { marginTop: 200 }
-          }
+          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
         >
           {({ marginTop, opacity }) => (
             <img
@@ -126,11 +135,7 @@ class Home extends Component {
         </Spring>
         <Spring
           from={{ marginTop: 200 }}
-          to={
-            this.state.recipes.length > 0
-              ? { marginTop: 0 }
-              : { marginTop: 200 }
-          }
+          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
         >
           {({ marginTop }) => (
             <div className="search-box" style={{ marginTop }}>
@@ -142,16 +147,10 @@ class Home extends Component {
                   onChange={this.handleQueryChange}
                   endAdornment={
                     <InputAdornment position="end">
-                      <IconButton
-                        onMouseDown={this.handleMouseDown}
-                        onClick={this.toggleFilter}
-                      >
+                      <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
                         <FilterList size={30} />
                       </IconButton>
-                      <Button
-                        id="searchButton"
-                        onClick={this.handleButtonSearch}
-                      >
+                      <Button id="searchButton" onClick={this.handleButtonSearch}>
                         Search
                       </Button>
                     </InputAdornment>
@@ -161,14 +160,23 @@ class Home extends Component {
             </div>
           )}
         </Spring>
-
         <div
-          className="search-results"
+          className="search-filters"
           style={
             this.state.recipes.length > 0
-              ? { marginTop: 0 }
-              : { marginTop: 200 }
+              ? { marginTop: 10, display: 'flex' }
+              : { marginTop: 210, display: 'flex' }
           }
+        >
+          <FilterButton title="Cook Time" items={['One', 'Two', 'Three']} />
+          <FilterButton title="Prep. Time" items={['2', 'Two', 'two']} />
+          <FilterButton title="Difficulty" items={['One', 'Two', 'Three']} />
+          <FilterButton title="Rating" items={['2', 'Two', 'two']} />
+          <FilterButton title="Ingredients" items={['One', 'Two', 'Three']} />
+        </div>
+        <div
+          className="search-results"
+          style={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
         >
           {this.state.recipes.length > 0 && (
             <Grid container>
@@ -180,7 +188,7 @@ class Home extends Component {
               >
                 {this.state.recipes.map(recipe => (marginTop, index) => {
                   return (
-                    <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                    <Grid item md={4} sm={6} xs={6} zeroMinWidth>
                       <animated.div key={index} style={marginTop}>
                         <SearchResult
                           key={recipe.id}
@@ -210,10 +218,10 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default compose(
   withStyles(styles),
-  withApollo
+  withApollo,
 )(Home);
