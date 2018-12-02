@@ -20,6 +20,7 @@ import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 import { Menu } from 'material-ui';
 import FilterButton from './FilterButton/FilterButton';
+import FilterChipsArray from './FilterChip/FilterChipsArray';
 
 const styles = {
   gridList: {
@@ -164,15 +165,24 @@ class Home extends Component {
           className="search-filters"
           style={
             this.state.recipes.length > 0
-              ? { marginTop: 10, display: 'flex' }
-              : { marginTop: 210, display: 'flex' }
+              ? {
+                marginTop: 10,
+                display: 'flex',
+              }
+              : {
+                marginTop: 210,
+                display: 'flex',
+              }
           }
         >
-          <FilterButton title="Cook Time" items={['One', 'Two', 'Three']} />
-          <FilterButton title="Prep. Time" items={['2', 'Two', 'two']} />
-          <FilterButton title="Difficulty" items={['One', 'Two', 'Three']} />
-          <FilterButton title="Rating" items={['2', 'Two', 'two']} />
-          <FilterButton title="Ingredients" items={['One', 'Two', 'Three']} />
+          <FilterButton title="Cook Time" items={['<= 10 min', '20 min', '45 min', '>60 min']} />
+          <FilterButton title="Prep. Time" items={['<= 10 min', '20 min', '45 min', '>60 min']} />
+          <FilterButton title="Difficulty" items={['One', 'Two', 'Three', 'Four', 'Five']} />
+          <FilterButton title="Rating" items={['One', 'Two', 'Three', 'Four', 'Five']} />
+          <FilterButton title="Ingredients" items={['Need to add dialog']} />
+        </div>
+        <div className="search-chips" style={{ display: 'flex' }}>
+          <FilterChipsArray />
         </div>
         <div
           className="search-results"

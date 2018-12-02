@@ -8,6 +8,7 @@
     ". . logo . ."
     ". search search search ."
     ". filters filters filters ."
+    ". chips chips chips ."
     ". results results results .";
 }
 
@@ -37,8 +38,13 @@
 }
 
 .search-filters {
-  height: 40px;
+  height: 100%;
   grid-area: filters;
+}
+
+.search-chips {
+  height: 100%;
+  grid-area: chips;
 }
 
 .test {
