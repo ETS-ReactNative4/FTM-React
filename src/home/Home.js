@@ -75,10 +75,11 @@ class Home extends Component {
   };
 
   handleButtonSearch = async () => {
+    console.log(this.state.filters);
     const { client } = this.props;
     const { data } = await client.query({
       query: gql`
-        query searchAllRecipes($query: String, $filters: [SearchFilter]) {
+        query searchAllRecipes($query: String!, $filters: [SearchFilter]!) {
           searchAllRecipes(query: $query, filters: $filters) {
             id
             name
@@ -96,6 +97,7 @@ class Home extends Component {
         query: this.state.query,
         filters: this.state.filters,
       },
+      fetchPolicy: 'network-only',
     });
     this.setState({
       loading: true,
@@ -165,6 +167,46 @@ class Home extends Component {
     this.filterChipsRef.current.handleAddIngredientChips(includes, excludes);
   };
 
+  handleDeleteFilterChips = (data) => {
+    this.setState((state, props) => {
+      const filters = [...state.filters];
+      let chipToDelete = filters.indexOf();
+      switch (data.title) {
+      case 'Cook Time':
+        switch (data.label) {
+        case '<= 10 min':
+          chipToDelete = filters.indexOf({
+            field: 'cookTime',
+            operator: 'LTE',
+            value: ['10'],
+          });
+          break;
+        case '20 min':
+          break;
+        case '45 min':
+          break;
+        case '>60 min':
+          break;
+        default:
+        }
+        break;
+      case 'Prep. Time':
+        break;
+      case 'Difficulty':
+        break;
+      case 'Rating':
+        break;
+      case 'Include':
+        break;
+      case 'Exclude':
+        break;
+      default:
+      }
+      filters.splice(chipToDelete, 1);
+      return { filters };
+    });
+  };
+
   render() {
     return (
       <div className="home-container">
@@ -231,6 +273,7 @@ class Home extends Component {
               <FilterChipsArray
                 innerRef={this.filterChipsRef}
                 handleHasFilterChips={this.handleHasFilterChips}
+                handleDeleteFilterChips={this.handleDeleteFilterChips}
               />
             </animated.div>
           )}

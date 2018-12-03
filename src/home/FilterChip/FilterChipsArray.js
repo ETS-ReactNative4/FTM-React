@@ -86,6 +86,7 @@ class FilterChipsArray extends React.Component {
       if (chipData.length === 0) {
         this.props.handleHasFilterChips(false);
       }
+      this.props.handleDeleteFilterChips(data);
       return { chipData };
     });
   };
@@ -112,6 +113,7 @@ class FilterChipsArray extends React.Component {
 FilterChipsArray.propTypes = {
   classes: PropTypes.object.isRequired,
   handleHasFilterChips: PropTypes.func.isRequired,
+  handleDeleteFilterChips: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(FilterChipsArray);
