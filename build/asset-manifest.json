@@ -1,7 +1,10 @@
 {
-  "main.css": "static/css/main.e0b43027.css",
-  "main.css.map": "static/css/main.e0b43027.css.map",
-  "main.js": "static/js/main.afe3fd3e.js",
-  "main.js.map": "static/js/main.afe3fd3e.js.map",
-  "static/media/fb-logo.png": "static/media/fb-logo.9ddea350.png"
+  "main.css": "static/css/main.5b2fee46.css",
+  "main.css.map": "static/css/main.5b2fee46.css.map",
+  "main.js": "static/js/main.8aea5974.js",
+  "main.js.map": "static/js/main.8aea5974.js.map",
+  "pdfjsWorker.js": "static/js/pdfjsWorker.1b628d5d.chunk.js",
+  "pdfjsWorker.js.map": "static/js/pdfjsWorker.1b628d5d.chunk.js.map",
+  "static/media/fb-logo.png": "static/media/fb-logo.9ddea350.png",
+  "static/media/recipes.pdf": "static/media/recipes.d41d8cd9.pdf"
 }
