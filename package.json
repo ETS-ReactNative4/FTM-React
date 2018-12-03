@@ -24,17 +24,11 @@
     "openport": "0.0.5",
     "prop-types": "^15.6.2",
     "rc-print": "^1.0.4",
-<<<<<<< HEAD
-    "react": "^16.6.0",
-    "react-apollo": "^2.2.4",
-    "react-dom": "^16.6.0",
-    "react-pdf": "^3.0.5",
-=======
     "react": "^16.6.3",
     "react-apollo": "^2.3.1",
     "react-dom": "^16.6.3",
     "react-markdown": "^4.0.4",
->>>>>>> 14217ae637ca53382ddf801fc1a67e8dd4ba753e
+    "react-pdf": "^4.0.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^1.1.5",
     "react-share": "^2.4.0",
