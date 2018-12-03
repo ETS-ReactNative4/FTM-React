@@ -180,16 +180,17 @@ class Home extends Component {
           )}
         </Spring>
         <Spring
+          native
           from={{ height: 0, opacity: 0 }}
           to={this.state.hasFilterChips ? { height: 50, opacity: 1 } : { height: 0, opacity: 0 }}
         >
           {({ height, opacity }) => (
-            <div className="search-chips" style={{ display: 'flex', height, opacity }}>
+            <animated.div className="search-chips" style={{ display: 'flex', height, opacity }}>
               <FilterChipsArray
                 innerRef={this.filterChipsRef}
                 handleHasFilterChips={this.handleHasFilterChips}
               />
-            </div>
+            </animated.div>
           )}
         </Spring>
         <div

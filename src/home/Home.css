@@ -46,6 +46,7 @@
 }
 
 .search-chips {
+  padding-top: 10px;
   grid-area: chips;
 }
 
