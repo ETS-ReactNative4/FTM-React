@@ -67,6 +67,7 @@ class Recipe extends Component {
       new_comment: null,
       note_dialog_open: false,
       comment_dialog_open: false
+      
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
@@ -127,9 +128,6 @@ class Recipe extends Component {
         user_id: userId,
         recipe_id: this.state.recipe_id
       };
-
-      console.log('user id: ', data.user_id);
-      console.log('recipe id: ', data.recipe_id);
       const result = client
         .mutate({
           mutation: gql`

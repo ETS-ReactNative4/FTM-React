@@ -91,29 +91,37 @@ class CreateRecipe extends Component {
     // this.addToPublished(res.CreateRecipe.id);
   }
 
-  uploadFile = async () => {
+  uploadFile = async (e) => {
     console.log('upload a file');
-    /*
-    const file = e.target.files[0];
-    console.log(file);
-    const { data } = await this.props.client.mutate({
-      mutation: gql`
-        mutation uploadPhtoto($file: Upload!) {
-          uploadPhoto(file: $file) {
-            scalar
+    try {
+      const file = e.variables.file;
+      console.log('file: ', e.variables.file);
+      const { client } = this.props;
+      const { result } = client.mutate({
+        mutation: gql`
+          mutation uploadPhtoto($file: Upload!) {
+            uploadPhoto(file: $file) {
+              filename
+            }
           }
+        `,
+        variables: {
+          file
         }
-      `,
-      variables: {
-        file,
-      },
-    });
-    console.log("uploaded file: ", data.uploadPhoto.filename);
-    */
+      })
+      .then((result) => {
+        console.log('uploaded file: ', result);
+        return result;
+      });
+      return result;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
   };
 
   UPLOAD_FILE = gql`
-    mutation uploadPhoto($file: Upload!) {
+    mutation UploadPhoto($file: Upload!) {
       uploadPhoto(file: $file)
     }
   `;
@@ -199,10 +207,10 @@ class CreateRecipe extends Component {
                 onChange={({
                   target: {
                     validity,
-                    files: [file]
-                  }
+                    files: [file],
+                  },
                 }) => {
-                  validity.valid && uploadFile({ variables: { file } });
+                  validity.valid && this.uploadFile({ variables: { file } });
                 }}
               />
             )}

@@ -32,6 +32,7 @@ class Social extends Component {
             <span>Saved Recipes</span>
           </Card>
           <Card className="made-this-num" onClick={() => this.props.showResults('madethis')}>
+            <Icon>library_books</Icon>
             <span className="number">{this.props.made_this_number}</span><br />
             <span>I Made These!</span>
           </Card>
