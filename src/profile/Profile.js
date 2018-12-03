@@ -257,38 +257,28 @@ class Profile extends Component {
   };
 
   followUser = async () => {
+    console.log('vieweing profile for user: ', this.state.username, ', id: ', this.state.user_id);
+
     try {
-      const { client, userId } = this.props;
-      const data = {
-        user_id: userId,
-        other_user: this.state.username,
-      };
-      console.log('updated following: ', this.state.following);
-      console.log(
-        'user: ',
-        data.user_id,
-        ' trying to follow: ',
-        data.other_user,
-      );
+      const { client } = this.props;
+      let user = await this.fetchUser();
+      console.log('logged in name: ', user.username, ' id: ', user.id)
+
       const result = client
         .mutate({
           mutation: gql`
-          mutation UpdateUsers($userUpdates: UpdateUserInput!) {           
-            updateUser(
-              userId: "${data.user_id}"
-              userUpdates: $userUpdates
+          mutation FollowUser {
+            followUser(
+              userId: "${user.id}"
+              followingId: "${this.state.user_id}"
             ) {
               id
               username
-              following {id username}
+              followers {username}
+              following {username}
             }
           }
-        `,
-          variables: {
-            userUpdates: {
-              following: this.state.following,
-            },
-          },
+          `
         })
         .then((result) => {
           console.log('user followed: ', result.data);
@@ -329,6 +319,7 @@ class Profile extends Component {
     });
   }
 
+  // get the info of the logged in user 
   fetchUser = async () => {
     try {
       const { client, token } = this.props;
@@ -345,6 +336,7 @@ class Profile extends Component {
               ownedRecipes {name id description images}
               savedRecipes {name id description images}
               following {id username}
+              followers {id username}
             }
           }
         `,
@@ -361,6 +353,7 @@ class Profile extends Component {
     }
   };
 
+  // get the info when viewing anothers profile
   fetchOtherUser = async () => {
     console.log('get other user: ', this.props.match.params.username);
     try {
@@ -452,8 +445,25 @@ class Profile extends Component {
               followers_number="0"
               showResults={this.showResults}
               my_profile={myProfile}
-              followUser={this.updateFollowing}
+              followUser={this.followUser}
             />
+            <Grid item>
+              <Route
+                render={({ history }) => (
+                        
+                  <Button
+                    variant="contained"
+                    color="default"
+                    className="post-comment-button"
+                    onClick={() => {
+                      history.push(`/exportrecipes`);
+                    }}
+                  >
+                          Export Recipes
+                  </Button>
+                )}
+              />
+            </Grid>
           </Grid>
           <Grid
             className="search-box"
@@ -517,45 +527,27 @@ class Profile extends Component {
                     to={{ marginTop: 0, opacity: 1 }}
                   >
                     {this.state.saved_recipes.map(recipe => (marginTop, index) => {
-                        return (
-                          <Grid item md={6} sm={4} xs={12} zeroMinWidth>
-                            <animated.div key={index} style={marginTop}>
-                              <SearchResult
-                                key={recipe.id}
-                                name={recipe.name}
-                                style={marginTop}
-                                description={recipe.description}
-                                images={recipe.images}
-                                r_id={recipe.id}
-                              />
-                            </animated.div>
-                          </Grid>
-                        );
-                      },)}
+                      return (
+                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <SearchResult
+                              key={recipe.id}
+                              name={recipe.name}
+                              style={marginTop}
+                              description={recipe.description}
+                              images={recipe.images}
+                              r_id={recipe.id}
+                            />
+                          </animated.div>
+                        </Grid>
+                      );
+                    },)}
                   </Trail>
                 </Grid>
               )}
 
               {ownedShow && myProfile && (
                 <Grid container>
-
-                  
-                  <Route
-                    render={({ history }) => (
-                      
-                      <Button
-                        variant="contained"
-                        color="default"
-                        className="post-comment-button"
-                        onClick={() => {
-                          history.push(`/exportrecipes`);
-                        }}
-                      >
-                        Export Recipes
-                      </Button>
-                    )}
-                  />
-
                   <Trail
                     native
                     keys={this.state.owned_recipes.map(item => item.id)}
@@ -563,21 +555,21 @@ class Profile extends Component {
                     to={{ marginTop: 0, opacity: 1 }}
                   >
                     {this.state.owned_recipes.map(recipe => (marginTop, index) => {
-                        return (
-                          <Grid item md={6} sm={4} xs={12} zeroMinWidth>
-                            <animated.div key={index} style={marginTop}>
-                              <SearchResult
-                                key={recipe.id}
-                                name={recipe.name}
-                                style={marginTop}
-                                description={recipe.description}
-                                images={recipe.images}
-                                r_id={recipe.id}
-                              />
-                            </animated.div>
-                          </Grid>
-                        );
-                      },)}
+                      return (
+                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <SearchResult
+                              key={recipe.id}
+                              name={recipe.name}
+                              style={marginTop}
+                              description={recipe.description}
+                              images={recipe.images}
+                              r_id={recipe.id}
+                            />
+                          </animated.div>
+                        </Grid>
+                      );
+                    },)}
                   </Trail>
                 </Grid>
               )}
