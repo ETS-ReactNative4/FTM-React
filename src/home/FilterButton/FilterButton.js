@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Menu, MenuItem } from '@material-ui/core';
 import { withStyles } from 'material-ui/styles';
 
@@ -20,7 +21,6 @@ class FilterButton extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
     const { active, anchorEl } = this.state;
     const open = Boolean(anchorEl);
     const { title } = this.props;
@@ -30,7 +30,7 @@ class FilterButton extends React.Component {
       </MenuItem>
     ));
     return (
-      <div style={{ height: '100%', width: '100%' }}>
+      <div style={{ width: '100%' }}>
         <Button
           aria-owns={open ? 'filter-button' : null}
           aria-haspopup="true"
@@ -46,5 +46,10 @@ class FilterButton extends React.Component {
     );
   }
 }
+
+FilterButton.propTypes = {
+  title: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+};
 
 export default FilterButton;

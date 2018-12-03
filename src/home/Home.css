@@ -3,7 +3,7 @@
   height: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 365px 48px auto;
+  grid-template-rows: 365px 50px 50px auto;
   grid-template-areas:
     ". . logo . ."
     ". search search search ."
@@ -18,7 +18,7 @@
 }
 
 .search-box {
-  height: 30px;
+  height: 100%;
   grid-area: search;
 }
 
@@ -38,12 +38,12 @@
 }
 
 .search-filters {
-  height: 100%;
+  width: 100%;
+  height: 50px;
   grid-area: filters;
 }
 
 .search-chips {
-  height: 100%;
   grid-area: chips;
 }
 
