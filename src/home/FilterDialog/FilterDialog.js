@@ -14,6 +14,7 @@ import {
 const styles = theme => ({});
 const initialState = {
   open: false,
+  isEditing: false,
   includes: [],
   excludes: [],
 };
@@ -31,18 +32,21 @@ class FilterDialog extends React.Component {
   };
 
   handleCancel = () => {
-    this.setState({ open: false, includes: [], excludes: [] });
+    this.setState({
+      open: false, includes: [], excludes: [], isEditing: false,
+    });
   };
 
   handleSave = () => {
     this.props.handleIngredientsFilter(this.state.includes, this.state.excludes);
-    this.setState({ open: false });
+    this.setState({ open: false, isEditing: false });
   };
 
   handleOnChangeIncludes = (event) => {
     const trimmedIncludes = event.target.value.replace(/\s/g, '-');
     this.setState((prevState, props) => ({
       includes: trimmedIncludes.split(','),
+      isEditing: true,
     }));
   };
 
@@ -50,22 +54,13 @@ class FilterDialog extends React.Component {
     const trimmedExcludes = event.target.value.replace(/\s/g, '-');
     this.setState((prevState, props) => ({
       excludes: trimmedExcludes.split(','),
-    }));
-  };
-  handleClearInclude = (event) => {
-    this.setState((prevState, props) => ({
-      includes: [],
-    }));
-  };
-
-  handleClearExclude = (event) => {
-    this.setState((prevState, props) => ({
-      excludes: [],
+      isEditing: true,
     }));
   };
 
   render() {
-    if (this.state.includes.length > 0 && this.state.excludes.length > 0) {
+    if (this.state.includes.length > 0 && this.state.excludes.length > 0 && !this.state.isEditing) {
+      console.log('resetting');
       this.setState((prevState, props) => ({
         includes: [],
         excludes: [],
@@ -91,7 +86,6 @@ class FilterDialog extends React.Component {
               id="include"
               label="Include"
               fullWidth
-              onFocus={event => this.handleClearInclude(event)}
               onChange={event => this.handleOnChangeIncludes(event)}
             />
             <TextField
@@ -99,7 +93,6 @@ class FilterDialog extends React.Component {
               id="exclude"
               label="Exclude"
               fullWidth
-              onFocus={event => this.handleClearExclude(event)}
               onChange={event => this.handleOnChangeExcludes(event)}
             />
           </DialogContent>

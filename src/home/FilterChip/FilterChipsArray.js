@@ -56,18 +56,14 @@ class FilterChipsArray extends React.Component {
     includes.forEach((element) => {
       if (newChipData.filter(potential => potential.label === element).length === 0) {
         if (newIncludes.filter(potential => potential.label === element).length === 0) {
-          if (newIncludes.filter(potential => potential.title === 'Include').length === 0) {
-            newIncludes.push({ key: 0, title: 'Include', label: element });
-          }
+          newIncludes.push({ key: 0, title: 'Include', label: element });
         }
       }
     });
     excludes.forEach((element) => {
       if (newChipData.filter(potential => potential.label === element).length === 0) {
         if (newExcludes.filter(potential => potential.label === element).length === 0) {
-          if (newExcludes.filter(potential => potential.title === 'Exclude').length === 0) {
-            newExcludes.push({ key: 0, title: 'Exclude', label: element });
-          }
+          newExcludes.push({ key: 0, title: 'Exclude', label: element });
         }
       }
     });
