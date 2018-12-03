@@ -16,14 +16,74 @@ class FilterChipsArray extends React.Component {
     chipData: [],
   };
 
-  handleAddFilterChip = (filterChip) => {
+  handleAddFilterChip = (chipTitle, chipLabel) => {
     const newChipData = this.state.chipData.slice();
-    newChipData.push({ key: 0, label: filterChip });
+    if (newChipData.length === 0) {
+      newChipData.push({ key: 0, title: chipTitle, label: chipLabel });
+    } else {
+      let newAdd = true;
+      newChipData.forEach((element) => {
+        if (chipTitle === element.title) {
+          if (chipLabel === element.label) {
+            newAdd = false;
+          }
+        }
+      });
+      if (newAdd) {
+        newChipData.push({ key: 0, title: chipTitle, label: chipLabel });
+      }
+    }
     const updatedChipData = [];
     newChipData.forEach((chip, index) => {
-      updatedChipData.push({ key: index, label: chip.label });
+      updatedChipData.push({ key: index, title: chip.title, label: chip.label });
     });
-    this.props.handleHasFilterChips(true);
+    if (updatedChipData.length > 0) {
+      this.props.handleHasFilterChips(true);
+    }
+    this.setState({ chipData: updatedChipData });
+  };
+
+  handleAddIngredientChips = (includes, excludes) => {
+    const newChipData = this.state.chipData.slice();
+    const updatedChipData = [];
+    if (newChipData.length === 0) {
+      const newIncludes = [];
+      const newExcludes = [];
+      includes.forEach((element) => {
+        if (newChipData.indexOf({ key: 0, title: 'Include', label: element }) < 0) {
+          newIncludes.push({ key: 0, title: 'Include', label: element });
+        }
+      });
+      excludes.forEach((element) => {
+        if (newChipData.indexOf({ key: 0, title: 'Exclude', label: element }) < 0) {
+          newExcludes.push({ key: 0, title: 'Exclude', label: element });
+        }
+      });
+      const newData = newIncludes.concat(newExcludes);
+      newData.forEach((chip, index) => {
+        updatedChipData.push({ key: index, title: chip.title, label: chip.label });
+      });
+    } else {
+      const newIncludes = [];
+      const newExcludes = [];
+      newChipData.forEach((element) => {
+        if (includes.indexOf(element.label) < 0) {
+          newIncludes.push({ key: 0, title: 'Include', label: element.label });
+        }
+      });
+      newChipData.forEach((element) => {
+        if (excludes.indexOf(element.label) < 0) {
+          newExcludes.push({ key: 0, title: 'Exclude', label: element.label });
+        }
+      });
+      const newData = newIncludes.concat(newExcludes);
+      newData.forEach((chip, index) => {
+        updatedChipData.push({ key: index, title: chip.title, label: chip.label });
+      });
+    }
+    if (updatedChipData.length > 0) {
+      this.props.handleHasFilterChips(true);
+    }
     this.setState({ chipData: updatedChipData });
   };
 
@@ -47,7 +107,7 @@ class FilterChipsArray extends React.Component {
           return (
             <Chip
               key={data.key}
-              label={data.label}
+              label={`${data.title}: ${data.label}`}
               onDelete={this.handleDelete(data)}
               className={classes.chip}
             />

@@ -21,6 +21,7 @@ import './Home.css';
 import { Menu } from 'material-ui';
 import FilterButton from './FilterButton/FilterButton';
 import FilterChipsArray from './FilterChip/FilterChipsArray';
+import FilterDialog from './FilterDialog/FilterDialog';
 
 const styles = {
   gridList: {
@@ -115,12 +116,16 @@ class Home extends Component {
     event.preventDefault();
   };
 
-  handleAddFilterChip = (filterChip) => {
-    this.filterChipsRef.current.handleAddFilterChip(filterChip);
+  handleAddFilterChip = (title, label) => {
+    this.filterChipsRef.current.handleAddFilterChip(title, label);
   };
 
   handleHasFilterChips = (value) => {
     this.setState({ hasFilterChips: value });
+  };
+
+  handleIngredientsFilter = (includes, excludes) => {
+    this.filterChipsRef.current.handleAddIngredientChips(includes, excludes);
   };
 
   render() {
@@ -229,11 +234,12 @@ class Home extends Component {
             items={['One', 'Two', 'Three', 'Four', 'Five']}
             handleAddFilterChip={this.handleAddFilterChip}
           />
-          <FilterButton
+          <FilterDialog handleIngredientsFilter={this.handleIngredientsFilter} />
+          {/* <FilterButton
             title="Ingredients"
             items={['Need to add dialog']}
             handleAddFilterChip={this.handleAddFilterChip}
-          />
+          /> */}
         </div>
 
         <div
