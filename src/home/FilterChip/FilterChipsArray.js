@@ -72,6 +72,7 @@ class FilterChipsArray extends React.Component {
     if (updatedChipData.length > 0) {
       this.props.handleHasFilterChips(true);
     }
+    console.log(updatedChipData);
     this.setState((prevState, props) => ({
       chipData: updatedChipData,
     }));

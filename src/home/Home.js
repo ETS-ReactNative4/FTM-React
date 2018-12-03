@@ -240,11 +240,6 @@ class Home extends Component {
             handleAddFilterChip={this.handleAddFilterChip}
           />
           <FilterDialog handleIngredientsFilter={this.handleIngredientsFilter} />
-          {/* <FilterButton
-            title="Ingredients"
-            items={['Need to add dialog']}
-            handleAddFilterChip={this.handleAddFilterChip}
-          /> */}
         </div>
 
         <div

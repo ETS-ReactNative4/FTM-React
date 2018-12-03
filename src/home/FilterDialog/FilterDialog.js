@@ -33,17 +33,28 @@ class FilterDialog extends React.Component {
 
   handleCancel = () => {
     this.setState({
-      open: false, includes: [], excludes: [], isEditing: false,
+      open: false,
+      includes: [],
+      excludes: [],
+      isEditing: false,
     });
   };
 
   handleSave = () => {
-    this.props.handleIngredientsFilter(this.state.includes, this.state.excludes);
+    const cleanIncludes = [];
+    this.state.includes.forEach((element) => {
+      cleanIncludes.push(element.trim());
+    });
+    const cleanExcludes = [];
+    this.state.excludes.forEach((element) => {
+      cleanExcludes.push(element.trim());
+    });
+    this.props.handleIngredientsFilter(cleanIncludes, cleanExcludes);
     this.setState({ open: false, isEditing: false });
   };
 
   handleOnChangeIncludes = (event) => {
-    const trimmedIncludes = event.target.value.replace(/\s/g, '-');
+    const trimmedIncludes = event.target.value.trim();
     this.setState((prevState, props) => ({
       includes: trimmedIncludes.split(','),
       isEditing: true,
@@ -51,7 +62,7 @@ class FilterDialog extends React.Component {
   };
 
   handleOnChangeExcludes = (event) => {
-    const trimmedExcludes = event.target.value.replace(/\s/g, '-');
+    const trimmedExcludes = event.target.value.trim();
     this.setState((prevState, props) => ({
       excludes: trimmedExcludes.split(','),
       isEditing: true,
