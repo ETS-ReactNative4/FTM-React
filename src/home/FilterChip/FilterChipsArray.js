@@ -40,61 +40,59 @@ class FilterChipsArray extends React.Component {
     if (updatedChipData.length > 0) {
       this.props.handleHasFilterChips(true);
     }
-    this.setState({ chipData: updatedChipData });
+    this.setState((prevState, props) => ({
+      chipData: updatedChipData,
+    }));
   };
 
   handleAddIngredientChips = (includes, excludes) => {
+    console.log('includes: ', includes);
+    console.log('excludes: ', excludes);
     const newChipData = this.state.chipData.slice();
     const updatedChipData = [];
-    if (newChipData.length === 0) {
-      const newIncludes = [];
-      const newExcludes = [];
-      includes.forEach((element) => {
-        if (newChipData.indexOf({ key: 0, title: 'Include', label: element }) < 0) {
-          newIncludes.push({ key: 0, title: 'Include', label: element });
+
+    const newIncludes = [];
+    const newExcludes = [];
+    includes.forEach((element) => {
+      if (newChipData.filter(potential => potential.label === element).length === 0) {
+        if (newIncludes.filter(potential => potential.label === element).length === 0) {
+          if (newIncludes.filter(potential => potential.title === 'Include').length === 0) {
+            newIncludes.push({ key: 0, title: 'Include', label: element });
+          }
         }
-      });
-      excludes.forEach((element) => {
-        if (newChipData.indexOf({ key: 0, title: 'Exclude', label: element }) < 0) {
-          newExcludes.push({ key: 0, title: 'Exclude', label: element });
+      }
+    });
+    excludes.forEach((element) => {
+      if (newChipData.filter(potential => potential.label === element).length === 0) {
+        if (newExcludes.filter(potential => potential.label === element).length === 0) {
+          if (newExcludes.filter(potential => potential.title === 'Exclude').length === 0) {
+            newExcludes.push({ key: 0, title: 'Exclude', label: element });
+          }
         }
-      });
-      const newData = newIncludes.concat(newExcludes);
-      newData.forEach((chip, index) => {
-        updatedChipData.push({ key: index, title: chip.title, label: chip.label });
-      });
-    } else {
-      const newIncludes = [];
-      const newExcludes = [];
-      newChipData.forEach((element) => {
-        if (includes.indexOf(element.label) < 0) {
-          newIncludes.push({ key: 0, title: 'Include', label: element.label });
-        }
-      });
-      newChipData.forEach((element) => {
-        if (excludes.indexOf(element.label) < 0) {
-          newExcludes.push({ key: 0, title: 'Exclude', label: element.label });
-        }
-      });
-      const newData = newIncludes.concat(newExcludes);
-      newData.forEach((chip, index) => {
-        updatedChipData.push({ key: index, title: chip.title, label: chip.label });
-      });
-    }
+      }
+    });
+    const newData = newIncludes.concat(newExcludes).concat(newChipData);
+    newData.forEach((chip, index) => {
+      updatedChipData.push({ key: index, title: chip.title, label: chip.label });
+    });
     if (updatedChipData.length > 0) {
       this.props.handleHasFilterChips(true);
     }
-    this.setState({ chipData: updatedChipData });
+    console.log('updated: ', updatedChipData);
+    this.setState((prevState, props) => ({
+      chipData: updatedChipData,
+    }));
   };
 
   handleDelete = data => () => {
-    this.setState((state) => {
+    this.setState((state, props) => {
       const chipData = [...state.chipData];
       const chipToDelete = chipData.indexOf(data);
       chipData.splice(chipToDelete, 1);
       if (chipData.length === 0) {
         this.props.handleHasFilterChips(false);
       }
+      console.log('delete: ', chipData);
       return { chipData };
     });
   };

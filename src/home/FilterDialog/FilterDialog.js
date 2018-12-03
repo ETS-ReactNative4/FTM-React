@@ -12,14 +12,20 @@ import {
 } from '@material-ui/core';
 
 const styles = theme => ({});
+const initialState = {
+  open: false,
+  includes: [],
+  excludes: [],
+};
 
 class FilterDialog extends React.Component {
-  state = {
-    open: false,
-    includes: [],
-    excludes: [],
-  };
-
+  constructor(props) {
+    super(props);
+    this.state = initialState;
+  }
+  reset() {
+    this.setState(initialState);
+  }
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -34,14 +40,38 @@ class FilterDialog extends React.Component {
   };
 
   handleOnChangeIncludes = (event) => {
-    this.setState({ includes: event.target.value.split(',') });
+    const trimmedIncludes = event.target.value.replace(/\s/g, '-');
+    this.setState((prevState, props) => ({
+      includes: trimmedIncludes.split(','),
+    }));
   };
 
   handleOnChangeExcludes = (event) => {
-    this.setState({ excludes: event.target.value.split(',') });
+    const trimmedExcludes = event.target.value.replace(/\s/g, '-');
+    this.setState((prevState, props) => ({
+      excludes: trimmedExcludes.split(','),
+    }));
+  };
+  handleClearInclude = (event) => {
+    this.setState((prevState, props) => ({
+      includes: [],
+    }));
+  };
+
+  handleClearExclude = (event) => {
+    this.setState((prevState, props) => ({
+      excludes: [],
+    }));
   };
 
   render() {
+    if (this.state.includes.length > 0 && this.state.excludes.length > 0) {
+      this.setState((prevState, props) => ({
+        includes: [],
+        excludes: [],
+      }));
+    }
+
     return (
       <div style={{ width: '100%', flex: '1' }}>
         <Button onClick={this.handleClickOpen} color="primary">
@@ -61,6 +91,7 @@ class FilterDialog extends React.Component {
               id="include"
               label="Include"
               fullWidth
+              onFocus={event => this.handleClearInclude(event)}
               onChange={event => this.handleOnChangeIncludes(event)}
             />
             <TextField
@@ -68,6 +99,7 @@ class FilterDialog extends React.Component {
               id="exclude"
               label="Exclude"
               fullWidth
+              onFocus={event => this.handleClearExclude(event)}
               onChange={event => this.handleOnChangeExcludes(event)}
             />
           </DialogContent>
@@ -76,7 +108,7 @@ class FilterDialog extends React.Component {
               Cancel
             </Button>
             <Button onClick={this.handleSave} color="primary">
-              Save
+              Add
             </Button>
           </DialogActions>
         </Dialog>
