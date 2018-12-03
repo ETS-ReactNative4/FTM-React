@@ -5,7 +5,8 @@
 }
 .recipe-num,
 .follower-num,
-.favorite-num {
+.favorite-num,
+.made-this-num {
   width: 100%;
   text-align: center;
   padding: 10px;
@@ -14,14 +15,16 @@
 }
 .recipe-num > .number,
 .follower-num > .number,
-.favorite-num > .number {
+.favorite-num > .number,
+.made-this-num > .number {
   font-size: 2em;
   margin-left: 10px;
 }
 
 .recipe-num span:last-child,
 .follower-num span:last-child,
-.favorite-num span:last-child {
+.favorite-num span:last-child,
+.made-this-num span:last-child {
   font-size: 1em;
   color: gray;
 }
