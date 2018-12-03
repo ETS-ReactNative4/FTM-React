@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from 'material-ui';
+import { withApollo, compose, Mutation } from 'react-apollo';
 import './CreateRecipe.css';
 import gql from 'graphql-tag';
 
@@ -52,6 +53,7 @@ class CreateRecipe extends Component {
     this.handleIngredients = this.handleIngredients.bind(this);
     this.handleInstructions = this.handleInstructions.bind(this);
     this.handleNotes = this.handleNotes.bind(this);
+    this.uploadFile = this.uploadFile.bind(this);
   }
 
   handleTitleChange = title => (event) => {
@@ -88,6 +90,33 @@ class CreateRecipe extends Component {
     await this.submitRecipe();
     // this.addToPublished(res.CreateRecipe.id);
   }
+
+  uploadFile = async () => {
+    console.log('upload a file');
+    /*
+    const file = e.target.files[0];
+    console.log(file);
+    const { data } = await this.props.client.mutate({
+      mutation: gql`
+        mutation uploadPhtoto($file: Upload!) {
+          uploadPhoto(file: $file) {
+            scalar
+          }
+        }
+      `,
+      variables: {
+        file,
+      },
+    });
+    console.log("uploaded file: ", data.uploadPhoto.filename);
+    */
+  };
+
+  UPLOAD_FILE = gql`
+    mutation uploadPhoto($file: Upload!) {
+      uploadPhoto(file: $file)
+    }
+  `;
 
   submitRecipe = async () => {
     try {
@@ -162,6 +191,22 @@ class CreateRecipe extends Component {
           spacing={styles.spacing}
           justify={'center'}
         >
+          <Mutation mutation={this.UPLOAD_FILE}>
+            {uploadFile => (
+              <input
+                type="file"
+                required
+                onChange={({
+                  target: {
+                    validity,
+                    files: [file]
+                  }
+                }) => {
+                  validity.valid && uploadFile({ variables: { file } });
+                }}
+              />
+            )}
+          </Mutation>
           <form className="recipe-form" onSubmit={this.submitRecipe}>
             <TextField
               id="textarea"
