@@ -18,12 +18,59 @@ class FilterChipsArray extends React.Component {
 
   handleAddFilterChip = (chipTitle, chipLabel) => {
     const newChipData = this.state.chipData.slice();
+
     newChipData.push({ key: 0, title: chipTitle, label: chipLabel });
     const updatedChipData = [];
     newChipData.forEach((chip, index) => {
       updatedChipData.push({ key: index, title: chip.title, label: chip.label });
     });
-    this.props.handleHasFilterChips(true);
+    if (updatedChipData.length > 0) {
+      this.props.handleHasFilterChips(true);
+    }
+    this.setState({ chipData: updatedChipData });
+  };
+
+  handleAddIngredientChips = (includes, excludes) => {
+    const newChipData = this.state.chipData.slice();
+    const updatedChipData = [];
+    if (newChipData.length === 0) {
+      const newIncludes = [];
+      const newExcludes = [];
+      includes.forEach((element) => {
+        if (newChipData.indexOf({ key: 0, title: 'Include', label: element }) < 0) {
+          newIncludes.push({ key: 0, title: 'Include', label: element });
+        }
+      });
+      excludes.forEach((element) => {
+        if (newChipData.indexOf({ key: 0, title: 'Exclude', label: element }) < 0) {
+          newExcludes.push({ key: 0, title: 'Exclude', label: element });
+        }
+      });
+      const newData = newIncludes.concat(newExcludes);
+      newData.forEach((chip, index) => {
+        updatedChipData.push({ key: index, title: chip.title, label: chip.label });
+      });
+    } else {
+      const newIncludes = [];
+      const newExcludes = [];
+      newChipData.forEach((element) => {
+        if (includes.indexOf(element.label) < 0) {
+          newIncludes.push({ key: 0, title: 'Include', label: element.label });
+        }
+      });
+      newChipData.forEach((element) => {
+        if (excludes.indexOf(element.label) < 0) {
+          newExcludes.push({ key: 0, title: 'Exclude', label: element.label });
+        }
+      });
+      const newData = newIncludes.concat(newExcludes);
+      newData.forEach((chip, index) => {
+        updatedChipData.push({ key: index, title: chip.title, label: chip.label });
+      });
+    }
+    if (updatedChipData.length > 0) {
+      this.props.handleHasFilterChips(true);
+    }
     this.setState({ chipData: updatedChipData });
   };
 

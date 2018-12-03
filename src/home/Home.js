@@ -124,6 +124,10 @@ class Home extends Component {
     this.setState({ hasFilterChips: value });
   };
 
+  handleIngredientsFilter = (includes, excludes) => {
+    this.filterChipsRef.current.handleAddIngredientChips(includes, excludes);
+  };
+
   render() {
     return (
       <div className="home-container">
@@ -230,7 +234,7 @@ class Home extends Component {
             items={['One', 'Two', 'Three', 'Four', 'Five']}
             handleAddFilterChip={this.handleAddFilterChip}
           />
-          <FilterDialog />
+          <FilterDialog handleIngredientsFilter={this.handleIngredientsFilter} />
           {/* <FilterButton
             title="Ingredients"
             items={['Need to add dialog']}

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   TextField,
@@ -15,17 +16,30 @@ const styles = theme => ({});
 class FilterDialog extends React.Component {
   state = {
     open: false,
+    includes: [],
+    excludes: [],
   };
 
   handleClickOpen = () => {
     this.setState({ open: true });
   };
 
-  handleClose = () => {
+  handleCancel = () => {
+    this.setState({ open: false, includes: [], excludes: [] });
+  };
+
+  handleSave = () => {
+    this.props.handleIngredientsFilter(this.state.includes, this.state.excludes);
     this.setState({ open: false });
   };
 
-  handleSave = () => {};
+  handleOnChangeIncludes = (event) => {
+    this.setState({ includes: event.target.value.split(',') });
+  };
+
+  handleOnChangeExcludes = (event) => {
+    this.setState({ excludes: event.target.value.split(',') });
+  };
 
   render() {
     return (
@@ -35,17 +49,30 @@ class FilterDialog extends React.Component {
         </Button>
         <Dialog
           open={this.state.open}
-          onClose={this.handleClose}
+          onClose={this.handleCancel}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Include/Exclude Ingredients</DialogTitle>
           <DialogContent>
-            <DialogContentText>Separate ingredients by white space.</DialogContentText>
-            <TextField autoFocus margin="dense" id="include" label="Include" fullWidth />
-            <TextField margin="dense" id="exclude" label="Exclude" fullWidth />
+            <DialogContentText>Separate ingredients by a single comma.</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="include"
+              label="Include"
+              fullWidth
+              onChange={event => this.handleOnChangeIncludes(event)}
+            />
+            <TextField
+              margin="dense"
+              id="exclude"
+              label="Exclude"
+              fullWidth
+              onChange={event => this.handleOnChangeExcludes(event)}
+            />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleCancel} color="primary">
               Cancel
             </Button>
             <Button onClick={this.handleSave} color="primary">
@@ -57,5 +84,8 @@ class FilterDialog extends React.Component {
     );
   }
 }
+FilterDialog.propTypes = {
+  handleIngredientsFilter: PropTypes.func.isRequired,
+};
 
 export default withStyles(styles)(FilterDialog);
