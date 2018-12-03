@@ -46,8 +46,6 @@ class FilterChipsArray extends React.Component {
   };
 
   handleAddIngredientChips = (includes, excludes) => {
-    console.log('includes: ', includes);
-    console.log('excludes: ', excludes);
     const newChipData = this.state.chipData.slice();
     const updatedChipData = [];
 
@@ -74,7 +72,6 @@ class FilterChipsArray extends React.Component {
     if (updatedChipData.length > 0) {
       this.props.handleHasFilterChips(true);
     }
-    console.log('updated: ', updatedChipData);
     this.setState((prevState, props) => ({
       chipData: updatedChipData,
     }));
@@ -88,7 +85,6 @@ class FilterChipsArray extends React.Component {
       if (chipData.length === 0) {
         this.props.handleHasFilterChips(false);
       }
-      console.log('delete: ', chipData);
       return { chipData };
     });
   };

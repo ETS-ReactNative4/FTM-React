@@ -83,6 +83,11 @@ class Home extends Component {
                     name
                     description
                     images
+                    cookTime
+                    prepTime
+                    difficulty
+                    rating
+                    ingredients
                   }
                 }`,
     });
