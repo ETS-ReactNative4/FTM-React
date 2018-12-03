@@ -56,12 +56,14 @@ class Profile extends Component {
       user_id: null,
       owned_recipes: [],
       saved_recipes: [],
+      made_recipes: [],
       owned_recipes_length: null,
       saved_recipes_length: null,
+      made_recipes_length: null,
       following: [],
       query: '',
       currently_viewing:
-        'saved' /** ********** saved, owned, or followers *************** */,
+        'saved' /** ********** saved, owned, followers, or madethis *************** */,
       searchSavedOrOwned: true, // search saved by default, so false means search owned
     };
 
@@ -90,8 +92,13 @@ class Profile extends Component {
       this.setState({
         searchSavedOrOwned: false,
       });
+    } else if (this.state.currently_viewing === 'madethis') {
+      this.setState({
+        searchSavedOrOwned: false,
+      });
     }
   }
+
   handleExport = () => {
     console.log('handle export');
     <RecipePDF />
@@ -306,6 +313,7 @@ class Profile extends Component {
         username: user.username,
         owned_recipes: user.ownedRecipes,
         saved_recipes: user.savedRecipes,
+        made_recipes: user.madeRecipes,
         following: user.following,
       },
       () => this.setLengths(),
@@ -316,6 +324,7 @@ class Profile extends Component {
     this.setState({
       owned_recipes_length: this.state.owned_recipes.length,
       saved_recipes_length: this.state.saved_recipes.length,
+      made_recipes_length: this.state.made_recipes.length,
     });
   }
 
@@ -335,6 +344,7 @@ class Profile extends Component {
               username
               ownedRecipes {name id description images}
               savedRecipes {name id description images}
+              madeRecipes {name id description images}
               following {id username}
               followers {id username}
             }
@@ -368,6 +378,7 @@ class Profile extends Component {
               username
               ownedRecipes {name id description images}
               savedRecipes {name id description images}
+              madeRecipes {name id description images}
             }
           }
         `,
@@ -393,19 +404,29 @@ class Profile extends Component {
     let savedShow = true;
     let ownedShow = false;
     let followShow = false;
+    let madeThisShow = false;
     if (this.state.currently_viewing === 'saved') {
       savedShow = true;
       ownedShow = false;
       followShow = false;
+      madeThisShow = false;
     } else if (this.state.currently_viewing === 'owned') {
       savedShow = false;
       ownedShow = true;
       followShow = false;
+      madeThisShow = false;
     } else if (this.state.currently_viewing === 'followers') {
       savedShow = false;
       ownedShow = false;
       followShow = true;
+      madeThisShow = false;
+    } else if (this.state.currently_viewing === 'madethis') {
+      savedShow = false;
+      ownedShow = false;
+      followShow = false;
+      madeThisShow = true;
     }
+    
 
     let myProfile = true;
     if (this.props.match.params.username) {
@@ -442,6 +463,7 @@ class Profile extends Component {
             <Social
               owned_recipes_number={this.state.owned_recipes_length}
               saved_recipes_number={this.state.saved_recipes_length}
+              made_this_number={this.state.made_recipes_length}
               followers_number="0"
               showResults={this.showResults}
               my_profile={myProfile}
@@ -555,6 +577,34 @@ class Profile extends Component {
                     to={{ marginTop: 0, opacity: 1 }}
                   >
                     {this.state.owned_recipes.map(recipe => (marginTop, index) => {
+                      return (
+                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <SearchResult
+                              key={recipe.id}
+                              name={recipe.name}
+                              style={marginTop}
+                              description={recipe.description}
+                              images={recipe.images}
+                              r_id={recipe.id}
+                            />
+                          </animated.div>
+                        </Grid>
+                      );
+                    },)}
+                  </Trail>
+                </Grid>
+              )}
+
+              {madeThisShow && (
+                <Grid container>
+                  <Trail
+                    native
+                    keys={this.state.made_recipes.map(item => item.id)}
+                    from={{ marginTop: 500, opacity: 1 }}
+                    to={{ marginTop: 0, opacity: 1 }}
+                  >
+                    {this.state.made_recipes.map(recipe => (marginTop, index) => {
                       return (
                         <Grid item md={6} sm={4} xs={12} zeroMinWidth>
                           <animated.div key={index} style={marginTop}>

@@ -9,6 +9,7 @@ class Social extends Component {
     this.state = {
       owned_recipes_number: null,
       saved_recipes_number: null,
+      made_this_number: null,
       followers_number: null,
       my_profile: null,
     };
@@ -29,6 +30,10 @@ class Social extends Component {
             <Icon>library_books</Icon>
             <span className="number">{this.props.saved_recipes_number}</span><br />
             <span>Saved Recipes</span>
+          </Card>
+          <Card className="made-this-num" onClick={() => this.props.showResults('madethis')}>
+            <span className="number">{this.props.made_this_number}</span><br />
+            <span>I Made These!</span>
           </Card>
           {this.props.my_profile &&
             <Card className="favorite-num" onClick={() => this.props.showResults('followers')}>
