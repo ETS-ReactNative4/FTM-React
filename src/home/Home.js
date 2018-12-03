@@ -44,6 +44,7 @@ class Home extends Component {
     super(props);
     this.state = {
       query: '',
+      filters: [],
       recipes: [],
       loading: false,
       showFilter: false,
@@ -77,19 +78,24 @@ class Home extends Component {
     const { client } = this.props;
     const { data } = await client.query({
       query: gql`
-                query {
-                  searchAllRecipes(query: "${this.state.query}") {
-                    id
-                    name
-                    description
-                    images
-                    cookTime
-                    prepTime
-                    difficulty
-                    rating
-                    ingredients
-                  }
-                }`,
+        query searchAllRecipes($query: String, $filters: [SearchFilter]) {
+          searchAllRecipes(query: $query, filters: $filters) {
+            id
+            name
+            description
+            images
+            cookTime
+            prepTime
+            difficulty
+            rating
+            ingredients
+          }
+        }
+      `,
+      variables: {
+        query: this.state.query,
+        filters: this.state.filters,
+      },
     });
     this.setState({
       loading: true,
@@ -123,6 +129,32 @@ class Home extends Component {
 
   handleAddFilterChip = (title, label) => {
     this.filterChipsRef.current.handleAddFilterChip(title, label);
+    const currentFilters = this.state.filters;
+    switch (title) {
+    case 'Cook Time':
+      switch (label) {
+      case '<= 10 min':
+        currentFilters.push({ field: 'cookTime', operator: 'LTE', value: ['10'] });
+        break;
+      case '20 min':
+        currentFilters.push({ field: 'cookTime', operator: 'LTE', value: ['20'] });
+        break;
+      case '45 min':
+        currentFilters.push({ field: 'cookTime', operator: 'LTE', value: ['45'] });
+        break;
+      case '>60 min':
+        currentFilters.push({ field: 'cookTime', operator: 'GTE', value: ['60'] });
+        break;
+      default:
+      }
+      this.setState({ filter: currentFilters });
+      console.log(this.state.filters);
+      break;
+    case 'Prep. Time':
+    case 'Difficulty':
+    case 'Rating':
+    default:
+    }
   };
 
   handleHasFilterChips = (value) => {
