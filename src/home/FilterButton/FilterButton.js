@@ -1,5 +1,14 @@
-import React, { Component } from 'react';
-import { Button, Menu, MenuItem } from '@material-ui/core';
+import React from 'react';
+import PropTypes from 'prop-types';
+import {
+  Button,
+  MenuList,
+  MenuItem,
+  ClickAwayListener,
+  Popper,
+  Grow,
+  Paper,
+} from '@material-ui/core';
 import { withStyles } from 'material-ui/styles';
 
 class FilterButton extends React.Component {
@@ -15,36 +24,67 @@ class FilterButton extends React.Component {
     this.setState({ anchorEl: event.currentTarget });
   };
 
-  handleClose = () => {
+  handleClose = (item, event) => {
+    if (!(item instanceof MouseEvent)) {
+      console.log(item);
+    }
+    this.setState({ anchorEl: null });
+  };
+
+  handleNewChip = (item) => {
+    if (!(item instanceof MouseEvent)) {
+      // console.log(this.props);
+      this.props.handleAddFilterChip(item);
+    }
     this.setState({ anchorEl: null });
   };
 
   render() {
-    const { classes } = this.props;
     const { active, anchorEl } = this.state;
     const open = Boolean(anchorEl);
     const { title } = this.props;
-    const listItems = this.props.items.map((link, index) => (
-      <MenuItem key={index} onClick={this.handleClose}>
-        {link}
+    const listItems = this.props.items.map((item, index) => (
+      <MenuItem key={index} onClick={event => this.handleNewChip(item)}>
+        {item}
       </MenuItem>
     ));
     return (
-      <div style={{ height: '100%', width: '100%' }}>
+      <div style={{ width: '100%', flex: '1' }}>
         <Button
-          aria-owns={open ? 'filter-button' : null}
+          buttonRef={(node) => {
+            this.anchorEl = node;
+          }}
+          style={{ justifySelf: 'center' }}
+          aria-owns={open ? 'filter-list-grow' : null}
           aria-haspopup="true"
           onClick={this.handleMenu}
           color="primary"
         >
           {title}
         </Button>
-        <Menu id="filter-button" anchorEl={anchorEl} open={open} onClose={this.handleChange}>
-          {listItems}
-        </Menu>
+        <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              id="filter-list-grow"
+              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+            >
+              <Paper>
+                <ClickAwayListener onClickAway={this.handleClose}>
+                  <MenuList>{listItems}</MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
       </div>
     );
   }
 }
+
+FilterButton.propTypes = {
+  title: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+};
 
 export default FilterButton;
