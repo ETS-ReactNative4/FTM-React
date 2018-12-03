@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Typography, Paper } from 'material-ui/core';
+import { Button, Typography, Paper } from '@material-ui/core';
 import './FilterTab.css';
 
 const FilterTab = ({ filter, color }) => (
   <Paper>
     <div className="filter-root">
-      <Button variant="raised" color="primary" className="filter-button">
+      <Button variant="contained" color="primary" className="filter-button">
         <Typography className="filter-title" variant="button">
           {filter}
         </Typography>
@@ -17,7 +17,7 @@ const FilterTab = ({ filter, color }) => (
 
 FilterTab.propTypes = {
   filter: PropTypes.string,
-  color: PropTypes.string,
+  color: PropTypes.string
 };
 
 export default FilterTab;

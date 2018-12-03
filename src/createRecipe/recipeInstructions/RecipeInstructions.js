@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Grid, List, ListItem, Checkbox, Typography } from 'material-ui';
+import { Card, Grid, List, ListItem, Checkbox, Typography } from '@material-ui/core';
 import './RecipeInstructions.css';
 
 class RecipeInstructions extends Component {

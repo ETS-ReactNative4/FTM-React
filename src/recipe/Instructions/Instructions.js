@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
-import { Card, Grid, List, ListItem, Checkbox, Typography } from '@material-ui/core';
+import {
+  Card,
+  Grid,
+  List,
+  ListItem,
+  Checkbox,
+  Typography,
+} from '@material-ui/core';
 import './Instructions.css';
 
 class RecipeInstructions extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -17,11 +23,14 @@ class RecipeInstructions extends Component {
         <Typography className="instructions-title"> Directions </Typography>
         <Grid item>
           <List className="instructions-list">
-            {
-              this.props.value.map((name, index) => {
-                return <ListItem key={index}><Checkbox />{name}</ListItem>;
-              })
-            }
+            {this.props.value.map((name, index) => {
+              return (
+                <ListItem key={index}>
+                  <Checkbox />
+                  {name}
+                </ListItem>
+              );
+            })}
           </List>
         </Grid>
       </Card>

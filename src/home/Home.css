@@ -7,6 +7,8 @@
   grid-template-areas:
     ". . logo . ."
     ". search search search ."
+    ". filters filters filters ."
+    ". chips chips chips ."
     ". results results results .";
 }
 
@@ -33,6 +35,16 @@
   will-change: opacity;
   height: 100%;
   grid-area: results;
+}
+
+.search-filters {
+  height: 100%;
+  grid-area: filters;
+}
+
+.search-chips {
+  height: 100%;
+  grid-area: chips;
 }
 
 .test {

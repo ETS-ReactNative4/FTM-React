@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from 'material-ui';
 import './CreateRecipe.css';
-import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
-
-const client = new ApolloClient({
-  uri: 'http://api.foodtomake.com/graphql',
-});
 
 const styles = {
   spacing: 24,
@@ -29,7 +24,6 @@ const styles = {
     },
   },
 };
-
 
 class CreateRecipe extends Component {
   constructor(props) {
@@ -69,17 +63,17 @@ class CreateRecipe extends Component {
     this.setState({
       ingredients: event.target.value.split(','),
     });
-  }
+  };
   handleInstructions = instructions => (event) => {
     this.setState({
       instructions: event.target.value.split(','),
     });
-  }
+  };
   handleNotes = notes => (event) => {
     this.setState({
       notes: event.target.value.split(','),
     });
-  }
+  };
   handleChange = name => (event) => {
     this.setState({
       [name]: event.target.value,
@@ -87,12 +81,12 @@ class CreateRecipe extends Component {
   };
 
   async handleSubmit(e) {
-    //e.preventDefault();
-    //const { title } = this.state.title;
-    //const { dispatch } = this.props;
-    
-    const res = await this.submitRecipe();
-    //this.addToPublished(res.CreateRecipe.id);
+    // e.preventDefault();
+    // const { title } = this.state.title;
+    // const { dispatch } = this.props;
+
+    await this.submitRecipe();
+    // this.addToPublished(res.CreateRecipe.id);
   }
 
   submitRecipe = async () => {
@@ -107,26 +101,26 @@ class CreateRecipe extends Component {
         ingredients: this.state.ingredients,
         instructions: this.state.instructions,
         notes: this.state.notes,
-        sourceURL: "www.foodtomake.com",
+        sourceURL: 'www.foodtomake.com',
         servings: this.state.servings,
         user_id: userId,
-        
       };
       console.log(data.name);
       console.log(data.ingredients);
       const result = client
         .mutate({
           mutation: gql`
-          mutation CreateRecipe($recipe: NewRecipeInput!) {           
-            createRecipe(
-              recipe: $recipe
-            ) {
-              id
-              name
-              author {id username}
+            mutation CreateRecipe($recipe: NewRecipeInput!) {
+              createRecipe(recipe: $recipe) {
+                id
+                name
+                author {
+                  id
+                  username
+                }
+              }
             }
-          }
-        `,
+          `,
           variables: {
             recipe: {
               description: data.description,
@@ -157,14 +151,18 @@ class CreateRecipe extends Component {
       console.log(err);
       return {};
     }
-  }
+  };
 
   render() {
     return (
       <div>
-        <Grid className='create-recipe-container' container spacing={styles.spacing} justify={'center'}>
-          <form className='recipe-form' onSubmit={this.submitRecipe} >
-
+        <Grid
+          className="create-recipe-container"
+          container
+          spacing={styles.spacing}
+          justify={'center'}
+        >
+          <form className="recipe-form" onSubmit={this.submitRecipe}>
             <TextField
               id="textarea"
               placeholder="Recipe Title"
@@ -201,7 +199,7 @@ class CreateRecipe extends Component {
               className="difficulty"
               onChange={this.handleChange('difficulty')}
             />
-             <TextField
+            <TextField
               id="textarea"
               label="Servings"
               fullWidth
@@ -230,9 +228,7 @@ class CreateRecipe extends Component {
               onChange={this.handleNotes('Notes')}
             />
 
-            <Button onClick={this.handleSubmit}>
-              Submit
-            </Button>
+            <Button onClick={this.handleSubmit}>Submit</Button>
           </form>
         </Grid>
       </div>

@@ -9,7 +9,6 @@ import {
   Paper,
   FormControl,
   withStyles,
-  GridList,
   Grid,
 } from '@material-ui/core';
 import { FilterList, Close } from '@material-ui/icons';
@@ -19,6 +18,9 @@ import gql from 'graphql-tag';
 import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
+import { Menu } from 'material-ui';
+import FilterButton from './FilterButton/FilterButton';
+import FilterChipsArray from './FilterChip/FilterChipsArray';
 
 const styles = {
   gridList: {
@@ -27,6 +29,12 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     overflow: 'hidden',
+  },
+  heading: {},
+  secondaryHeading: {},
+  column: {
+    flexBasis: '33.33%',
+    width: '30%',
   },
 };
 
@@ -38,6 +46,11 @@ class Home extends Component {
       recipes: [],
       loading: false,
       showFilter: false,
+      anchorElCookTime: null,
+      anchorElPrepTime: null,
+      anchorElDifficulty: null,
+      anchorElRating: null,
+      anchorElIngredients: null,
     };
   }
 
@@ -106,7 +119,6 @@ class Home extends Component {
   };
 
   render() {
-    const { classes } = this.props;
     return (
       <div className="home-container">
         <Spring
@@ -149,7 +161,29 @@ class Home extends Component {
             </div>
           )}
         </Spring>
-
+        <div
+          className="search-filters"
+          style={
+            this.state.recipes.length > 0
+              ? {
+                marginTop: 10,
+                display: 'flex',
+              }
+              : {
+                marginTop: 210,
+                display: 'flex',
+              }
+          }
+        >
+          <FilterButton title="Cook Time" items={['<= 10 min', '20 min', '45 min', '>60 min']} />
+          <FilterButton title="Prep. Time" items={['<= 10 min', '20 min', '45 min', '>60 min']} />
+          <FilterButton title="Difficulty" items={['One', 'Two', 'Three', 'Four', 'Five']} />
+          <FilterButton title="Rating" items={['One', 'Two', 'Three', 'Four', 'Five']} />
+          <FilterButton title="Ingredients" items={['Need to add dialog']} />
+        </div>
+        <div className="search-chips" style={{ display: 'flex' }}>
+          <FilterChipsArray />
+        </div>
         <div
           className="search-results"
           style={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 200 }}
@@ -164,7 +198,7 @@ class Home extends Component {
               >
                 {this.state.recipes.map(recipe => (marginTop, index) => {
                   return (
-                    <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                    <Grid item md={4} sm={6} xs={6} zeroMinWidth>
                       <animated.div key={index} style={marginTop}>
                         <SearchResult
                           key={recipe.id}

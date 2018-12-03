@@ -17,8 +17,7 @@ import RecipePicture from './Picture/Picture';
 import Notes from './Notes/Notes';
 import Comments from './Comments/Comments';
 import withLocalData from '../withLocalData';
-
-const jwt = require('jsonwebtoken');
+import Fraction from 'fraction.js';
 
 const styles = {
   spacing: 24,
@@ -29,7 +28,7 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 8,
+      title: 8
     },
     sm: {
       picture: 4,
@@ -37,15 +36,16 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 8,
-    },
-  },
+      title: 8
+    }
+  }
 };
 
 class Recipe extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      scale: 1,
       ingredients: [],
       instructions: [],
       description: null,
@@ -66,7 +66,7 @@ class Recipe extends Component {
       new_note: null,
       new_comment: null,
       note_dialog_open: false,
-      comment_dialog_open: false,
+      comment_dialog_open: false
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
@@ -102,15 +102,15 @@ class Recipe extends Component {
     this.setState({ comment_dialog_open: false });
   };
 
-  handleNoteInput = (event) => {
+  handleNoteInput = event => {
     this.setState({
-      new_note: event.target.value,
+      new_note: event.target.value
     });
   };
 
-  handleCommentInput = (event) => {
+  handleCommentInput = event => {
     this.setState({
-      new_comment: event.target.value,
+      new_comment: event.target.value
     });
   };
 
@@ -123,7 +123,7 @@ class Recipe extends Component {
       const { client, userId } = this.props;
       const data = {
         user_id: userId,
-        recipe_id: this.state.recipe_id,
+        recipe_id: this.state.recipe_id
       };
       console.log(this.state.title);
       console.log(userId);
@@ -131,20 +131,24 @@ class Recipe extends Component {
         .query({
           query: gql`
           query {
-            searchSavedRecipes(userId: "${userId}" query: "${this.state.title}") {
+            searchSavedRecipes(userId: "${userId}" query: "${
+            this.state.title
+          }") {
               id
               name
             }
           }`,
-          fetchPolicy: 'network-only',
+          fetchPolicy: 'network-only'
         })
-        .then((result) => {
+        .then(result => {
           if (result.data.searchSavedRecipes.length === 0) {
             console.log(result.data.searchSavedRecipes);
             console.log('adding to empty');
             return false;
           } else if (
-            result.data.searchSavedRecipes.filter(recipe => recipe.id === data.recipe_id)
+            result.data.searchSavedRecipes.filter(
+              recipe => recipe.id === data.recipe_id
+            )
           ) {
             console.log('already exist');
             return true;
@@ -163,9 +167,9 @@ class Recipe extends Component {
       const { client, userId } = this.props;
       const data = {
         user_id: userId,
-        recipe_id: this.state.recipe_id,
+        recipe_id: this.state.recipe_id
       };
-      this.recipeAlreadySaved().then((result) => {
+      this.recipeAlreadySaved().then(result => {
         if (result) {
           console.log('exists');
         } else {
@@ -181,9 +185,9 @@ class Recipe extends Component {
               }
             }
           `,
-          fetchPolicy: 'no-cache',
+              fetchPolicy: 'no-cache'
             })
-            .then((result) => {
+            .then(result => {
               return result.data.recipeById;
             });
           return result;
@@ -201,7 +205,7 @@ class Recipe extends Component {
       const { client, userId } = this.props;
       const data = {
         user_id: userId,
-        recipe_id: this.state.recipe_id,
+        recipe_id: this.state.recipe_id
       };
       const result = client
         .mutate({
@@ -212,9 +216,9 @@ class Recipe extends Component {
               recipeId: "${data.recipe_id}"
             )
           }
-        `,
+        `
         })
-        .then((result) => {
+        .then(result => {
           return result.data;
         });
       return result;
@@ -227,9 +231,9 @@ class Recipe extends Component {
     // append the new note to the current ones, then use callback to make api call
     this.setState(
       previousState => ({
-        notes: [...previousState.notes, this.state.new_note],
+        notes: [...previousState.notes, this.state.new_note]
       }),
-      this.addNote,
+      this.addNote
     );
   }
 
@@ -238,7 +242,7 @@ class Recipe extends Component {
       const { client } = this.props;
       const data = {
         notes: this.state.notes,
-        recipe_id: this.state.recipe_id,
+        recipe_id: this.state.recipe_id
       };
       const result = client
         .mutate({
@@ -256,11 +260,11 @@ class Recipe extends Component {
         `,
           variables: {
             recipe: {
-              notes: data.notes,
-            },
-          },
+              notes: data.notes
+            }
+          }
         })
-        .then((result) => {
+        .then(result => {
           this.handleDialogClose();
           return result.data;
         });
@@ -274,9 +278,9 @@ class Recipe extends Component {
     // append the new comment to the current ones, then use callback to make api call
     this.setState(
       previousState => ({
-        comments: [...previousState.comments, this.state.new_comment],
+        comments: [...previousState.comments, this.state.new_comment]
       }),
-      this.postComment,
+      this.postComment
     );
   }
 
@@ -285,7 +289,7 @@ class Recipe extends Component {
       const { client } = this.props;
       const data = {
         comments: this.state.comments,
-        recipe_id: this.state.recipe_id,
+        recipe_id: this.state.recipe_id
       };
       const result = client
         .mutate({
@@ -303,11 +307,11 @@ class Recipe extends Component {
         `,
           variables: {
             recipe: {
-              comments: data.comments,
-            },
-          },
+              comments: data.comments
+            }
+          }
         })
-        .then((result) => {
+        .then(result => {
           this.handleCommentClose();
           return result.data;
         });
@@ -323,7 +327,7 @@ class Recipe extends Component {
 
   fetchRecipe = async () => {
     const data = {
-      recipe_id: this.state.recipe_id,
+      recipe_id: this.state.recipe_id
     };
     try {
       const { client } = this.props;
@@ -356,9 +360,9 @@ class Recipe extends Component {
               author {username}
             }
           }
-        `,
+        `
         })
-        .then((result) => {
+        .then(result => {
           console.log('recipe result: ', result.data.recipeById);
           return result.data.recipeById;
         });
@@ -383,16 +387,45 @@ class Recipe extends Component {
       description: recipe.description,
       sourceURL: recipe.sourceURL,
       servings: recipe.servings,
+      scale: recipe.servings,
       stars: Math.round(recipe.rating),
       notes: recipe.notes,
-      comments: recipe.comments,
+      comments: recipe.comments
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
-        authorImage: 'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png',
+        authorImage:
+          'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png'
       });
     }
   }
+
+  handleScaleChange = ({ target: { value } }) => {
+    if (!value || Number(value) < 1) {
+      this.setState({ scale: 1 });
+      return;
+    }
+    this.setState({ scale: value });
+  };
+
+  getScaledIngredients = () => {
+    return this.state.ingredients.map(ingredient => {
+      // eslint-disable-next-line
+      const reg = /[0-9]+[0-9]*([\/][0-9]+[0-9]*)*/g;
+      let result;
+      let newIngredient = ingredient;
+      const scale = new Fraction(
+        this.state.scale,
+        this.state.servings
+      ).valueOf();
+      while ((result = reg.exec(ingredient)) !== null) {
+        const num = result[0];
+        const newNum = new Fraction(num).mul(scale).toFraction(true);
+        newIngredient = newIngredient.replace(num, newNum.toString());
+      }
+      return newIngredient;
+    });
+  };
 
   render() {
     // don't render until we have data loaded
@@ -408,8 +441,18 @@ class Recipe extends Component {
     return (
       <div>
         <Notes notes={this.state.notes} />
-        <Grid className="pic-des-container" container spacing={styles.spacing} justify={'center'}>
-          <Grid className="picture" item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
+        <Grid
+          className="pic-des-container"
+          container
+          spacing={styles.spacing}
+          justify={'center'}
+        >
+          <Grid
+            className="picture"
+            item
+            xs={styles.sizes.xs.picture}
+            sm={styles.sizes.sm.picture}
+          >
             <RecipePicture
               title={this.state.title}
               stars={this.state.stars}
@@ -424,7 +467,12 @@ class Recipe extends Component {
           >
             <RecipeDescription desc={this.state.description} />
           </Grid>
-          <Grid className="info" item xs={styles.sizes.xs.author} sm={styles.sizes.sm.author}>
+          <Grid
+            className="info"
+            item
+            xs={styles.sizes.xs.author}
+            sm={styles.sizes.sm.author}
+          >
             <RecipeInfo
               authorImage={this.state.authorImage}
               authorName={this.state.author}
@@ -432,6 +480,8 @@ class Recipe extends Component {
               cookTime={this.state.cookTime}
               difficulty={this.state.difficulty}
               tags={this.state.tags}
+              onScaleChange={this.handleScaleChange}
+              servings={this.state.scale}
             />
           </Grid>
           <Grid
@@ -441,7 +491,7 @@ class Recipe extends Component {
             sm={styles.sizes.sm.instructions}
           >
             <RecipeIngredients
-              ingredients={this.state.ingredients}
+              ingredients={this.getScaledIngredients()}
               servings={this.state.servings}
             />
           </Grid>
@@ -534,7 +584,11 @@ class Recipe extends Component {
                   <Button onClick={this.handleDialogClose} color="primary">
                     Cancel
                   </Button>
-                  <Button onClick={this.noteSubmit} color="primary" variant="contained">
+                  <Button
+                    onClick={this.noteSubmit}
+                    color="primary"
+                    variant="contained"
+                  >
                     Add Note
                   </Button>
                 </DialogActions>
@@ -585,7 +639,9 @@ class Recipe extends Component {
                   className="comment-dialog"
                   fullWidth={true}
                 >
-                  <DialogTitle id="comment-dialog-title">New Comment</DialogTitle>
+                  <DialogTitle id="comment-dialog-title">
+                    New Comment
+                  </DialogTitle>
                   <DialogContent>
                     <TextField
                       autoFocus
@@ -601,7 +657,11 @@ class Recipe extends Component {
                     <Button onClick={this.handleCommentClose} color="primary">
                       Cancel
                     </Button>
-                    <Button onClick={this.commentSubmit} color="primary" variant="contained">
+                    <Button
+                      onClick={this.commentSubmit}
+                      color="primary"
+                      variant="contained"
+                    >
                       Post Comment
                     </Button>
                   </DialogActions>
@@ -619,5 +679,5 @@ class Recipe extends Component {
 
 export default compose(
   withLocalData,
-  withApollo,
+  withApollo
 )(Recipe);

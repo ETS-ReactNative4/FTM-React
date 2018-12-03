@@ -4,21 +4,20 @@ import Home from './home/Home';
 import Recipe from './recipe/Recipe';
 import CreateRecipe from './createRecipe/CreateRecipe';
 import Login from './login/Login';
-import Logs from './logs/Logs';
-import AddLog from './addlog/AddLog';
 import Profile from './profile/Profile';
 import Signup from './signup/Signup';
 import CallbackReceiver from './callback/CallbackReceiver';
 import SignOut from './signOut/SignOut';
 import RecipePDF from './profile/PDF/RecipePDF';
 import withLocalData from './withLocalData';
+import helpPage from './helpPage/helpPage';
 
 class App extends Component {
   render() {
     console.log(this.props);
     const { token } = this.props;
     return (
-      <div style={{ width: '100vw', height: '100vh' }}>
+      <div style={{ width: '100%', height: '100vh' }}>
         <Switch>
           <Route exact path="/" component={() => <Home token={token} />} />
           <Route exact path="/recipe" component={Recipe} />
@@ -26,12 +25,11 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/profile/:username" component={Profile} />
-          <Route path="/logs" component={Logs} />
-          <Route path="/addlog" component={AddLog} />
           <Route path="/signup" component={Signup} />
           <Route path="/signout" component={SignOut} />
           <Route path="/createrecipe" component={CreateRecipe} />
           <Route path="/exportrecipes" component={RecipePDF} />
+          <Route path="/helpPage" component={helpPage} />
           <Route
             path="/auth/google/callback"
             component={() => {

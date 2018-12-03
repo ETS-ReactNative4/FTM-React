@@ -11,35 +11,48 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
+import { decode } from 'jsonwebtoken';
 
-const cache = new InMemoryCache();
 
-const client = new ApolloClient({
-  link: ApolloLink.from([
-    withClientState({
-      cache,
-      defaults: {
-        token: '',
-        userId: ''
-      }
-    }),
-    new HttpLink({
-      uri: 'https://api.foodtomake.com/graphql'
-    })
-  ]),
-  cache
-});
 
 const theme = createMuiTheme({
   palette: {
-    primary: red
-  }
+    primary: red,
+  },
+  typography: {
+    useNextVariants: true,
+  },
 });
 class Root extends Component {
+  constructor(props) {
+    super(props);
+    const token = localStorage.getItem('FTM_TOKEN') || '';
+    let userId = '';
+    if (token) {
+      userId = decode(token).id;
+    }
+    const cache = new InMemoryCache();
+    this.client = new ApolloClient({
+      link: ApolloLink.from([
+        withClientState({
+          cache,
+          defaults: {
+            token,
+            userId,
+          },
+        }),
+        new HttpLink({
+          uri: 'https://api.foodtomake.com/graphql',
+        }),
+      ]),
+      cache,
+    });
+  }
+
   render() {
     return (
       <div className="app-container">
-        <ApolloProvider client={client}>
+        <ApolloProvider client={this.client}>
           <BrowserRouter>
             <MuiThemeProvider theme={theme}>
               <div className="app-bar">
