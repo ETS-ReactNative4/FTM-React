@@ -1,25 +1,27 @@
 import React, { Component } from 'react';
-import { Document, Page } from 'react-pdf';
+import { Document, Page } from 'react-pdf/dist/entry.webpack';
+import file from '../../recipes.pdf';
 
 class RecipePDF extends Component {
   state = {
-    numPages: 2,
+    numPages: null,
     pageNumber: 1,
   }
-
-  onDocumentLoad = ({ numPages }) => {
+ 
+  onDocumentLoadSuccess = ({ numPages }) => {
     this.setState({ numPages });
   }
 
   render() {
     const { pageNumber, numPages } = this.state;
-
+ 
     return (
       <div>
         <Document
-          file="recipes.pdf"
+          file={file}
+          onLoadSuccess={this.onDocumentLoadSuccess}
         >
-          text here
+          <Page pageNumber={pageNumber} />
         </Document>
         <p>Page {pageNumber} of {numPages}</p>
       </div>

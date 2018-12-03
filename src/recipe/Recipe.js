@@ -80,6 +80,7 @@ class Recipe extends Component {
     this.handleCommentClose = this.handleCommentClose.bind(this);
     this.handleCommentOpen = this.handleCommentOpen.bind(this);
     this.handleNoteInput = this.handleNoteInput.bind(this);
+    this.iMadeThis = this.iMadeThis.bind(this);
   }
 
   isUserLoggedIn() {
@@ -116,6 +117,41 @@ class Recipe extends Component {
 
   printRecipe() {
     window.print();
+  }
+
+  iMadeThis() {
+    console.log('show youve made this');
+    try {
+      const { client, userId } = this.props;
+      const data = {
+        user_id: userId,
+        recipe_id: this.state.recipe_id
+      };
+
+      console.log('user id: ', data.user_id);
+      console.log('recipe id: ', data.recipe_id);
+      const result = client
+        .mutate({
+          mutation: gql`
+            mutation MadeThis {
+              toggleIMadeThis(
+                userId: "${data.user_id}"
+                recipeId: "${data.recipe_id}"
+                newVal: true
+              ) {
+                madeRecipes { name }
+              }
+            }`
+        })
+        .then((result) => {
+          console.log('made this result: ', result);
+          return result;
+        });
+      return result;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
   }
 
   recipeAlreadySaved(recipeId) {
@@ -187,7 +223,7 @@ class Recipe extends Component {
           `,
               fetchPolicy: 'no-cache'
             })
-            .then(result => {
+            .then((result) => {
               return result.data.recipeById;
             });
           return result;
@@ -549,7 +585,16 @@ class Recipe extends Component {
               <Button
                 variant="contained"
                 color="default"
-                className="twitter-share"
+                className="i-made-this btn-margin"
+                onClick={this.iMadeThis}
+              >
+                I Made This!
+              </Button>
+
+              <Button
+                variant="contained"
+                color="default"
+                className="twitter-share btn-margin"
               >
                 <TwitterShareButton url={shareUrl}><TwitterIcon size={32} round={true} /></TwitterShareButton>
               </Button>
@@ -557,7 +602,7 @@ class Recipe extends Component {
               <Button
                 variant="contained"
                 color="default"
-                className="facebook-share"
+                className="facebook-share btn-margin"
               >
                 <FacebookShareButton url={shareUrl}><FacebookIcon size={32} round={true} /></FacebookShareButton>
               </Button>
