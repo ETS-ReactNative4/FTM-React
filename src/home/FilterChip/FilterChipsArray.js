@@ -18,8 +18,21 @@ class FilterChipsArray extends React.Component {
 
   handleAddFilterChip = (chipTitle, chipLabel) => {
     const newChipData = this.state.chipData.slice();
-
-    newChipData.push({ key: 0, title: chipTitle, label: chipLabel });
+    if (newChipData.length === 0) {
+      newChipData.push({ key: 0, title: chipTitle, label: chipLabel });
+    } else {
+      let newAdd = true;
+      newChipData.forEach((element) => {
+        if (chipTitle === element.title) {
+          if (chipLabel === element.label) {
+            newAdd = false;
+          }
+        }
+      });
+      if (newAdd) {
+        newChipData.push({ key: 0, title: chipTitle, label: chipLabel });
+      }
+    }
     const updatedChipData = [];
     newChipData.forEach((chip, index) => {
       updatedChipData.push({ key: index, title: chip.title, label: chip.label });
