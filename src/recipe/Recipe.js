@@ -6,7 +6,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Icon from '@material-ui/core/Icon';
 import gql from 'graphql-tag';
-import { withApollo, compose } from 'react-apollo';
+import { withApollo, compose, graphql } from 'react-apollo';
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from 'react-share';
 import './Recipe.css';
 import RecipeInstructions from './Instructions/Instructions';
 import RecipeInfo from './Info/Info';
@@ -435,6 +436,8 @@ class Recipe extends Component {
     const isLoggedIn = this.isUserLoggedIn();
     console.log('user is logged in: ', isLoggedIn);
 
+    const shareUrl = `http://www.foodtomake.com${this.props.location.pathname}`; // TODO:  Change this later for live
+
     return (
       <div>
         <Notes notes={this.state.notes} />
@@ -541,6 +544,22 @@ class Recipe extends Component {
               >
                 <Icon>edit_icon</Icon>
                 Add A Note
+              </Button>
+
+              <Button
+                variant="contained"
+                color="default"
+                className="twitter-share"
+              >
+                <TwitterShareButton url={shareUrl}><TwitterIcon size={32} round={true} /></TwitterShareButton>
+              </Button>
+
+              <Button
+                variant="contained"
+                color="default"
+                className="facebook-share"
+              >
+                <FacebookShareButton url={shareUrl}><FacebookIcon size={32} round={true} /></FacebookShareButton>
               </Button>
 
               <Dialog

@@ -12,10 +12,13 @@ import { FilterList } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
 import { compose, withApollo } from 'react-apollo';
+import { Document, Page } from 'react-pdf';
+import { Route } from 'react-router-dom';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
 import Loading from '../loading/Loading';
+import RecipePDF from './PDF/RecipePDF';
 import './Profile.css';
 import withLocalData from '../withLocalData';
 
@@ -65,6 +68,7 @@ class Profile extends Component {
     this.showResults = this.showResults.bind(this);
     this.followUser = this.followUser.bind(this);
     this.updateFollowing = this.updateFollowing.bind(this);
+    this.handleExport = this.handleExport.bind(this);
     // this.getDataFromAPI();
   }
 
@@ -88,6 +92,10 @@ class Profile extends Component {
       });
     }
   }
+  handleExport = () => {
+    console.log('handle export');
+    <RecipePDF />
+  };
 
   componentWillMount() {
     this.getDataFromAPI();
@@ -530,6 +538,24 @@ class Profile extends Component {
 
               {ownedShow && myProfile && (
                 <Grid container>
+
+                  
+                  <Route
+                    render={({ history }) => (
+                      
+                      <Button
+                        variant="contained"
+                        color="default"
+                        className="post-comment-button"
+                        onClick={() => {
+                          history.push(`/exportrecipes`);
+                        }}
+                      >
+                        Export Recipes
+                      </Button>
+                    )}
+                  />
+
                   <Trail
                     native
                     keys={this.state.owned_recipes.map(item => item.id)}

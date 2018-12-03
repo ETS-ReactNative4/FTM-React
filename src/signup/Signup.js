@@ -56,7 +56,7 @@ class SignUp extends Component {
             id="fb-btn"
           >
             <img id="fb-logo" alt="fb-logo" src={fbLogo} />
-            Sign up With Facebook
+            Signup With Facebook
           </Button>
           <Button
             onClick={this.loginGoogle}
@@ -64,7 +64,7 @@ class SignUp extends Component {
             id="google-btn"
           >
             <img id="gg-logo" alt="gg-logo" src={ggLogo} />
-            Sign up With Google
+            Signup With Google
           </Button>
         </div>
         <TextField
