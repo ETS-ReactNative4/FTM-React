@@ -16,12 +16,12 @@ class FilterChipsArray extends React.Component {
     chipData: [],
   };
 
-  handleAddFilterChip = (filterChip) => {
+  handleAddFilterChip = (chipTitle, chipLabel) => {
     const newChipData = this.state.chipData.slice();
-    newChipData.push({ key: 0, label: filterChip });
+    newChipData.push({ key: 0, title: chipTitle, label: chipLabel });
     const updatedChipData = [];
     newChipData.forEach((chip, index) => {
-      updatedChipData.push({ key: index, label: chip.label });
+      updatedChipData.push({ key: index, title: chip.title, label: chip.label });
     });
     this.props.handleHasFilterChips(true);
     this.setState({ chipData: updatedChipData });
@@ -47,7 +47,7 @@ class FilterChipsArray extends React.Component {
           return (
             <Chip
               key={data.key}
-              label={data.label}
+              label={`${data.title}: ${data.label}`}
               onDelete={this.handleDelete(data)}
               className={classes.chip}
             />

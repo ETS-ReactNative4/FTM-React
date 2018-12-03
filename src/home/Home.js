@@ -115,8 +115,8 @@ class Home extends Component {
     event.preventDefault();
   };
 
-  handleAddFilterChip = (filterChip) => {
-    this.filterChipsRef.current.handleAddFilterChip(filterChip);
+  handleAddFilterChip = (title, label) => {
+    this.filterChipsRef.current.handleAddFilterChip(title, label);
   };
 
   handleHasFilterChips = (value) => {

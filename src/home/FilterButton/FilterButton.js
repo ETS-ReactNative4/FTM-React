@@ -26,15 +26,14 @@ class FilterButton extends React.Component {
 
   handleClose = (item, event) => {
     if (!(item instanceof MouseEvent)) {
-      console.log(item);
+      // console.log(item);
     }
     this.setState({ anchorEl: null });
   };
 
-  handleNewChip = (item) => {
+  handleNewChip = (title, item) => {
     if (!(item instanceof MouseEvent)) {
-      // console.log(this.props);
-      this.props.handleAddFilterChip(item);
+      this.props.handleAddFilterChip(title, item);
     }
     this.setState({ anchorEl: null });
   };
@@ -44,7 +43,7 @@ class FilterButton extends React.Component {
     const open = Boolean(anchorEl);
     const { title } = this.props;
     const listItems = this.props.items.map((item, index) => (
-      <MenuItem key={index} onClick={event => this.handleNewChip(item)}>
+      <MenuItem key={index} onClick={event => this.handleNewChip(title, item)}>
         {item}
       </MenuItem>
     ));
