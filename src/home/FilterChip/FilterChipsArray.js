@@ -23,6 +23,7 @@ class FilterChipsArray extends React.Component {
     newChipData.forEach((chip, index) => {
       updatedChipData.push({ key: index, label: chip.label });
     });
+    this.props.handleHasFilterChips(true);
     this.setState({ chipData: updatedChipData });
   };
 
@@ -31,6 +32,9 @@ class FilterChipsArray extends React.Component {
       const chipData = [...state.chipData];
       const chipToDelete = chipData.indexOf(data);
       chipData.splice(chipToDelete, 1);
+      if (chipData.length === 0) {
+        this.props.handleHasFilterChips(false);
+      }
       return { chipData };
     });
   };
@@ -56,6 +60,7 @@ class FilterChipsArray extends React.Component {
 
 FilterChipsArray.propTypes = {
   classes: PropTypes.object.isRequired,
+  handleHasFilterChips: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(FilterChipsArray);

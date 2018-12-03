@@ -46,6 +46,7 @@ class Home extends Component {
       recipes: [],
       loading: false,
       showFilter: false,
+      hasFilterChips: false,
     };
     this.filterChipsRef = React.createRef();
   }
@@ -115,8 +116,11 @@ class Home extends Component {
   };
 
   handleAddFilterChip = (filterChip) => {
-    // console.log(this.filterChipsRef.current.handleAddFilterChip(filterChip));
     this.filterChipsRef.current.handleAddFilterChip(filterChip);
+  };
+
+  handleHasFilterChips = (value) => {
+    this.setState({ hasFilterChips: value });
   };
 
   render() {
@@ -162,9 +166,33 @@ class Home extends Component {
             </div>
           )}
         </Spring>
-        <div className="search-chips" style={{ display: 'flex' }}>
-          <FilterChipsArray innerRef={this.filterChipsRef} />
-        </div>
+        <Spring
+          from={{ marginTop: 0 }}
+          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
+        >
+          {({ marginTop, opacity }) => (
+            <img
+              className="logo"
+              style={{ marginTop }}
+              src="http://i63.tinypic.com/14joi09.png"
+              alt="logo"
+            />
+          )}
+        </Spring>
+        <Spring
+          native
+          from={{ height: 0, opacity: 0 }}
+          to={this.state.hasFilterChips ? { height: 50, opacity: 1 } : { height: 0, opacity: 0 }}
+        >
+          {({ height, opacity }) => (
+            <animated.div className="search-chips" style={{ display: 'flex', height, opacity }}>
+              <FilterChipsArray
+                innerRef={this.filterChipsRef}
+                handleHasFilterChips={this.handleHasFilterChips}
+              />
+            </animated.div>
+          )}
+        </Spring>
         <div
           className="search-filters"
           style={
