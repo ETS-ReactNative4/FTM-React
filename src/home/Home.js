@@ -180,11 +180,11 @@ class Home extends Component {
           )}
         </Spring>
         <Spring
-          from={{ height: 0 }}
-          to={this.state.hasFilterChips ? { height: 50 } : { height: 0 }}
+          from={{ height: 0, opacity: 0 }}
+          to={this.state.hasFilterChips ? { height: 50, opacity: 1 } : { height: 0, opacity: 0 }}
         >
-          {({ height }) => (
-            <div className="search-chips" style={{ display: 'flex', height }}>
+          {({ height, opacity }) => (
+            <div className="search-chips" style={{ display: 'flex', height, opacity }}>
               <FilterChipsArray
                 innerRef={this.filterChipsRef}
                 handleHasFilterChips={this.handleHasFilterChips}
