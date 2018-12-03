@@ -46,12 +46,8 @@ class Home extends Component {
       recipes: [],
       loading: false,
       showFilter: false,
-      anchorElCookTime: null,
-      anchorElPrepTime: null,
-      anchorElDifficulty: null,
-      anchorElRating: null,
-      anchorElIngredients: null,
     };
+    this.filterChipsRef = React.createRef();
   }
 
   handleEnterSearch = async (event) => {
@@ -118,11 +114,16 @@ class Home extends Component {
     event.preventDefault();
   };
 
+  handleAddFilterChip = (filterChip) => {
+    // console.log(this.filterChipsRef.current.handleAddFilterChip(filterChip));
+    this.filterChipsRef.current.handleAddFilterChip(filterChip);
+  };
+
   render() {
     return (
       <div className="home-container">
         <Spring
-          from={{ marginTop: 100, opacity: 1 }}
+          from={{ marginTop: 0 }}
           to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
         >
           {({ marginTop, opacity }) => (
@@ -135,7 +136,7 @@ class Home extends Component {
           )}
         </Spring>
         <Spring
-          from={{ marginTop: 100 }}
+          from={{ marginTop: 0 }}
           to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
         >
           {({ marginTop }) => (
@@ -161,6 +162,9 @@ class Home extends Component {
             </div>
           )}
         </Spring>
+        <div className="search-chips" style={{ display: 'flex' }}>
+          <FilterChipsArray innerRef={this.filterChipsRef} />
+        </div>
         <div
           className="search-filters"
           style={
@@ -177,15 +181,33 @@ class Home extends Component {
               }
           }
         >
-          <FilterButton title="Cook Time" items={['<= 10 min', '20 min', '45 min', '>60 min']} />
-          <FilterButton title="Prep. Time" items={['<= 10 min', '20 min', '45 min', '>60 min']} />
-          <FilterButton title="Difficulty" items={['One', 'Two', 'Three', 'Four', 'Five']} />
-          <FilterButton title="Rating" items={['One', 'Two', 'Three', 'Four', 'Five']} />
-          <FilterButton title="Ingredients" items={['Need to add dialog']} />
+          <FilterButton
+            title="Cook Time"
+            items={['<= 10 min', '20 min', '45 min', '>60 min']}
+            handleAddFilterChip={this.handleAddFilterChip}
+          />
+          <FilterButton
+            title="Prep. Time"
+            items={['<= 10 min', '20 min', '45 min', '>60 min']}
+            handleAddFilterChip={this.handleAddFilterChip}
+          />
+          <FilterButton
+            title="Difficulty"
+            items={['One', 'Two', 'Three', 'Four', 'Five']}
+            handleAddFilterChip={this.handleAddFilterChip}
+          />
+          <FilterButton
+            title="Rating"
+            items={['One', 'Two', 'Three', 'Four', 'Five']}
+            handleAddFilterChip={this.handleAddFilterChip}
+          />
+          <FilterButton
+            title="Ingredients"
+            items={['Need to add dialog']}
+            handleAddFilterChip={this.handleAddFilterChip}
+          />
         </div>
-        <div className="search-chips" style={{ display: 'flex' }}>
-          <FilterChipsArray />
-        </div>
+
         <div
           className="search-results"
           style={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}

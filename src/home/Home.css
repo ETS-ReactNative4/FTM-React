@@ -3,13 +3,14 @@
   height: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 365px 50px 50px auto;
+  grid-template-rows: 365px 50px (50px, auto);
   grid-template-areas:
     ". . logo . ."
     ". search search search ."
-    ". filters filters filters ."
     ". chips chips chips ."
+    ". filters filters filters ."
     ". results results results .";
+    grid-auto-rows: min-content;
 }
 
 .logo {
@@ -41,6 +42,7 @@
   width: 100%;
   height: 50px;
   grid-area: filters;
+  z-index: 10;
 }
 
 .search-chips {

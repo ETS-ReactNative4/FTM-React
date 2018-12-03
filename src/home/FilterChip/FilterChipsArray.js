@@ -13,23 +13,17 @@ const styles = theme => ({
 
 class FilterChipsArray extends React.Component {
   state = {
-    chipData: [
-      { key: 0, label: 'One' },
-      { key: 1, label: 'Two' },
-      { key: 2, label: 'Three' },
-      { key: 3, label: 'Four' },
-      { key: 4, label: 'Five' },
-      { key: 5, label: 'One' },
-      { key: 6, label: 'Two' },
-      { key: 7, label: 'Three' },
-      { key: 8, label: 'Four' },
-      { key: 9, label: 'Five' },
-      { key: 10, label: 'One' },
-      { key: 11, label: 'Two' },
-      { key: 12, label: 'Three' },
-      { key: 13, label: 'Four' },
-      { key: 14, label: 'Five' },
-    ],
+    chipData: [],
+  };
+
+  handleAddFilterChip = (filterChip) => {
+    const newChipData = this.state.chipData.slice();
+    newChipData.push({ key: 0, label: filterChip });
+    const updatedChipData = [];
+    newChipData.forEach((chip, index) => {
+      updatedChipData.push({ key: index, label: chip.label });
+    });
+    this.setState({ chipData: updatedChipData });
   };
 
   handleDelete = data => () => {
