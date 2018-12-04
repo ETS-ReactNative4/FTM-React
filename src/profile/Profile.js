@@ -12,13 +12,13 @@ import { FilterList } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
 import { compose, withApollo } from 'react-apollo';
-import { Document, Page } from 'react-pdf';
 import { Route } from 'react-router-dom';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
 import Loading from '../loading/Loading';
 import RecipePDF from './PDF/RecipePDF';
+import FollowingProfile from './FollowingProfiles/FollowingProfiles';
 import './Profile.css';
 import withLocalData from '../withLocalData';
 
@@ -47,6 +47,11 @@ const styles = {
   },
 };
 
+const savedString = 'saved';
+const ownedString = 'owned';
+const followingString = 'following';
+const madeThisString = 'madethis';
+
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -61,9 +66,11 @@ class Profile extends Component {
       saved_recipes_length: null,
       made_recipes_length: null,
       following: [],
+      followers: [],
+      following_length: null,
+      followers_length: null,
       query: '',
-      currently_viewing:
-        'saved' /** ********** saved, owned, followers, or madethis *************** */,
+      currently_viewing: 'saved', // ********** saved, owned, following, or madethis *************
       searchSavedOrOwned: true, // search saved by default, so false means search owned
     };
 
@@ -84,24 +91,34 @@ class Profile extends Component {
   }
   printClicked() {
     console.log('clicked: ', this.state.currently_viewing);
-    if (this.state.currently_viewing === 'saved') {
+    if (this.state.currently_viewing === savedString) {
       this.setState({
         searchSavedOrOwned: true,
       });
-    } else if (this.state.currently_viewing === 'owned') {
+    } else if (this.state.currently_viewing === ownedString) {
       this.setState({
         searchSavedOrOwned: false,
       });
-    } else if (this.state.currently_viewing === 'madethis') {
+      let button = document.getElementsByClassName('saved-button');
+      button.classList.toggle('btn-active');
+    } else if (this.state.currently_viewing === followingString) {
       this.setState({
         searchSavedOrOwned: false,
       });
+      let button = document.getElementsByClassName('saved-button');
+      button.classList.toggle('btn-active');
+    } else if (this.state.currently_viewing === madeThisString) {
+      this.setState({
+        searchSavedOrOwned: false,
+      });
+      let button = document.getElementsByClassName('saved-button');
+      button.classList.toggle('btn-active');
     }
   }
 
   handleExport = () => {
     console.log('handle export');
-    <RecipePDF />
+    <RecipePDF />;
   };
 
   componentWillMount() {
@@ -268,8 +285,8 @@ class Profile extends Component {
 
     try {
       const { client } = this.props;
-      let user = await this.fetchUser();
-      console.log('logged in name: ', user.username, ' id: ', user.id)
+      const user = await this.fetchUser();
+      console.log('logged in name: ', user.username, ' id: ', user.id);
 
       const result = client
         .mutate({
@@ -285,7 +302,7 @@ class Profile extends Component {
               following {username}
             }
           }
-          `
+          `,
         })
         .then((result) => {
           console.log('user followed: ', result.data);
@@ -315,6 +332,7 @@ class Profile extends Component {
         saved_recipes: user.savedRecipes,
         made_recipes: user.madeRecipes,
         following: user.following,
+        followers: user.followers,
       },
       () => this.setLengths(),
     );
@@ -325,10 +343,12 @@ class Profile extends Component {
       owned_recipes_length: this.state.owned_recipes.length,
       saved_recipes_length: this.state.saved_recipes.length,
       made_recipes_length: this.state.made_recipes.length,
+      following_length: this.state.following.length,
+      followers_length: this.state.followers.length,
     });
   }
 
-  // get the info of the logged in user 
+  // get the info of the logged in user
   fetchUser = async () => {
     try {
       const { client, token } = this.props;
@@ -345,8 +365,8 @@ class Profile extends Component {
               ownedRecipes {name id description images}
               savedRecipes {name id description images}
               madeRecipes {name id description images}
-              following {id username}
-              followers {id username}
+              following {id username profilePicture}
+              followers {id username profilePicture}
             }
           }
         `,
@@ -379,6 +399,8 @@ class Profile extends Component {
               ownedRecipes {name id description images}
               savedRecipes {name id description images}
               madeRecipes {name id description images}
+              following {id username profilePicture}
+              followers {id username profilePicture}
             }
           }
         `,
@@ -405,28 +427,28 @@ class Profile extends Component {
     let ownedShow = false;
     let followShow = false;
     let madeThisShow = false;
-    if (this.state.currently_viewing === 'saved') {
+    if (this.state.currently_viewing === savedString) {
       savedShow = true;
       ownedShow = false;
       followShow = false;
       madeThisShow = false;
-    } else if (this.state.currently_viewing === 'owned') {
+    } else if (this.state.currently_viewing === ownedString) {
       savedShow = false;
       ownedShow = true;
       followShow = false;
       madeThisShow = false;
-    } else if (this.state.currently_viewing === 'followers') {
+    } else if (this.state.currently_viewing === followingString) {
       savedShow = false;
       ownedShow = false;
       followShow = true;
       madeThisShow = false;
-    } else if (this.state.currently_viewing === 'madethis') {
+    } else if (this.state.currently_viewing === madeThisString) {
       savedShow = false;
       ownedShow = false;
       followShow = false;
       madeThisShow = true;
     }
-    
+
 
     let myProfile = true;
     if (this.props.match.params.username) {
@@ -464,7 +486,7 @@ class Profile extends Component {
               owned_recipes_number={this.state.owned_recipes_length}
               saved_recipes_number={this.state.saved_recipes_length}
               made_this_number={this.state.made_recipes_length}
-              followers_number="0"
+              following_number={this.state.following_length}
               showResults={this.showResults}
               my_profile={myProfile}
               followUser={this.followUser}
@@ -472,16 +494,16 @@ class Profile extends Component {
             <Grid item>
               <Route
                 render={({ history }) => (
-                        
+
                   <Button
                     variant="contained"
                     color="default"
                     className="post-comment-button"
                     onClick={() => {
-                      history.push(`/exportrecipes`);
+                      history.push('/exportrecipes');
                     }}
                   >
-                          Export Recipes
+                    Export Recipes
                   </Button>
                 )}
               />
@@ -563,7 +585,7 @@ class Profile extends Component {
                           </animated.div>
                         </Grid>
                       );
-                    },)}
+                    } )}
                   </Trail>
                 </Grid>
               )}
@@ -591,7 +613,7 @@ class Profile extends Component {
                           </animated.div>
                         </Grid>
                       );
-                    },)}
+                    } )}
                   </Trail>
                 </Grid>
               )}
@@ -619,12 +641,37 @@ class Profile extends Component {
                           </animated.div>
                         </Grid>
                       );
-                    },)}
+                    } )}
                   </Trail>
                 </Grid>
               )}
 
-              {followShow && <h2>Show Followers</h2>}
+              {followShow &&
+                <Grid container>
+                  <Trail
+                    native
+                    keys={this.state.following.map(item => item.id)}
+                    from={{ marginTop: 500, opacity: 1 }}
+                    to={{ marginTop: 0, opacity: 1 }}
+                  >
+                    {this.state.following.map(userProfile => (marginTop, index) => {
+                      return (
+                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <FollowingProfile
+                              key={userProfile.id}
+                              name={userProfile.username}
+                              style={marginTop}
+                              images={userProfile.profilePicture}
+                              r_id={userProfile.username}
+                            />
+                          </animated.div>
+                        </Grid>
+                      );
+                    } )}
+                  </Trail>
+                </Grid>
+              }
             </div>
           </Grid>
         </Grid>
