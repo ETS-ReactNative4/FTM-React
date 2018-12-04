@@ -18,6 +18,7 @@ import Notes from './Notes/Notes';
 import Comments from './Comments/Comments';
 import withLocalData from '../withLocalData';
 import Fraction from 'fraction.js';
+import * as jsPDF  from 'jspdf'
 
 const styles = {
   spacing: 24,
@@ -67,11 +68,12 @@ class Recipe extends Component {
       new_comment: null,
       note_dialog_open: false,
       comment_dialog_open: false
+
       
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
-    this.printRecipe = this.printRecipe.bind(this);
+    //this.printRecipe = this.printRecipe.bind(this);
     this.noteSubmit = this.noteSubmit.bind(this);
     this.commentSubmit = this.commentSubmit.bind(this);
     this.addNote = this.addNote.bind(this);
@@ -82,6 +84,7 @@ class Recipe extends Component {
     this.handleCommentOpen = this.handleCommentOpen.bind(this);
     this.handleNoteInput = this.handleNoteInput.bind(this);
     this.iMadeThis = this.iMadeThis.bind(this);
+    this.pdfToHTML=this.pdfToHTML.bind(this);
   }
 
   isUserLoggedIn() {
@@ -116,10 +119,7 @@ class Recipe extends Component {
     });
   };
 
-  printRecipe() {
-    window.print();
-  }
-
+ 
   iMadeThis() {
     console.log('show youve made this');
     try {
@@ -151,6 +151,36 @@ class Recipe extends Component {
       return {};
     }
   }
+  pdfToHTML(){
+   // var doc = new jsPDF();
+    var specialElementHandlers = {
+        '#myId': function(element, renderer){
+            return true;
+        },
+    };
+
+    let doc = new jsPDF();
+    doc.text(20, 20, 'Hello world.');
+    doc.addPage('a4','p');
+    var source = document.getElementById('myId'); //$('#HTMLtoPDF')[0];
+    doc.fromHTML(
+        source, 15, 15, {
+            'elementHandlers': specialElementHandlers
+        }
+    );
+    doc.addPage('a4','l');
+    doc.fromHTML(
+        source, 15, 15, {
+            'elementHandlers': specialElementHandlers
+        }
+    );
+    doc.save('Test.pdf');
+
+
+}
+
+
+
 
   recipeAlreadySaved(recipeId) {
     try {
@@ -481,6 +511,8 @@ class Recipe extends Component {
           spacing={styles.spacing}
           justify={'center'}
         >
+        
+  
           <Grid
             className="picture"
             item
@@ -565,7 +597,7 @@ class Recipe extends Component {
                 variant="contained"
                 color="secondary"
                 className="print-button btn-margin"
-                onClick={this.printRecipe}
+                onClick={this.pdfToHTML}
               >
                 Print Recipe
               </Button>
