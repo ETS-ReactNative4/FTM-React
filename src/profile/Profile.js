@@ -99,20 +99,14 @@ class Profile extends Component {
       this.setState({
         searchSavedOrOwned: false,
       });
-      let button = document.getElementsByClassName('saved-button');
-      button.classList.toggle('btn-active');
     } else if (this.state.currently_viewing === followingString) {
       this.setState({
         searchSavedOrOwned: false,
       });
-      let button = document.getElementsByClassName('saved-button');
-      button.classList.toggle('btn-active');
     } else if (this.state.currently_viewing === madeThisString) {
       this.setState({
         searchSavedOrOwned: false,
       });
-      let button = document.getElementsByClassName('saved-button');
-      button.classList.toggle('btn-active');
     }
   }
 
