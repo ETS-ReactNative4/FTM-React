@@ -3,28 +3,29 @@
   flex-direction: row;
   justify-content: space-between;
 }
-.recipe-num,
-.follower-num,
-.favorite-num,
-.made-this-num {
+.num-container {
   width: 100%;
   text-align: center;
   padding: 10px;
   margin: 10px;
   cursor: pointer;
 }
-.recipe-num > .number,
-.follower-num > .number,
-.favorite-num > .number,
-.made-this-num > .number {
+.btn-active,
+.btn-active span:last-child,
+.btn-active:hover,
+.btn-active:hover span:last-child,
+.num-container:hover,
+.num-container:hover span:last-child {
+  background: rgba(244, 67, 54, 1) !important;
+  color: #fff !important;
+}
+
+.num-container > .number {
   font-size: 2em;
   margin-left: 10px;
 }
 
-.recipe-num span:last-child,
-.follower-num span:last-child,
-.favorite-num span:last-child,
-.made-this-num span:last-child {
+.num-container span:last-child {
   font-size: 1em;
   color: gray;
 }
