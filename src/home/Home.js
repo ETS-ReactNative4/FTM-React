@@ -20,6 +20,7 @@ import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 import { Menu } from 'material-ui';
 import FilterButton from './FilterButton/FilterButton';
+import CookTimeButton from './FilterButton/CookTimeButton';
 import FilterChipsArray from './FilterChip/FilterChipsArray';
 import FilterDialog from './FilterDialog/FilterDialog';
 
@@ -294,11 +295,7 @@ class Home extends Component {
               }
           }
         >
-          <FilterButton
-            title="Cook Time"
-            items={['<= 10 min', '20 min', '45 min', '>60 min']}
-            handleAddFilterChip={this.handleAddFilterChip}
-          />
+          <CookTimeButton title="Cook Time" handleAddFilterChip={this.handleAddFilterChip} />
           <FilterButton
             title="Prep. Time"
             items={['<= 10 min', '20 min', '45 min', '>60 min']}

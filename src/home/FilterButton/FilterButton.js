@@ -8,12 +8,24 @@ import {
   Popper,
   Grow,
   Paper,
+  Typography,
 } from '@material-ui/core';
+import Slider from '@material-ui/lab/Slider';
 import { withStyles } from 'material-ui/styles';
+
+const styles = {
+  root: {
+    width: 300,
+  },
+  slider: {
+    padding: '22px 0px',
+  },
+};
 
 class FilterButton extends React.Component {
   state = {
     anchorEl: null,
+    sliderValue: 10,
   };
 
   handleChange = (event, checked) => {
@@ -38,10 +50,14 @@ class FilterButton extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  handleSliderChange = (event, value) => {
+    this.setState({ sliderValue: value });
+  };
+
   render() {
-    const { active, anchorEl } = this.state;
+    const { active, anchorEl, sliderValue } = this.state;
     const open = Boolean(anchorEl);
-    const { title } = this.props;
+    const { title, styles } = this.props;
     const listItems = this.props.items.map((item, index) => (
       <MenuItem key={index} onClick={event => this.handleNewChip(title, item)}>
         {item}
@@ -68,9 +84,16 @@ class FilterButton extends React.Component {
               id="filter-list-grow"
               style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
             >
-              <Paper>
+              <Paper style={{ width: '100%', height: '100%' }}>
                 <ClickAwayListener onClickAway={this.handleClose}>
-                  <MenuList>{listItems}</MenuList>
+                  <Typography id="label">Slider label</Typography>
+                  <Slider
+                    style={{ width: 300, padding: '25px' }}
+                    value={sliderValue}
+                    aria-labelledby="label"
+                    onChange={this.handleSliderChange}
+                  />
+                  {/* <MenuList>{listItems}</MenuList> */}
                 </ClickAwayListener>
               </Paper>
             </Grow>
@@ -86,4 +109,4 @@ FilterButton.propTypes = {
   items: PropTypes.array.isRequired,
 };
 
-export default FilterButton;
+export default withStyles(styles)(FilterButton);
