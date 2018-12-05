@@ -135,6 +135,7 @@ class Home extends Component {
     const currentFilters = this.state.filters;
     switch (title) {
     case 'Cook Time':
+        console.log(label);
       switch (label) {
       case '<= 10 min':
         currentFilters.push({ field: 'cookTime', operator: 'LTE', value: ['10'] });

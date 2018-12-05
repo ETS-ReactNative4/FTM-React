@@ -1,13 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  ClickAwayListener,
-  Popper,
-  Grow,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { Button, ClickAwayListener, Popper, Grow, Paper, Typography } from '@material-ui/core';
 import { Slider, ToggleButtonGroup, ToggleButton } from '@material-ui/lab';
 import { HourglassEmpty, HourglassFull } from '@material-ui/icons';
 
@@ -61,7 +54,10 @@ class CookTimeButton extends React.Component {
     default:
       sign = '== ';
     }
-    this.props.handleAddFilterChip(this.props.title, sign.concat(this.state.sliderValue));
+    this.props.handleAddFilterChip(
+      this.props.title,
+      sign.concat(this.state.sliderValue).concat(' min'),
+    );
     this.setState({ anchorEl: null });
   };
 
