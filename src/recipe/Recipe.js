@@ -156,24 +156,13 @@ class Recipe extends Component {
   }
   pdfToHTML() {
     // var doc = new jsPDF();
-    var specialElementHandlers = {
-      '#myId': function(element, renderer) {
-        return true;
-      }
-    };
+    
+    // We'll make our own renderer to skip this editor
 
     let doc = new jsPDF();
-    doc.text(20, 20, 'Hello world.');
+    doc.text(20, 40, this.state.title);
     doc.addPage('a4', 'p');
-    var source = document.getElementById('myId'); //$('#HTMLtoPDF')[0];
-    doc.fromHTML(source, 15, 15, {
-      elementHandlers: specialElementHandlers
-    });
-    doc.addPage('a4', 'l');
-    doc.fromHTML(source, 15, 15, {
-      elementHandlers: specialElementHandlers
-    });
-    doc.save('Test.pdf');
+    doc.save('test.pdf');
   }
 
   recipeAlreadySaved(recipeId) {
