@@ -7,20 +7,19 @@ import {
   ClickAwayListener,
   Popper,
   Grow,
-  Paper,
+  Paper
 } from '@material-ui/core';
-import { withStyles } from 'material-ui/styles';
 
 class FilterButton extends React.Component {
   state = {
-    anchorEl: null,
+    anchorEl: null
   };
 
   handleChange = (event, checked) => {
     this.setState({ active: checked });
   };
 
-  handleMenu = (event) => {
+  handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
@@ -39,7 +38,7 @@ class FilterButton extends React.Component {
   };
 
   render() {
-    const { active, anchorEl } = this.state;
+    const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
     const { title } = this.props;
     const listItems = this.props.items.map((item, index) => (
@@ -50,7 +49,7 @@ class FilterButton extends React.Component {
     return (
       <div style={{ width: '100%', flex: '1' }}>
         <Button
-          buttonRef={(node) => {
+          buttonRef={node => {
             this.anchorEl = node;
           }}
           style={{ justifySelf: 'center' }}
@@ -66,7 +65,10 @@ class FilterButton extends React.Component {
             <Grow
               {...TransitionProps}
               id="filter-list-grow"
-              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+              style={{
+                transformOrigin:
+                  placement === 'bottom' ? 'center top' : 'center bottom'
+              }}
             >
               <Paper>
                 <ClickAwayListener onClickAway={this.handleClose}>
@@ -83,7 +85,7 @@ class FilterButton extends React.Component {
 
 FilterButton.propTypes = {
   title: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
+  items: PropTypes.array.isRequired
 };
 
 export default FilterButton;

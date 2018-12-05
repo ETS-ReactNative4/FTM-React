@@ -4,21 +4,16 @@ import {
   Input,
   InputAdornment,
   InputLabel,
-  IconButton,
   Button,
-  Paper,
   FormControl,
   withStyles,
-  Grid,
+  Grid
 } from '@material-ui/core';
-import { FilterList, Close } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
 import { withApollo, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import HomeFilter from './Filter/Filter';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
-import { Menu } from 'material-ui';
 import FilterButton from './FilterButton/FilterButton';
 import FilterChipsArray from './FilterChip/FilterChipsArray';
 import FilterDialog from './FilterDialog/FilterDialog';
@@ -29,14 +24,14 @@ const styles = {
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   heading: {},
   secondaryHeading: {},
   column: {
     flexBasis: '33.33%',
-    width: '30%',
-  },
+    width: '30%'
+  }
 };
 
 class Home extends Component {
@@ -47,13 +42,12 @@ class Home extends Component {
       filters: [],
       recipes: [],
       loading: false,
-      showFilter: false,
-      hasFilterChips: false,
+      hasFilterChips: false
     };
     this.filterChipsRef = React.createRef();
   }
 
-  handleEnterSearch = async (event) => {
+  handleEnterSearch = async event => {
     const { client } = this.props;
     if (event.key === 'Enter') {
       const { data } = await client.query({
@@ -65,11 +59,11 @@ class Home extends Component {
                     description
                     images
                   }
-                }`,
+                }`
       });
       this.setState({
         loading: true,
-        recipes: data.searchAllRecipes,
+        recipes: data.searchAllRecipes
       });
     }
   };
@@ -95,71 +89,69 @@ class Home extends Component {
       `,
       variables: {
         query: this.state.query,
-        filters: this.state.filters,
+        filters: this.state.filters
       },
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'network-only'
     });
     this.setState({
       loading: true,
-      recipes: data.searchAllRecipes,
+      recipes: data.searchAllRecipes
     });
   };
 
-  handleQueryChange = (event) => {
+  handleQueryChange = event => {
     this.setState({
-      query: event.target.value,
+      query: event.target.value
     });
-  };
-
-  toggleFilter = () => {
-    this.setState({ showFilter: !this.state.showFilter });
-  };
-
-  getFilterClassNames = () => {
-    const classes = ['filter-card'];
-    if (this.state.showFilter) {
-      classes.push('showFilter');
-    } else {
-      classes.push('hideFilter');
-    }
-    return classes.join(' ');
-  };
-
-  handleMouseDown = (event) => {
-    event.preventDefault();
   };
 
   handleAddFilterChip = (title, label) => {
     this.filterChipsRef.current.handleAddFilterChip(title, label);
     const currentFilters = this.state.filters;
     switch (title) {
-    case 'Cook Time':
-      switch (label) {
-      case '<= 10 min':
-        currentFilters.push({ field: 'cookTime', operator: 'LTE', value: ['10'] });
+      case 'Cook Time':
+        switch (label) {
+          case '<= 10 min':
+            currentFilters.push({
+              field: 'cookTime',
+              operator: 'LTE',
+              value: ['10']
+            });
+            break;
+          case '20 min':
+            currentFilters.push({
+              field: 'cookTime',
+              operator: 'LTE',
+              value: ['20']
+            });
+            break;
+          case '45 min':
+            currentFilters.push({
+              field: 'cookTime',
+              operator: 'LTE',
+              value: ['45']
+            });
+            break;
+          case '>60 min':
+            currentFilters.push({
+              field: 'cookTime',
+              operator: 'GTE',
+              value: ['60']
+            });
+            break;
+          default:
+        }
+        this.setState({ filter: currentFilters });
+        console.log(this.state.filters);
         break;
-      case '20 min':
-        currentFilters.push({ field: 'cookTime', operator: 'LTE', value: ['20'] });
-        break;
-      case '45 min':
-        currentFilters.push({ field: 'cookTime', operator: 'LTE', value: ['45'] });
-        break;
-      case '>60 min':
-        currentFilters.push({ field: 'cookTime', operator: 'GTE', value: ['60'] });
-        break;
+      case 'Prep. Time':
+      case 'Difficulty':
+      case 'Rating':
       default:
-      }
-      this.setState({ filter: currentFilters });
-      console.log(this.state.filters);
-      break;
-    case 'Prep. Time':
-    case 'Difficulty':
-    case 'Rating':
-    default:
     }
   };
 
-  handleHasFilterChips = (value) => {
+  handleHasFilterChips = value => {
     this.setState({ hasFilterChips: value });
   };
 
@@ -167,40 +159,40 @@ class Home extends Component {
     this.filterChipsRef.current.handleAddIngredientChips(includes, excludes);
   };
 
-  handleDeleteFilterChips = (data) => {
+  handleDeleteFilterChips = data => {
     this.setState((state, props) => {
       const filters = [...state.filters];
       let chipToDelete = filters.indexOf();
       switch (data.title) {
-      case 'Cook Time':
-        switch (data.label) {
-        case '<= 10 min':
-          chipToDelete = filters.indexOf({
-            field: 'cookTime',
-            operator: 'LTE',
-            value: ['10'],
-          });
+        case 'Cook Time':
+          switch (data.label) {
+            case '<= 10 min':
+              chipToDelete = filters.indexOf({
+                field: 'cookTime',
+                operator: 'LTE',
+                value: ['10']
+              });
+              break;
+            case '20 min':
+              break;
+            case '45 min':
+              break;
+            case '>60 min':
+              break;
+            default:
+          }
           break;
-        case '20 min':
+        case 'Prep. Time':
           break;
-        case '45 min':
+        case 'Difficulty':
           break;
-        case '>60 min':
+        case 'Rating':
+          break;
+        case 'Include':
+          break;
+        case 'Exclude':
           break;
         default:
-        }
-        break;
-      case 'Prep. Time':
-        break;
-      case 'Difficulty':
-        break;
-      case 'Rating':
-        break;
-      case 'Include':
-        break;
-      case 'Exclude':
-        break;
-      default:
       }
       filters.splice(chipToDelete, 1);
       return { filters };
@@ -212,7 +204,9 @@ class Home extends Component {
       <div className="home-container">
         <Spring
           from={{ marginTop: 0 }}
-          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
+          to={
+            this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }
+          }
         >
           {({ marginTop, opacity }) => (
             <img
@@ -225,7 +219,9 @@ class Home extends Component {
         </Spring>
         <Spring
           from={{ marginTop: 0 }}
-          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
+          to={
+            this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }
+          }
         >
           {({ marginTop }) => (
             <div className="search-box" style={{ marginTop }}>
@@ -237,10 +233,10 @@ class Home extends Component {
                   onChange={this.handleQueryChange}
                   endAdornment={
                     <InputAdornment position="end">
-                      <IconButton onMouseDown={this.handleMouseDown} onClick={this.toggleFilter}>
-                        <FilterList size={30} />
-                      </IconButton>
-                      <Button id="searchButton" onClick={this.handleButtonSearch}>
+                      <Button
+                        id="searchButton"
+                        onClick={this.handleButtonSearch}
+                      >
                         Search
                       </Button>
                     </InputAdornment>
@@ -252,7 +248,9 @@ class Home extends Component {
         </Spring>
         <Spring
           from={{ marginTop: 0 }}
-          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
+          to={
+            this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }
+          }
         >
           {({ marginTop, opacity }) => (
             <img
@@ -266,10 +264,17 @@ class Home extends Component {
         <Spring
           native
           from={{ height: 0, opacity: 0 }}
-          to={this.state.hasFilterChips ? { height: 50, opacity: 1 } : { height: 0, opacity: 0 }}
+          to={
+            this.state.hasFilterChips
+              ? { height: 50, opacity: 1 }
+              : { height: 0, opacity: 0 }
+          }
         >
           {({ height, opacity }) => (
-            <animated.div className="search-chips" style={{ display: 'flex', height, opacity }}>
+            <animated.div
+              className="search-chips"
+              style={{ display: 'flex', height, opacity }}
+            >
               <FilterChipsArray
                 innerRef={this.filterChipsRef}
                 handleHasFilterChips={this.handleHasFilterChips}
@@ -283,15 +288,15 @@ class Home extends Component {
           style={
             this.state.recipes.length > 0
               ? {
-                marginTop: 0,
-                display: 'flex',
-                alignItems: 'center',
-              }
+                  marginTop: 0,
+                  display: 'flex',
+                  alignItems: 'center'
+                }
               : {
-                marginTop: 0,
-                display: 'flex',
-                alignItems: 'center',
-              }
+                  marginTop: 0,
+                  display: 'flex',
+                  alignItems: 'center'
+                }
           }
         >
           <FilterButton
@@ -314,12 +319,16 @@ class Home extends Component {
             items={['One', 'Two', 'Three', 'Four', 'Five']}
             handleAddFilterChip={this.handleAddFilterChip}
           />
-          <FilterDialog handleIngredientsFilter={this.handleIngredientsFilter} />
+          <FilterDialog
+            handleIngredientsFilter={this.handleIngredientsFilter}
+          />
         </div>
 
         <div
           className="search-results"
-          style={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
+          style={
+            this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }
+          }
         >
           {this.state.recipes.length > 0 && (
             <Grid container>
@@ -349,22 +358,16 @@ class Home extends Component {
             </Grid>
           )}
         </div>
-        <Paper className={this.getFilterClassNames()} elevation={5}>
-          <IconButton className="close-filters" onClick={this.toggleFilter}>
-            <Close />
-          </IconButton>
-          <HomeFilter filter="Time" color="primary" />
-        </Paper>
       </div>
     );
   }
 }
 
 Home.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default compose(
   withStyles(styles),
-  withApollo,
+  withApollo
 )(Home);
