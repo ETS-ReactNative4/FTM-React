@@ -486,70 +486,76 @@ class Profile extends Component {
               my_profile={myProfile}
               followUser={this.followUser}
             />
-            <Grid item>
-              <Route
-                render={({ history }) => (
+            {!followShow && // don't show export if they are looking at followers
+              <Grid item>
+                <Route
+                  render={({ history }) => (
 
-                  <Button
-                    variant="contained"
-                    color="default"
-                    className="post-comment-button"
-                    onClick={() => {
-                      history.push('/exportrecipes');
-                    }}
-                  >
-                    Export Recipes
-                  </Button>
-                )}
-              />
-            </Grid>
+                    <Button
+                      variant="contained"
+                      color="default"
+                      className="post-comment-button"
+                      onClick={() => {
+                        history.push('/exportrecipes');
+                      }}
+                    >
+                      Export Recipes
+                    </Button>
+                  )}
+                />
+              </Grid>
+            }
           </Grid>
-          <Grid
-            className="search-box"
-            item
-            xs={styles.sizes.xs.social}
-            sm={styles.sizes.sm.social}
-          >
-            <Spring
-              from={{ marginTop: 0 }}
-              to={
-                this.state.saved_recipes.length > 0
-                  ? { marginTop: 0 }
-                  : { marginTop: 0 }
-              }
+
+          {!followShow && // don't show search box if they are looking at followers
+            <Grid
+              className="search-box"
+              item
+              xs={styles.sizes.xs.social}
+              sm={styles.sizes.sm.social}
             >
-              {({ marginTop }) => (
-                <div className="search-box" style={{ marginTop }}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="search">
-                      Search for a recipe...
-                    </InputLabel>
-                    <Input
-                      id="search"
-                      onKeyPress={this.handleEnterSearch}
-                      onChange={this.handleQueryChange}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            onMouseDown={this.handleMouseDown}
-                            onClick={this.toggleFilter}
-                          >
-                            <FilterList size={30} />
-                          </IconButton>
-                          <Button
-                            id="searchButton"
-                            onClick={this.handleButtonSearch}
-                          >
-                            Search
-                          </Button>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </div>
-              )}
-            </Spring>
-          </Grid>
+              <Spring
+                from={{ marginTop: 0 }}
+                to={
+                  this.state.saved_recipes.length > 0
+                    ? { marginTop: 0 }
+                    : { marginTop: 0 }
+                }
+              >
+                {({ marginTop }) => (
+                  <div className="search-box" style={{ marginTop }}>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="search">
+                        Search for a recipe...
+                      </InputLabel>
+                      <Input
+                        id="search"
+                        onKeyPress={this.handleEnterSearch}
+                        onChange={this.handleQueryChange}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              onMouseDown={this.handleMouseDown}
+                              onClick={this.toggleFilter}
+                            >
+                              <FilterList size={30} />
+                            </IconButton>
+                            <Button
+                              id="searchButton"
+                              onClick={this.handleButtonSearch}
+                            >
+                              Search
+                            </Button>
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                  </div>
+                )}
+              </Spring>
+            </Grid>
+          }
+
           <Grid
             className="users-recipes"
             item
