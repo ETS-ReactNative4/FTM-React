@@ -34,8 +34,8 @@ class CreateRecipe extends Component {
       ingredients: null,
       instructions: null,
       description: null,
-      image: null,
-      title: null,
+      images: [],
+      name: null,
       stars: null,
       tags: null,
       author: null,
@@ -48,7 +48,6 @@ class CreateRecipe extends Component {
       notes: null,
     };
 
-    this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleIngredients = this.handleIngredients.bind(this);
@@ -57,11 +56,6 @@ class CreateRecipe extends Component {
     this.uploadFile = this.uploadFile.bind(this);
   }
 
-  handleTitleChange = title => (event) => {
-    this.setState({
-      [title]: event.target.value,
-    });
-  };
   handleIngredients = ingredients => (event) => {
     this.setState({
       ingredients: event.target.value.split(','),
@@ -84,9 +78,6 @@ class CreateRecipe extends Component {
   };
 
   async handleSubmit(e) {
-    // e.preventDefault();
-    // const { title } = this.state.title;
-    // const { dispatch } = this.props;
 
     await this.submitRecipe();
     // this.addToPublished(res.CreateRecipe.id);
@@ -94,6 +85,13 @@ class CreateRecipe extends Component {
 
   uploadFile = async (e) => {
     const photo = e.variables.file;
+    this.setState(previousState => ({
+      images: [...previousState.images, photo],
+    }), () => {
+      console.log('uploaded image: ', this.state.images);
+    });
+
+    /*
     try {
       const { client } = this.props;
       console.log(photo);
@@ -115,6 +113,7 @@ class CreateRecipe extends Component {
       console.log(err);
       return {};
     }
+    */
   };
 
   UPLOAD_FILE = gql`
@@ -138,6 +137,7 @@ class CreateRecipe extends Component {
         sourceURL: 'www.foodtomake.com',
         servings: this.state.servings,
         user_id: userId,
+        images: this.state.images,
       };
       console.log('new recipe info: ', data);
       const result = await client
@@ -151,6 +151,7 @@ class CreateRecipe extends Component {
                   id
                   username
                 }
+                images
               }
             }
           `,
@@ -158,7 +159,7 @@ class CreateRecipe extends Component {
             recipe: {
               description: data.description,
               system: 'us',
-              images: [],
+              images: data.images,
               name: data.name,
               ingredients: data.ingredients,
               instructions: data.instructions,
@@ -199,6 +200,7 @@ class CreateRecipe extends Component {
             {uploadFile => (
               <input
                 type="file"
+                accept="image/jpg, image/jpeg, image/png"
                 required
                 onChange={({
                   target: {
@@ -217,7 +219,7 @@ class CreateRecipe extends Component {
               placeholder="Recipe Title"
               fullWidth
               className="title"
-              onChange={this.handleChange('title')}
+              onChange={this.handleChange('name')}
             />
             <TextField
               id="textarea"
