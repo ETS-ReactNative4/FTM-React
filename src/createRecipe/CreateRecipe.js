@@ -232,6 +232,7 @@ class CreateRecipe extends Component {
             <TextField
               id="textarea"
               label="Prep Time"
+              type="number"
               fullWidth
               className="preptime"
               onChange={this.handleChange('prepTime')}
@@ -239,6 +240,7 @@ class CreateRecipe extends Component {
             <TextField
               id="textarea"
               label="Cook Time"
+              type="number"
               fullWidth
               className="cooktime"
               onChange={this.handleChange('cookTime')}
@@ -246,6 +248,7 @@ class CreateRecipe extends Component {
             <TextField
               id="textarea"
               label="Difficulty"
+              type="number"
               fullWidth
               className="difficulty"
               onChange={this.handleChange('difficulty')}
@@ -253,6 +256,7 @@ class CreateRecipe extends Component {
             <TextField
               id="textarea"
               label="Servings"
+              type="number"
               fullWidth
               className="servings"
               onChange={this.handleChange('servings')}
