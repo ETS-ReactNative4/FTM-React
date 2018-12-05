@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Icon from '@material-ui/core/Icon';
 import gql from 'graphql-tag';
-import { withApollo, compose, graphql } from 'react-apollo';
+import { withApollo, compose } from 'react-apollo';
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from 'react-share';
 import './Recipe.css';
 import RecipeInstructions from './Instructions/Instructions';
@@ -685,7 +685,11 @@ class Recipe extends Component {
                     : this.state.sourceURL
                 }
               >
-                Source
+                {
+                  this.state.sourceURL === '' || this.state.sourceURL === null
+                    ? 'http://www.foodtomake.com'
+                    : this.state.sourceURL
+                }
               </a>
             </span>
           </Grid>

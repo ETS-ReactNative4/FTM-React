@@ -52,7 +52,10 @@ class RecipeInfo extends Component {
             )}
           />
           <span className="time">
-            <TimerIcon /> {this.props.cookTime + this.props.prepTime} mins
+            <TimerIcon /> Prep: {this.props.prepTime} mins
+          </span>
+          <span className="time">
+            <TimerIcon /> Cook: {this.props.cookTime} mins
           </span>
           <span className="difficulty">
             Difficulty: {this.props.difficulty}

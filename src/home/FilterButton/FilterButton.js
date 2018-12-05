@@ -32,7 +32,7 @@ class FilterButton extends React.Component {
     this.setState({ active: checked });
   };
 
-  handleMenu = (event) => {
+  handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
@@ -66,7 +66,7 @@ class FilterButton extends React.Component {
     return (
       <div style={{ width: '100%', flex: '1' }}>
         <Button
-          buttonRef={(node) => {
+          buttonRef={node => {
             this.anchorEl = node;
           }}
           style={{ justifySelf: 'center' }}
@@ -82,7 +82,10 @@ class FilterButton extends React.Component {
             <Grow
               {...TransitionProps}
               id="filter-list-grow"
-              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+              style={{
+                transformOrigin:
+                  placement === 'bottom' ? 'center top' : 'center bottom'
+              }}
             >
               <Paper style={{ width: '100%', height: '100%' }}>
                 <ClickAwayListener onClickAway={this.handleClose}>
@@ -106,7 +109,7 @@ class FilterButton extends React.Component {
 
 FilterButton.propTypes = {
   title: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
+  items: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(FilterButton);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from 'material-ui';
-import { withApollo, compose, Mutation } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 import './CreateRecipe.css';
 import gql from 'graphql-tag';
 

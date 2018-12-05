@@ -6,7 +6,7 @@ import {
   InputLabel,
   InputAdornment,
   IconButton,
-  Button,
+  Button
 } from '@material-ui/core';
 import { FilterList } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
@@ -17,7 +17,6 @@ import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
 import Loading from '../loading/Loading';
-import RecipePDF from './PDF/RecipePDF';
 import FollowingProfile from './FollowingProfiles/FollowingProfiles';
 import './Profile.css';
 import withLocalData from '../withLocalData';
@@ -30,21 +29,21 @@ const styles = {
     xs: {
       picture: 12,
       social: 12,
-      recipes: 12,
+      recipes: 12
     },
     sm: {
       picture: 8,
       social: 8,
-      recipes: 8,
-    },
+      recipes: 8
+    }
   },
   gridList: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
     alignItems: 'flex-start',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'
+  }
 };
 
 const savedString = 'saved';
@@ -71,65 +70,60 @@ class Profile extends Component {
       followers_length: null,
       query: '',
       currently_viewing: 'saved', // ********** saved, owned, following, or madethis *************
-      searchSavedOrOwned: true, // search saved by default, so false means search owned
+      searchSavedOrOwned: true // search saved by default, so false means search owned
     };
 
     this.showResults = this.showResults.bind(this);
     this.followUser = this.followUser.bind(this);
     this.updateFollowing = this.updateFollowing.bind(this);
-    this.handleExport = this.handleExport.bind(this);
     // this.getDataFromAPI();
   }
 
   showResults(arg) {
+    console.log('SHOW RESULTS: ', arg);
     this.setState(
       {
-        currently_viewing: arg,
+        currently_viewing: arg
       },
-      () => this.printClicked(),
+      () => this.printClicked()
     );
   }
   printClicked() {
     console.log('clicked: ', this.state.currently_viewing);
     if (this.state.currently_viewing === savedString) {
       this.setState({
-        searchSavedOrOwned: true,
+        searchSavedOrOwned: true
       });
     } else if (this.state.currently_viewing === ownedString) {
       this.setState({
-        searchSavedOrOwned: false,
+        searchSavedOrOwned: false
       });
     } else if (this.state.currently_viewing === followingString) {
       this.setState({
-        searchSavedOrOwned: false,
+        searchSavedOrOwned: false
       });
     } else if (this.state.currently_viewing === madeThisString) {
       this.setState({
-        searchSavedOrOwned: false,
+        searchSavedOrOwned: false
       });
     }
   }
-
-  handleExport = () => {
-    console.log('handle export');
-    <RecipePDF />;
-  };
 
   componentWillMount() {
     this.getDataFromAPI();
   }
 
-  handleQueryChange = (event) => {
+  handleQueryChange = event => {
     this.setState({
-      query: event.target.value,
+      query: event.target.value
     });
   };
 
-  handleMouseDown = (event) => {
+  handleMouseDown = event => {
     event.preventDefault();
   };
 
-  handleEnterSearch = async (event) => {
+  handleEnterSearch = async event => {
     const { client } = this.props;
     if (event.key === 'Enter') {
       if (this.state.searchSavedOrOwned) {
@@ -145,11 +139,11 @@ class Profile extends Component {
                 description
                 images
               }
-            }`,
+            }`
         });
         this.setState({
           loading: true,
-          saved_recipes: data.searchSavedRecipes,
+          saved_recipes: data.searchSavedRecipes
         });
       } else {
         // search through owned
@@ -164,11 +158,11 @@ class Profile extends Component {
                 description
                 images
               }
-            }`,
+            }`
         });
         this.setState({
           loading: true,
-          owned_recipes: data.searchOwnedRecipes,
+          owned_recipes: data.searchOwnedRecipes
         });
       }
     }
@@ -189,11 +183,11 @@ class Profile extends Component {
               description
               images
             }
-          }`,
+          }`
       });
       this.setState({
         loading: true,
-        saved_recipes: data.searchSavedRecipes,
+        saved_recipes: data.searchSavedRecipes
       });
     } else {
       // search through owned
@@ -208,11 +202,11 @@ class Profile extends Component {
               description
               images
             }
-          }`,
+          }`
       });
       this.setState({
         loading: true,
-        owned_recipes: data.searchOwnedRecipes,
+        owned_recipes: data.searchOwnedRecipes
       });
     }
   };
@@ -225,7 +219,7 @@ class Profile extends Component {
     console.log('--------------------- tyring to get following');
     const { client, userId } = this.props;
     const info = {
-      user_id: userId,
+      user_id: userId
     };
     await client
       .query({
@@ -236,12 +230,12 @@ class Profile extends Component {
             username
             following {id username}
           }
-        }`,
+        }`
       })
-      .then((result) => {
+      .then(result => {
         console.log('result from getting userByID: ', result.data.userById);
         this.setState({
-          following: result.data.userById.following,
+          following: result.data.userById.following
         });
         return result.info;
       });
@@ -256,26 +250,31 @@ class Profile extends Component {
             id
             username
           }
-        }`,
+        }`
       })
-      .then((result) => {
+      .then(result => {
         console.log(
           'result from getting userbyUsername: ',
-          result.data.userByUsername,
+          result.data.userByUsername
         );
         console.log('current following: ', this.state.following);
         this.setState(
           previousState => ({
-            following: [...previousState.following, result.data.userByUserName],
+            following: [...previousState.following, result.data.userByUserName]
           }),
-          this.followUser,
+          this.followUser
         );
         return result.data;
       });
   };
 
   followUser = async () => {
-    console.log('vieweing profile for user: ', this.state.username, ', id: ', this.state.user_id);
+    console.log(
+      'vieweing profile for user: ',
+      this.state.username,
+      ', id: ',
+      this.state.user_id
+    );
 
     try {
       const { client } = this.props;
@@ -296,9 +295,9 @@ class Profile extends Component {
               following {username}
             }
           }
-          `,
+          `
         })
-        .then((result) => {
+        .then(result => {
           console.log('user followed: ', result.data);
           return result.data;
         });
@@ -326,9 +325,9 @@ class Profile extends Component {
         saved_recipes: user.savedRecipes,
         made_recipes: user.madeRecipes,
         following: user.following,
-        followers: user.followers,
+        followers: user.followers
       },
-      () => this.setLengths(),
+      () => this.setLengths()
     );
   }
 
@@ -338,7 +337,7 @@ class Profile extends Component {
       saved_recipes_length: this.state.saved_recipes.length,
       made_recipes_length: this.state.made_recipes.length,
       following_length: this.state.following.length,
-      followers_length: this.state.followers.length,
+      followers_length: this.state.followers.length
     });
   }
 
@@ -364,9 +363,9 @@ class Profile extends Component {
             }
           }
         `,
-          fetchPolicy: 'network-only',
+          fetchPolicy: 'network-only'
         })
-        .then((result) => {
+        .then(result => {
           console.log('fetchUser: ', result.data.userById);
           return result.data.userById;
         });
@@ -398,9 +397,9 @@ class Profile extends Component {
             }
           }
         `,
-          fetchPolicy: 'network-only',
+          fetchPolicy: 'network-only'
         })
-        .then((result) => {
+        .then(result => {
           console.log('data got back: \n', result.data.userByUsername);
           return result.data.userByUsername;
         });
@@ -443,7 +442,6 @@ class Profile extends Component {
       madeThisShow = true;
     }
 
-
     let myProfile = true;
     if (this.props.match.params.username) {
       myProfile = false; // viewing somebody elses profile
@@ -485,70 +483,75 @@ class Profile extends Component {
               my_profile={myProfile}
               followUser={this.followUser}
             />
-            <Grid item>
-              <Route
-                render={({ history }) => (
+            {!followShow && ( // don't show export if they are looking at followers
+              <Grid item>
+                <Route
+                  render={({ history }) => (
+                    <Button
+                      variant="contained"
+                      color="default"
+                      className="post-comment-button"
+                      onClick={() => {
+                        history.push('/exportrecipes');
+                      }}
+                    >
+                      Export Recipes
+                    </Button>
+                  )}
+                />
+              </Grid>
+            )}
+          </Grid>
 
-                  <Button
-                    variant="contained"
-                    color="default"
-                    className="post-comment-button"
-                    onClick={() => {
-                      history.push('/exportrecipes');
-                    }}
-                  >
-                    Export Recipes
-                  </Button>
-                )}
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            className="search-box"
-            item
-            xs={styles.sizes.xs.social}
-            sm={styles.sizes.sm.social}
-          >
-            <Spring
-              from={{ marginTop: 0 }}
-              to={
-                this.state.saved_recipes.length > 0
-                  ? { marginTop: 0 }
-                  : { marginTop: 0 }
-              }
+          {!followShow && ( // don't show search box if they are looking at followers
+            <Grid
+              className="search-box"
+              item
+              xs={styles.sizes.xs.social}
+              sm={styles.sizes.sm.social}
             >
-              {({ marginTop }) => (
-                <div className="search-box" style={{ marginTop }}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="search">
-                      Search for a recipe...
-                    </InputLabel>
-                    <Input
-                      id="search"
-                      onKeyPress={this.handleEnterSearch}
-                      onChange={this.handleQueryChange}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            onMouseDown={this.handleMouseDown}
-                            onClick={this.toggleFilter}
-                          >
-                            <FilterList size={30} />
-                          </IconButton>
-                          <Button
-                            id="searchButton"
-                            onClick={this.handleButtonSearch}
-                          >
-                            Search
-                          </Button>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </div>
-              )}
-            </Spring>
-          </Grid>
+              <Spring
+                from={{ marginTop: 0 }}
+                to={
+                  this.state.saved_recipes.length > 0
+                    ? { marginTop: 0 }
+                    : { marginTop: 0 }
+                }
+              >
+                {({ marginTop }) => (
+                  <div className="search-box" style={{ marginTop }}>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="search">
+                        Search for a recipe...
+                      </InputLabel>
+                      <Input
+                        id="search"
+                        onKeyPress={this.handleEnterSearch}
+                        onChange={this.handleQueryChange}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              onMouseDown={this.handleMouseDown}
+                              onClick={this.toggleFilter}
+                            >
+                              <FilterList size={30} />
+                            </IconButton>
+                            <Button
+                              id="searchButton"
+                              onClick={this.handleButtonSearch}
+                            >
+                              Search
+                            </Button>
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                  </div>
+                )}
+              </Spring>
+            </Grid>
+          )}
+
           <Grid
             className="users-recipes"
             item
@@ -564,22 +567,24 @@ class Profile extends Component {
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.saved_recipes.map(recipe => (marginTop, index) => {
-                      return (
-                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
-                          <animated.div key={index} style={marginTop}>
-                            <SearchResult
-                              key={recipe.id}
-                              name={recipe.name}
-                              style={marginTop}
-                              description={recipe.description}
-                              images={recipe.images}
-                              r_id={recipe.id}
-                            />
-                          </animated.div>
-                        </Grid>
-                      );
-                    } )}
+                    {this.state.saved_recipes.map(
+                      recipe => (marginTop, index) => {
+                        return (
+                          <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                            <animated.div key={index} style={marginTop}>
+                              <SearchResult
+                                key={recipe.id}
+                                name={recipe.name}
+                                style={marginTop}
+                                description={recipe.description}
+                                images={recipe.images}
+                                r_id={recipe.id}
+                              />
+                            </animated.div>
+                          </Grid>
+                        );
+                      }
+                    )}
                   </Trail>
                 </Grid>
               )}
@@ -592,22 +597,24 @@ class Profile extends Component {
                     from={{ marginTop: 500, opacity: 1 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.owned_recipes.map(recipe => (marginTop, index) => {
-                      return (
-                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
-                          <animated.div key={index} style={marginTop}>
-                            <SearchResult
-                              key={recipe.id}
-                              name={recipe.name}
-                              style={marginTop}
-                              description={recipe.description}
-                              images={recipe.images}
-                              r_id={recipe.id}
-                            />
-                          </animated.div>
-                        </Grid>
-                      );
-                    } )}
+                    {this.state.owned_recipes.map(
+                      recipe => (marginTop, index) => {
+                        return (
+                          <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                            <animated.div key={index} style={marginTop}>
+                              <SearchResult
+                                key={recipe.id}
+                                name={recipe.name}
+                                style={marginTop}
+                                description={recipe.description}
+                                images={recipe.images}
+                                r_id={recipe.id}
+                              />
+                            </animated.div>
+                          </Grid>
+                        );
+                      }
+                    )}
                   </Trail>
                 </Grid>
               )}
@@ -620,27 +627,29 @@ class Profile extends Component {
                     from={{ marginTop: 500, opacity: 1 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.made_recipes.map(recipe => (marginTop, index) => {
-                      return (
-                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
-                          <animated.div key={index} style={marginTop}>
-                            <SearchResult
-                              key={recipe.id}
-                              name={recipe.name}
-                              style={marginTop}
-                              description={recipe.description}
-                              images={recipe.images}
-                              r_id={recipe.id}
-                            />
-                          </animated.div>
-                        </Grid>
-                      );
-                    } )}
+                    {this.state.made_recipes.map(
+                      recipe => (marginTop, index) => {
+                        return (
+                          <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                            <animated.div key={index} style={marginTop}>
+                              <SearchResult
+                                key={recipe.id}
+                                name={recipe.name}
+                                style={marginTop}
+                                description={recipe.description}
+                                images={recipe.images}
+                                r_id={recipe.id}
+                              />
+                            </animated.div>
+                          </Grid>
+                        );
+                      }
+                    )}
                   </Trail>
                 </Grid>
               )}
 
-              {followShow &&
+              {followShow && (
                 <Grid container>
                   <Trail
                     native
@@ -648,24 +657,26 @@ class Profile extends Component {
                     from={{ marginTop: 500, opacity: 1 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.following.map(userProfile => (marginTop, index) => {
-                      return (
-                        <Grid item md={6} sm={4} xs={12} zeroMinWidth>
-                          <animated.div key={index} style={marginTop}>
-                            <FollowingProfile
-                              key={userProfile.id}
-                              name={userProfile.username}
-                              style={marginTop}
-                              images={userProfile.profilePicture}
-                              r_id={userProfile.username}
-                            />
-                          </animated.div>
-                        </Grid>
-                      );
-                    } )}
+                    {this.state.following.map(
+                      userProfile => (marginTop, index) => {
+                        return (
+                          <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                            <animated.div key={index} style={marginTop}>
+                              <FollowingProfile
+                                key={userProfile.id}
+                                name={userProfile.username}
+                                style={marginTop}
+                                images={userProfile.profilePicture}
+                                r_id={userProfile.username}
+                              />
+                            </animated.div>
+                          </Grid>
+                        );
+                      }
+                    )}
                   </Trail>
                 </Grid>
-              }
+              )}
             </div>
           </Grid>
         </Grid>
@@ -676,5 +687,5 @@ class Profile extends Component {
 
 export default compose(
   withLocalData,
-  withApollo,
+  withApollo
 )(Profile);
