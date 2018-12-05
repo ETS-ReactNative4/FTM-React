@@ -61,17 +61,17 @@ function HomeAppBar(props) {
             </Fragment>
           ) : (
             <Fragment>
-            <Button color="inherit" component={Link} to="/helpPage">
-                Help
-              </Button>
               <Button color="inherit" component={Link} to="/signup">
                 Sign Up
               </Button>
               <Button color="inherit" component={Link} to="/login">
                 Login
               </Button>
-              </Fragment>
+            </Fragment>
           )}
+          <Button color="inherit" component={Link} to="/helpPage">
+            Help
+          </Button>
         </Toolbar>
       </AppBar>
     </div>

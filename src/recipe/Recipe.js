@@ -685,7 +685,11 @@ class Recipe extends Component {
                     : this.state.sourceURL
                 }
               >
-                Source
+                {
+                  this.state.sourceURL === '' || this.state.sourceURL === null
+                    ? 'http://www.foodtomake.com'
+                    : this.state.sourceURL
+                }
               </a>
             </span>
           </Grid>

@@ -80,7 +80,7 @@ class Social extends Component {
             icon={'library_books'}
             number={this.props.owned_recipes_number}
             title={'Owned Recipes'}
-            delegateShow={ownedString}
+            delegateShow={ ownedString}
             delegateShowResults={this.delegateShowResults}
             classActive={this.state.ownActive}
           />
@@ -116,36 +116,6 @@ class Social extends Component {
               <span>Follow this user</span><br />
             </Card>
           }
-          {/*
-          <Card className="num-container owned-button" onClick={() => { this.props.showResults('owned'); this.changeActive(); }}>
-            <Icon>library_books</Icon>
-            <span className="number">{this.props.owned_recipes_number}</span><br />
-            <span>Owned Recipes</span>
-          </Card>
-          <Card className="num-container saved-button btn-active" onClick={() => this.props.showResults('saved')}>
-            <Icon>library_books</Icon>
-            <span className="number">{this.props.saved_recipes_number}</span><br />
-            <span>Saved Recipes</span>
-          </Card>
-          <Card className="num-container madethis-button" onClick={() => this.props.showResults('madethis')}>
-            <Icon>library_books</Icon>
-            <span className="number">{this.props.made_this_number}</span><br />
-            <span>I Made These!</span>
-          </Card>
-          {this.props.my_profile &&
-            <Card className="num-container following-button" onClick={() => this.props.showResults('following')}>
-              <Icon>people</Icon>
-              <span className="number">{this.props.following_number}</span><br />
-              <span>Following</span>
-            </Card>
-          }
-          {!this.props.my_profile &&
-            <Card className="num-container follow-button" onClick={() => this.props.followUser()}>
-              <Icon>people</Icon>
-              <span>Follow this user</span><br />
-            </Card>
-          }
-          */}
         </div>
 
       </div>
