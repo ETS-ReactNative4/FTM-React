@@ -14,8 +14,9 @@ import { withApollo, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
-import FilterButton from './FilterButton/FilterButton';
-import CookTimeButton from './FilterButton/CookTimeButton';
+import TimeFilterButton from './FilterButton/TimeFilterButton';
+import DifficultyFilterButton from './FilterButton/DifficultyFilterButton';
+import RatingFilterButton from './FilterButton/RatingFilterButton';
 import FilterChipsArray from './FilterChip/FilterChipsArray';
 import FilterDialog from './FilterDialog/FilterDialog';
 
@@ -108,7 +109,7 @@ class Home extends Component {
 
   handleAddFilterChip = (title, label) => {
     this.filterChipsRef.current.handleAddFilterChip(title, label);
-    const currentFilters = this.state.filters;
+    const currentFilters = [...this.state.filters];
     const args = label.split(' ');
     switch (title) {
     case 'Cook Time':
@@ -169,6 +170,7 @@ class Home extends Component {
       break;
     default:
     }
+    this.setState({ filters: currentFilters });
   };
 
   handleHasFilterChips = (value) => {
@@ -303,23 +305,11 @@ class Home extends Component {
               }
           }
         >
-          <CookTimeButton title="Cook Time" handleAddFilterChip={this.handleAddFilterChip} />
-          <FilterButton
-            title="Prep. Time"
-            items={['<= 10 min', '20 min', '45 min', '>60 min']}
-            handleAddFilterChip={this.handleAddFilterChip}
-          />
-          <FilterButton
-            title="Difficulty"
-            items={['One', 'Two', 'Three', 'Four', 'Five']}
-            handleAddFilterChip={this.handleAddFilterChip}
-          />
-          <FilterButton
-            title="Rating"
-            items={['One', 'Two', 'Three', 'Four', 'Five']}
-            handleAddFilterChip={this.handleAddFilterChip}
-          />
-          <FilterDialog handleIngredientsFilter={this.handleIngredientsFilter} />
+          <TimeFilterButton title="Cook Time" handleAddFilterChip={this.handleAddFilterChip} />
+          {/* <TimeFilterButton title="Prep. Time" handleAddFilterChip={this.handleAddFilterChip} />
+          <DifficultyFilterButton title="Difficulty" handleAddFilterChip={this.handleAddFilterChip} />
+          <RatingFilterButton title="Rating" handleAddFilterChip={this.handleAddFilterChip} />
+          <FilterDialog handleIngredientsFilter={this.handleIngredientsFilter} /> */}
         </div>
 
         <div
