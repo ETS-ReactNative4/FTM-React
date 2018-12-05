@@ -14,7 +14,7 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 8,
+      title: 8
     },
     sm: {
       picture: 4,
@@ -22,9 +22,9 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 8,
-    },
-  },
+      title: 8
+    }
+  }
 };
 
 class CreateRecipe extends Component {
@@ -45,7 +45,7 @@ class CreateRecipe extends Component {
       difficulty: null,
       sourceURL: null,
       servings: null,
-      notes: null,
+      notes: null
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -56,64 +56,34 @@ class CreateRecipe extends Component {
     this.uploadFile = this.uploadFile.bind(this);
   }
 
-  handleIngredients = ingredients => (event) => {
+  handleIngredients = ingredients => event => {
     this.setState({
-      ingredients: event.target.value.split(','),
+      ingredients: event.target.value.split(',')
     });
   };
-  handleInstructions = instructions => (event) => {
+  handleInstructions = instructions => event => {
     this.setState({
-      instructions: event.target.value.split(','),
+      instructions: event.target.value.split(',')
     });
   };
-  handleNotes = notes => (event) => {
+  handleNotes = notes => event => {
     this.setState({
-      notes: event.target.value.split(','),
+      notes: event.target.value.split(',')
     });
   };
-  handleChange = name => (event) => {
+  handleChange = name => event => {
     this.setState({
-      [name]: event.target.value,
+      [name]: event.target.value
     });
   };
 
   async handleSubmit(e) {
-
     await this.submitRecipe();
     // this.addToPublished(res.CreateRecipe.id);
   }
 
-  uploadFile = async (e) => {
-    const photo = e.variables.file;
-    this.setState(previousState => ({
-      images: [...previousState.images, photo],
-    }), () => {
-      console.log('uploaded image: ', this.state.images);
-    });
-
-    /*
-    try {
-      const { client } = this.props;
-      console.log(photo);
-      const { result } = await client.mutate({
-        mutation: gql`
-          mutation UploadPhoto($file: Upload!) {
-            uploadPhoto(file: $file)
-          }
-        `,
-        variables: {
-          file: photo,
-        },
-      })
-        .then((result) => {
-          console.log('upload result: ', result);
-          return result.data;
-        });
-    } catch (err) {
-      console.log(err);
-      return {};
-    }
-    */
+  uploadFile = async photos => {
+    this.setState({ images: photos });
   };
 
   UPLOAD_FILE = gql`
@@ -123,68 +93,65 @@ class CreateRecipe extends Component {
   `;
 
   submitRecipe = async () => {
-    try {
-      const { client, userId } = this.props;
-      const data = {
-        name: this.state.title,
-        description: this.state.description,
-        prepTime: this.state.prepTime,
-        cookTime: this.state.cookTime,
-        difficulty: this.state.difficulty,
-        ingredients: this.state.ingredients,
-        instructions: this.state.instructions,
-        notes: this.state.notes,
-        sourceURL: 'www.foodtomake.com',
-        servings: this.state.servings,
-        user_id: userId,
-        images: this.state.images,
-      };
-      console.log('new recipe info: ', data);
-      const result = await client
-        .mutate({
-          mutation: gql`
-            mutation CreateRecipe($recipe: NewRecipeInput!) {
-              createRecipe(recipe: $recipe) {
+    const { client, userId } = this.props;
+    const data = {
+      name: 'Test',
+      description: this.state.description,
+      prepTime: this.state.prepTime,
+      cookTime: this.state.cookTime,
+      difficulty: this.state.difficulty,
+      ingredients: this.state.ingredients,
+      instructions: this.state.instructions,
+      notes: this.state.notes,
+      sourceURL: 'www.foodtomake.com',
+      servings: this.state.servings,
+      user_id: userId,
+      images: this.state.images
+    };
+    console.log('new recipe info: ', data);
+    client
+      .mutate({
+        mutation: gql`
+          mutation CreateRecipe($recipe: NewRecipeInput!) {
+            createRecipe(recipe: $recipe) {
+              id
+              name
+              author {
                 id
-                name
-                author {
-                  id
-                  username
-                }
-                images
+                username
               }
+              images
             }
-          `,
-          variables: {
-            recipe: {
-              description: data.description,
-              system: 'us',
-              images: data.images,
-              name: data.name,
-              ingredients: data.ingredients,
-              instructions: data.instructions,
-              sourceURL: data.sourceURL,
-              prepTime: data.prepTime,
-              cookTime: data.cookTime,
-              difficulty: data.difficulty,
-              servings: data.servings,
-              author: data.user_id,
-              tags: [],
-              notes: data.notes,
-              published: false,
-            },
-          },
-        })
-        .then((result) => {
-          console.log('created result: ', result.data);
-          // this.addToPublished(result.data.createRecipe.id);
-          return result.data;
-        });
-      return result;
-    } catch (err) {
-      console.log(err);
-      return {};
-    }
+          }
+        `,
+        variables: {
+          recipe: {
+            description: data.description,
+            system: 'us',
+            images: [data.images[0]],
+            name: data.name,
+            ingredients: data.ingredients,
+            instructions: data.instructions,
+            sourceURL: data.sourceURL,
+            prepTime: data.prepTime,
+            cookTime: data.cookTime,
+            difficulty: data.difficulty,
+            servings: data.servings,
+            author: data.user_id,
+            tags: [],
+            notes: data.notes,
+            published: false
+          }
+        }
+      })
+      .then(result => {
+        console.log('created result: ', result.data);
+        // this.addToPublished(result.data.createRecipe.id);
+        return result.data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -202,13 +169,8 @@ class CreateRecipe extends Component {
                 type="file"
                 accept="image/jpg, image/jpeg, image/png"
                 required
-                onChange={({
-                  target: {
-                    validity,
-                    files: [file],
-                  },
-                }) => {
-                  validity.valid && this.uploadFile({ variables: { file } });
+                onChange={({ target: { validity, files } }) => {
+                  validity.valid && this.uploadFile(files);
                 }}
               />
             )}
@@ -289,5 +251,5 @@ class CreateRecipe extends Component {
 
 export default compose(
   withLocalData,
-  withApollo,
+  withApollo
 )(CreateRecipe);
