@@ -109,31 +109,63 @@ class Home extends Component {
   handleAddFilterChip = (title, label) => {
     this.filterChipsRef.current.handleAddFilterChip(title, label);
     const currentFilters = this.state.filters;
+    const args = label.split(' ');
     switch (title) {
     case 'Cook Time':
-      const args = label.split(' ');
-      console.log(args);
-      switch (label) {
-      case '<= 10 min':
-        currentFilters.push({ field: 'cookTime', operator: 'LTE', value: ['10'] });
+      switch (args[0]) {
+      case '<=':
+        currentFilters.push({ field: 'cookTime', operator: 'LTE', value: [args[1]] });
         break;
-      case '20 min':
-        currentFilters.push({ field: 'cookTime', operator: 'LTE', value: ['20'] });
+      case '>=':
+        currentFilters.push({ field: 'cookTime', operator: 'GTE', value: [args[1]] });
         break;
-      case '45 min':
-        currentFilters.push({ field: 'cookTime', operator: 'LTE', value: ['45'] });
-        break;
-      case '>60 min':
-        currentFilters.push({ field: 'cookTime', operator: 'GTE', value: ['60'] });
+      case '==':
+        currentFilters.push({ field: 'cookTime', operator: 'EQ', value: [args[1]] });
         break;
       default:
       }
       break;
     case 'Prep. Time':
+      switch (args[0]) {
+      case '<=':
+        currentFilters.push({ field: 'prepTime', operator: 'LTE', value: [args[1]] });
+        break;
+      case '>=':
+        currentFilters.push({ field: 'prepTime', operator: 'GTE', value: [args[1]] });
+        break;
+      case '==':
+        currentFilters.push({ field: 'prepTime', operator: 'EQ', value: [args[1]] });
+        break;
+      default:
+      }
       break;
     case 'Difficulty':
+      switch (args[0]) {
+      case '<=':
+        currentFilters.push({ field: 'difficulty', operator: 'LTE', value: [args[1]] });
+        break;
+      case '>=':
+        currentFilters.push({ field: 'difficulty', operator: 'GTE', value: [args[1]] });
+        break;
+      case '==':
+        currentFilters.push({ field: 'difficulty', operator: 'EQ', value: [args[1]] });
+        break;
+      default:
+      }
       break;
     case 'Rating':
+      switch (args[0]) {
+      case '<=':
+        currentFilters.push({ field: 'rating', operator: 'LTE', value: [args[1]] });
+        break;
+      case '>=':
+        currentFilters.push({ field: 'rating', operator: 'GTE', value: [args[1]] });
+        break;
+      case '==':
+        currentFilters.push({ field: 'rating', operator: 'EQ', value: [args[1]] });
+        break;
+      default:
+      }
       break;
     default:
     }
