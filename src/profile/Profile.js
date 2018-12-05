@@ -82,6 +82,7 @@ class Profile extends Component {
   }
 
   showResults(arg) {
+    console.log('SHOW RESULTS: ', arg);
     this.setState(
       {
         currently_viewing: arg,
