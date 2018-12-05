@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from 'material-ui';
-import { Mutation } from 'react-apollo';
-import './CreateRecipe.css';
+import { withApollo, Mutation, compose } from 'react-apollo';
 import gql from 'graphql-tag';
+import './CreateRecipe.css';
+import withLocalData from '../withLocalData';
 
 const styles = {
   spacing: 24,
@@ -92,28 +93,24 @@ class CreateRecipe extends Component {
   }
 
   uploadFile = async (e) => {
-    console.log('upload a file');
+    const photo = e.variables.file;
     try {
-      const file = e.variables.file;
-      console.log('file: ', e.variables.file);
       const { client } = this.props;
-      const { result } = client.mutate({
+      console.log(photo);
+      const { result } = await client.mutate({
         mutation: gql`
-          mutation uploadPhtoto($file: Upload!) {
-            uploadPhoto(file: $file) {
-              filename
-            }
+          mutation UploadPhoto($file: Upload!) {
+            uploadPhoto(file: $file)
           }
         `,
         variables: {
-          file
-        }
+          file: photo,
+        },
       })
-      .then((result) => {
-        console.log('uploaded file: ', result);
-        return result;
-      });
-      return result;
+        .then((result) => {
+          console.log('upload result: ', result);
+          return result.data;
+        });
     } catch (err) {
       console.log(err);
       return {};
@@ -142,9 +139,8 @@ class CreateRecipe extends Component {
         servings: this.state.servings,
         user_id: userId,
       };
-      console.log(data.name);
-      console.log(data.ingredients);
-      const result = client
+      console.log('new recipe info: ', data);
+      const result = await client
         .mutate({
           mutation: gql`
             mutation CreateRecipe($recipe: NewRecipeInput!) {
@@ -180,7 +176,7 @@ class CreateRecipe extends Component {
         })
         .then((result) => {
           console.log('created result: ', result.data);
-          this.addToPublished(result.data.createRecipe.id);
+          // this.addToPublished(result.data.createRecipe.id);
           return result.data;
         });
       return result;
@@ -289,4 +285,7 @@ class CreateRecipe extends Component {
   }
 }
 
-export default CreateRecipe;
+export default compose(
+  withLocalData,
+  withApollo,
+)(CreateRecipe);
