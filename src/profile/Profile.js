@@ -17,7 +17,6 @@ import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
 import Loading from '../loading/Loading';
-import RecipePDF from './PDF/RecipePDF';
 import FollowingProfile from './FollowingProfiles/FollowingProfiles';
 import './Profile.css';
 import withLocalData from '../withLocalData';
