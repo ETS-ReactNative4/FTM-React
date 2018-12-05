@@ -17,3 +17,8 @@ div.title-container {
   margin-left: auto !important;
   margin-right: auto !important;
 }
+.create-recipe-button,
+.export-recipes-button {
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+}

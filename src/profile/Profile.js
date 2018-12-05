@@ -490,12 +490,27 @@ class Profile extends Component {
                     <Button
                       variant="contained"
                       color="default"
-                      className="post-comment-button"
+                      className="export-recipes-button"
                       onClick={() => {
                         history.push('/exportrecipes');
                       }}
                     >
                       Export Recipes
+                    </Button>
+                  )}
+                />
+
+                <Route
+                  render={({ history }) => (
+                    <Button
+                      variant="contained"
+                      color="default"
+                      className="create-recipe-button"
+                      onClick={() => {
+                        history.push('/createrecipe');
+                      }}
+                    >
+                      Create A Recipe
                     </Button>
                   )}
                 />
