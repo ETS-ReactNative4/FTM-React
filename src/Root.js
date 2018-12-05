@@ -13,15 +13,13 @@ import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 import { decode } from 'jsonwebtoken';
 
-
-
 const theme = createMuiTheme({
   palette: {
-    primary: red,
+    primary: red
   },
   typography: {
-    useNextVariants: true,
-  },
+    useNextVariants: true
+  }
 });
 class Root extends Component {
   constructor(props) {
@@ -38,14 +36,14 @@ class Root extends Component {
           cache,
           defaults: {
             token,
-            userId,
-          },
+            userId
+          }
         }),
         new HttpLink({
-          uri: 'https://api.foodtomake.com/graphql',
-        }),
+          uri: 'http://localhost:8081/graphql'
+        })
       ]),
-      cache,
+      cache
     });
   }
 
