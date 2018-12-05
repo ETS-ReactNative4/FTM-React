@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Button, TextField } from '@material-ui/core';
+import { Favorite, FavoriteBorder } from '@material-ui/icons';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -7,7 +8,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Icon from '@material-ui/core/Icon';
 import gql from 'graphql-tag';
 import { withApollo, compose } from 'react-apollo';
-import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from 'react-share';
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon
+} from 'react-share';
 import './Recipe.css';
 import RecipeInstructions from './Instructions/Instructions';
 import RecipeInfo from './Info/Info';
@@ -18,7 +24,7 @@ import Notes from './Notes/Notes';
 import Comments from './Comments/Comments';
 import withLocalData from '../withLocalData';
 import Fraction from 'fraction.js';
-import * as jsPDF  from 'jspdf'
+import * as jsPDF from 'jspdf';
 
 const styles = {
   spacing: 24,
@@ -68,8 +74,6 @@ class Recipe extends Component {
       new_comment: null,
       note_dialog_open: false,
       comment_dialog_open: false
-
-      
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
@@ -84,7 +88,7 @@ class Recipe extends Component {
     this.handleCommentOpen = this.handleCommentOpen.bind(this);
     this.handleNoteInput = this.handleNoteInput.bind(this);
     this.iMadeThis = this.iMadeThis.bind(this);
-    this.pdfToHTML=this.pdfToHTML.bind(this);
+    this.pdfToHTML = this.pdfToHTML.bind(this);
   }
 
   isUserLoggedIn() {
@@ -119,7 +123,6 @@ class Recipe extends Component {
     });
   };
 
- 
   iMadeThis() {
     console.log('show youve made this');
     try {
@@ -141,7 +144,7 @@ class Recipe extends Component {
               }
             }`
         })
-        .then((result) => {
+        .then(result => {
           console.log('made this result: ', result);
           return result;
         });
@@ -151,36 +154,27 @@ class Recipe extends Component {
       return {};
     }
   }
-  pdfToHTML(){
-   // var doc = new jsPDF();
+  pdfToHTML() {
+    // var doc = new jsPDF();
     var specialElementHandlers = {
-        '#myId': function(element, renderer){
-            return true;
-        },
+      '#myId': function(element, renderer) {
+        return true;
+      }
     };
 
     let doc = new jsPDF();
     doc.text(20, 20, 'Hello world.');
-    doc.addPage('a4','p');
+    doc.addPage('a4', 'p');
     var source = document.getElementById('myId'); //$('#HTMLtoPDF')[0];
-    doc.fromHTML(
-        source, 15, 15, {
-            'elementHandlers': specialElementHandlers
-        }
-    );
-    doc.addPage('a4','l');
-    doc.fromHTML(
-        source, 15, 15, {
-            'elementHandlers': specialElementHandlers
-        }
-    );
+    doc.fromHTML(source, 15, 15, {
+      elementHandlers: specialElementHandlers
+    });
+    doc.addPage('a4', 'l');
+    doc.fromHTML(source, 15, 15, {
+      elementHandlers: specialElementHandlers
+    });
     doc.save('Test.pdf');
-
-
-}
-
-
-
+  }
 
   recipeAlreadySaved(recipeId) {
     try {
@@ -226,70 +220,55 @@ class Recipe extends Component {
     }
   }
 
-  saveRecipe() {
-    try {
-      const { client, userId } = this.props;
-      const data = {
-        user_id: userId,
-        recipe_id: this.state.recipe_id
-      };
-      this.recipeAlreadySaved().then(result => {
-        if (result) {
-          console.log('exists');
-        } else {
-          const result = client
-            .mutate({
-              mutation: gql`
-            mutation SaveRecipe {
-              addSavedRecipe(
-                userId: "${data.user_id}"
-                recipeId: "${data.recipe_id}"
-              ) {
-                id
-              }
-            }
-          `,
-              fetchPolicy: 'no-cache'
-            })
-            .then((result) => {
-              return result.data.recipeById;
-            });
-          return result;
-        }
-        return 'yes';
-      });
-      return 'yes';
-    } catch (err) {
-      return {};
+  toggleSavedRecipe = () => {
+    this.setState({ recipeAlreadySaved: !this.state.recipeAlreadySaved })
+    if (this.state.recipeAlreadySaved) {
+      this.removeRecipe()
+    } else {
+      this.saveRecipe()
     }
-  }
+  };
 
-  removeRecipe() {
+  saveRecipe = () => {
     try {
       const { client, userId } = this.props;
-      const data = {
-        user_id: userId,
-        recipe_id: this.state.recipe_id
-      };
-      const result = client
-        .mutate({
-          mutation: gql`
-          mutation RemoveRecipe {           
-            deleteSavedRecipe(
-              userId: "${data.user_id}"
-              recipeId: "${data.recipe_id}"
-            )
+
+      return client.mutate({
+        mutation: gql`
+          mutation SaveRecipe($userId: String!, $recipeId: String!) {
+            addSavedRecipe(userId: $userId, recipeId: $recipeId) {
+              id
+            }
           }
-        `
-        })
-        .then(result => {
-          return result.data;
-        });
-      return result;
+        `,
+        variables: {
+          userId,
+          recipeId: this.state.recipe_id
+        }
+      });
+    } catch (err) {
+      return;
+    }
+  };
+
+  removeRecipe = () => {
+    try {
+      const { client, userId } = this.props;
+      return client.mutate({
+        mutation: gql`
+          mutation RemoveRecipe($userId: String!, $recipeId: String!) {
+            deleteSavedRecipe(userId: $userId, recipeId: $recipeId)
+          }
+        `,
+        variables: {
+          userId,
+          recipeId: this.state.recipe_id
+        }
+      });
     } catch (err) {
       return {};
     }
-  }
+  };
 
   noteSubmit() {
     // append the new note to the current ones, then use callback to make api call
@@ -511,8 +490,6 @@ class Recipe extends Component {
           spacing={styles.spacing}
           justify={'center'}
         >
-        
-  
           <Grid
             className="picture"
             item
@@ -579,22 +556,6 @@ class Recipe extends Component {
             >
               <Button
                 variant="contained"
-                color="primary"
-                className="save-recipe-button btn-margin"
-                onClick={this.saveRecipe}
-              >
-                Save Recipe
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                className="remove-recipe-button btn-margin"
-                onClick={this.removeRecipe}
-              >
-                Remove From Saved
-              </Button>
-              <Button
-                variant="contained"
                 color="secondary"
                 className="print-button btn-margin"
                 onClick={this.pdfToHTML}
@@ -619,22 +580,6 @@ class Recipe extends Component {
                 onClick={this.iMadeThis}
               >
                 I Made This!
-              </Button>
-
-              <Button
-                variant="contained"
-                color="default"
-                className="twitter-share btn-margin"
-              >
-                <TwitterShareButton url={shareUrl}><TwitterIcon size={32} round={true} /></TwitterShareButton>
-              </Button>
-
-              <Button
-                variant="contained"
-                color="default"
-                className="facebook-share btn-margin"
-              >
-                <FacebookShareButton url={shareUrl}><FacebookIcon size={32} round={true} /></FacebookShareButton>
               </Button>
 
               <Dialog
@@ -685,11 +630,9 @@ class Recipe extends Component {
                     : this.state.sourceURL
                 }
               >
-                {
-                  this.state.sourceURL === '' || this.state.sourceURL === null
-                    ? 'http://www.foodtomake.com'
-                    : this.state.sourceURL
-                }
+                {this.state.sourceURL === '' || this.state.sourceURL === null
+                  ? 'http://www.foodtomake.com'
+                  : this.state.sourceURL}
               </a>
             </span>
           </Grid>
@@ -699,6 +642,45 @@ class Recipe extends Component {
             xs={styles.sizes.xs.ingredients}
             sm={styles.sizes.sm.ingredients}
           >
+            <Button
+              style={{
+                position: 'absolute',
+                bottom: 160,
+                right: 20,
+                backgroundColor: '#3b5998'
+              }}
+              variant="fab"
+            >
+              <FacebookShareButton url={shareUrl} className="share-btn">
+                <FacebookIcon size={48} round={true} className="share-btn" />
+              </FacebookShareButton>
+            </Button>
+            <Button
+              style={{
+                position: 'absolute',
+                bottom: 90,
+                right: 20,
+                backgroundColor: '#00aced'
+              }}
+              variant="fab"
+            >
+              <TwitterShareButton url={shareUrl} className="share-btn">
+                <TwitterIcon size={48} round={true} className="share-btn" />
+              </TwitterShareButton>
+            </Button>
+            <Button
+              style={{ position: 'absolute', bottom: 20, right: 20 }}
+              variant="fab"
+              color="primary"
+              onClick={this.toggleSavedRecipe}
+              disabled={!isLoggedIn}
+            >
+              {this.state.recipeAlreadySaved ? (
+                <Favorite />
+              ) : (
+                <FavoriteBorder />
+              )}
+            </Button>
             <Comments comments={this.state.comments} />
             {isLoggedIn ? (
               <div className="comment-loggedin">

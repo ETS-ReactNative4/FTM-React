@@ -47,13 +47,17 @@ div.info {
   margin: 0 10px !important;
 }
 
-.divider{
-    width:5px;
-    height:auto;
-    display:inline-block;
+.divider {
+  width: 5px;
+  height: auto;
+  display: inline-block;
 }
 
 .source-url {
-  font-size: .7em;
+  font-size: 0.7em;
   color: gray;
+}
+
+.share-btn:focus {
+  outline: none;
 }
