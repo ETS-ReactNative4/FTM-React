@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from 'material-ui';
+import { Card, CardMedia, List, ListItem, Typography } from '@material-ui/core';
 import { withApollo, Mutation, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import './CreateRecipe.css';
@@ -14,7 +15,7 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 8
+      title: 8,
     },
     sm: {
       picture: 4,
@@ -22,9 +23,9 @@ const styles = {
       ingredients: 8,
       instructions: 8,
       author: 8,
-      title: 8
-    }
-  }
+      title: 8,
+    },
+  },
 };
 
 class CreateRecipe extends Component {
@@ -45,7 +46,7 @@ class CreateRecipe extends Component {
       difficulty: null,
       sourceURL: null,
       servings: null,
-      notes: null
+      notes: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -56,24 +57,24 @@ class CreateRecipe extends Component {
     this.uploadFile = this.uploadFile.bind(this);
   }
 
-  handleIngredients = ingredients => event => {
+  handleIngredients = ingredients => (event) => {
     this.setState({
-      ingredients: event.target.value.split(',')
+      ingredients: event.target.value.split(','),
     });
   };
-  handleInstructions = instructions => event => {
+  handleInstructions = instructions => (event) => {
     this.setState({
-      instructions: event.target.value.split(',')
+      instructions: event.target.value.split(','),
     });
   };
-  handleNotes = notes => event => {
+  handleNotes = notes => (event) => {
     this.setState({
-      notes: event.target.value.split(',')
+      notes: event.target.value.split(','),
     });
   };
-  handleChange = name => event => {
+  handleChange = name => (event) => {
     this.setState({
-      [name]: event.target.value
+      [name]: event.target.value,
     });
   };
 
@@ -82,7 +83,7 @@ class CreateRecipe extends Component {
     // this.addToPublished(res.CreateRecipe.id);
   }
 
-  uploadFile = async photos => {
+  uploadFile = async (photos) => {
     this.setState({ images: photos });
   };
 
@@ -106,7 +107,7 @@ class CreateRecipe extends Component {
       sourceURL: 'www.foodtomake.com',
       servings: this.state.servings,
       user_id: userId,
-      images: this.state.images
+      images: this.state.images,
     };
     console.log('new recipe info: ', data);
     client
@@ -140,16 +141,16 @@ class CreateRecipe extends Component {
             author: data.user_id,
             tags: [],
             notes: data.notes,
-            published: false
-          }
-        }
+            published: false,
+          },
+        },
       })
-      .then(result => {
+      .then((result) => {
         console.log('created result: ', result.data);
         // this.addToPublished(result.data.createRecipe.id);
         return result.data;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -157,6 +158,8 @@ class CreateRecipe extends Component {
   render() {
     return (
       <div>
+
+        {/* Dont use this simple text boxes anymore}
         <Grid
           className="create-recipe-container"
           container
@@ -248,6 +251,176 @@ class CreateRecipe extends Component {
             <Button onClick={this.handleSubmit}>Submit</Button>
           </form>
         </Grid>
+
+          */}
+
+
+
+        <Grid
+          className="pic-des-container"
+          container
+          spacing={styles.spacing}
+          justify={'center'}
+        >
+
+          {/* ----- PICTURE ----- */}
+          <Grid
+            className="picture"
+            item
+            xs={styles.sizes.xs.picture}
+            sm={styles.sizes.sm.picture}
+          >
+            <div className="fullSize">
+              <Card className="recipe-pic">
+                <Mutation mutation={this.UPLOAD_FILE}>
+                  {uploadFile => (
+                    <input
+                      type="file"
+                      accept="image/jpg, image/jpeg, image/png"
+                      required
+                      onChange={({ target: { validity, files } }) => {
+                        validity.valid && this.uploadFile(files);
+                      }}
+                    />
+                  )}
+                </Mutation>
+                <TextField
+                  id="textarea"
+                  placeholder="Recipe Title"
+                  fullWidth
+                  className="title"
+                  onChange={this.handleChange('name')}
+                />
+              </Card>
+            </div>
+          </Grid>
+
+          {/* ----- DESCRIPTION ----- */}
+          <Grid
+            className="description"
+            item
+            xs={styles.sizes.xs.description}
+            sm={styles.sizes.sm.description}
+          >
+            <div className="fullSize">
+              <Card className="recipe-full-description">
+                <TextField
+                  id="textarea"
+                  label="Description"
+                  multiline
+                  fullWidth
+                  className="description"
+                  onChange={this.handleChange('description')}
+                />
+              </Card>
+            </div>
+          </Grid>
+
+          {/* ----- INFO ----- */}
+          <Grid
+            className="info"
+            item
+            xs={styles.sizes.xs.author}
+            sm={styles.sizes.sm.author}
+          >
+            <Card className="recipeInfo">
+              <div className="recipeAuthor">
+                <span className="time">
+                  <TextField
+                    id="textarea"
+                    label="Prep Time"
+                    type="number"
+                    fullWidth
+                    className="preptime"
+                    onChange={this.handleChange('prepTime')}
+                  />
+                </span>
+                <span className="time">
+                  <TextField
+                    id="textarea"
+                    label="Cook Time"
+                    type="number"
+                    fullWidth
+                    className="cooktime"
+                    onChange={this.handleChange('cookTime')}
+                  />
+                </span>
+                <span className="difficulty">
+                  <TextField
+                    id="textarea"
+                    label="Difficulty"
+                    type="number"
+                    fullWidth
+                    className="difficulty"
+                    onChange={this.handleChange('difficulty')}
+                  />
+                </span>
+              </div>
+              <div className="servings">
+                <TextField
+                  id="textarea"
+                  label="Servings"
+                  type="number"
+                  fullWidth
+                  className="servings"
+                  onChange={this.handleChange('servings')}
+                />
+              </div>
+            </Card>
+          </Grid>
+
+          {/* ----- INGREDIENTS ----- */}
+          <Grid
+            className="ingredients"
+            item
+            xs={styles.sizes.xs.instructions}
+            sm={styles.sizes.sm.instructions}
+          >
+            <div className="fullSize">
+              <Card>
+                <Typography className="instructions-title"> Instructions </Typography>
+                <TextField
+                  id="textarea"
+                  label="Ingredients Separated by comma"
+                  fullWidth
+                  className="ingredients"
+                  onChange={this.handleIngredients('Ingredients')}
+                />
+              </Card>
+            </div>
+          </Grid>
+
+          {/* ----- INSTRUCTIONS ----- */}
+          <Grid
+            className="instructions"
+            item
+            xs={styles.sizes.xs.ingredients}
+            sm={styles.sizes.sm.ingredients}
+          >
+            <Card>
+              <Typography className="instructions-title"> Directions </Typography>
+              <Grid item>
+                <TextField
+                  id="textarea"
+                  label="Instructions Separated by comma"
+                  fullWidth
+                  className="instructions"
+                  onChange={this.handleInstructions('Instructions')}
+                />
+              </Grid>
+            </Card>
+          </Grid>
+
+          <Grid
+            className="submitsection"
+            item
+            xs={styles.sizes.xs.ingredients}
+            sm={styles.sizes.sm.ingredients}
+          >
+            <Button variant="contained" color="primary" className="create-recipe-button btn-margin" onClick={this.handleSubmit}>Submit</Button>
+          </Grid>
+        </Grid>
+
       </div>
     );
   }
@@ -255,5 +428,5 @@ class CreateRecipe extends Component {
 
 export default compose(
   withLocalData,
-  withApollo
+  withApollo,
 )(CreateRecipe);

@@ -544,7 +544,8 @@ class Recipe extends Component {
             >
               <Button
                 variant="contained"
-                color="secondary"
+                color="primary"
+                title="print"
                 className="print-button btn-margin"
               >
                 <PDFDownloadLink document={PDF} fileName="test.pdf">
@@ -553,20 +554,28 @@ class Recipe extends Component {
               </Button>
               <Button
                 variant="contained"
-                color="default"
-                className="add-note-button btn-margin"
+                color="secondary"
+                title="Add Notes"
+                className=" "
                 onClick={this.handleDialogOpen}
               >
-                <Icon>edit_icon</Icon>
-                Add A Note
+                
+                <i class="material-icons">
+                  create
+                  </i>
               </Button>
               <Button
                 variant="contained"
                 color="default"
+                title="I Made This"
                 className="i-made-this btn-margin"
                 onClick={this.iMadeThis}
               >
-                I Made This!
+                <i class="material-icons">
+                restaurant_menu
+                </i>
+              
+
               </Button>
               <Dialog
                 open={this.state.note_dialog_open}
@@ -672,7 +681,7 @@ class Recipe extends Component {
               <div className="comment-loggedin">
                 <Button
                   variant="contained"
-                  color="default"
+                  color="primary"
                   className="post-comment-button"
                   onClick={this.handleCommentOpen}
                 >
