@@ -23,9 +23,10 @@ class RecipeIngredients extends Component {
       <div className="fullSize">
         <Card>
           <Typography component="p" className="ingredients-title">
-           <i class="material-icons">          
-              room_service
-            </i>
+         <b>Ingredients</b> 
+          <i class="material-icons">
+              fastfood
+              </i>
             
           </Typography>
           <List>

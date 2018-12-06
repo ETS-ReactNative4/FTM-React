@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import './Instructions.css';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class RecipeInstructions extends Component {
   constructor(props) {
@@ -18,9 +19,14 @@ class RecipeInstructions extends Component {
   }
 
   render() {
+    
     return (
+      
       <Card>
-        <Typography className="instructions-title"> Directions </Typography>
+        <Typography className="instructions-title"><b>Directions</b><i class="material-icons">
+        
+                                 library_books
+</i> </Typography>
         <Grid item>
           <List className="instructions-list">
             {this.props.value.map((name, index) => {

@@ -530,6 +530,7 @@ class Profile extends Component {
                     <Button
                       variant="contained"
                       color="secondary"
+                      Title="Export to .pdf"
                       className="export-recipes-button"
                       
                       /*onClick={() => {
@@ -549,6 +550,7 @@ class Profile extends Component {
                     <Button
                       variant="contained"
                       color="primary"
+                      title="Create Recipe"
                       className="create-recipe-button"
                       onClick={() => {
                         history.push('/createrecipe');
@@ -575,8 +577,8 @@ class Profile extends Component {
                 from={{ marginTop: 0 }}
                 to={
                   this.state.saved_recipes.length > 0
-                    ? { marginTop: 0 }
-                    : { marginTop: 0 }
+                    ? { marginTop:10 }
+                    : { marginTop: 10 }
                 }
               >
                 {({ marginTop }) => (
@@ -652,7 +654,7 @@ class Profile extends Component {
                     native
                     keys={this.state.owned_recipes.map(item => item.id)}
                     from={{ marginTop: 500, opacity: 1 }}
-                    to={{ marginTop: 0, opacity: 1 }}
+                    to={{ marginTop: -2, opacity: 1 }}
                   >
                     {this.state.owned_recipes.map(
                       recipe => (marginTop, index) => {
@@ -666,6 +668,7 @@ class Profile extends Component {
                                 description={recipe.description}
                                 images={recipe.images}
                                 r_id={recipe.id}
+                                
                               />
                             </animated.div>
                           </Grid>
