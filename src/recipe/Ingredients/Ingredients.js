@@ -20,15 +20,12 @@ class RecipeIngredients extends Component {
 
   render() {
     return (
-      
       <div className="fullSize">
         <Card>
           <Typography component="p" className="ingredients-title">
-           <i class="material-icons">
-          
-            
-room_service
-</i>
+           <i class="material-icons">          
+              room_service
+            </i>
             
           </Typography>
           <List>
