@@ -587,12 +587,6 @@ class Profile extends Component {
                         onChange={this.handleQueryChange}
                         endAdornment={
                           <InputAdornment position="end">
-                            <IconButton
-                              onMouseDown={this.handleMouseDown}
-                              onClick={this.toggleFilter}
-                            >
-                              <FilterList size={30} />
-                            </IconButton>
                             <Button
                               id="searchButton"
                               onClick={this.handleButtonSearch}
