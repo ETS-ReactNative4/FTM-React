@@ -28,7 +28,7 @@ class App extends Component {
           <Route path="/signup" component={Signup} />
           <Route path="/signout" component={SignOut} />
           <Route path="/createrecipe" component={CreateRecipe} />
-          <Route path="/exportrecipes" component={RecipePDF} />
+          <Route exact path="/exportrecipes/:recipes" component={RecipePDF} />
           <Route path="/helpPage" component={helpPage} />
           <Route
             path="/auth/google/callback"

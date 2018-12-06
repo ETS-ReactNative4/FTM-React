@@ -7,6 +7,8 @@ class RecipePDF extends Component {
     numPages: null,
     pageNumber: 1,
   }
+
+  
  
   onDocumentLoadSuccess = ({ numPages }) => {
     this.setState({ numPages });

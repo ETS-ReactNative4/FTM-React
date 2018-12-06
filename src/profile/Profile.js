@@ -13,6 +13,7 @@ import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
 import { compose, withApollo } from 'react-apollo';
 import { Route } from 'react-router-dom';
+import jsPDF from 'jspdf';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
@@ -76,6 +77,7 @@ class Profile extends Component {
     this.showResults = this.showResults.bind(this);
     this.followUser = this.followUser.bind(this);
     this.updateFollowing = this.updateFollowing.bind(this);
+    this.exportToPdf = this.exportToPdf.bind(this);
     // this.getDataFromAPI();
   }
 
@@ -210,6 +212,27 @@ class Profile extends Component {
       });
     }
   };
+
+  exportToPdf() {
+    const doc = new jsPDF();
+    const rec = this.state.saved_recipes;
+    for (let i = 0; i < rec.length; i++) {
+      
+      doc.setFontSize(35);
+      doc.text(20, 20, rec[i].name);
+      doc.setFontSize(16);
+      doc.text(20, 30, rec[i].description);
+      doc.setFontSize(25);
+      doc.text(20, 50, 'Ingredients');
+      doc.setFontSize(16);
+      doc.text(20, 60, rec[i].ingredients);
+      doc.setFontSize(25);
+      doc.text(20, doc.internal.pageSize.height, 'Instructions');
+       
+      doc.addPage('a4', 'p');
+    }
+    doc.save('recipes.pdf');
+  }
 
   /** This whole function is garbage right now. ignore it */
   updateFollowing = async () => {
@@ -355,9 +378,9 @@ class Profile extends Component {
             ) {
               id
               username
-              ownedRecipes {name id description images}
-              savedRecipes {name id description images}
-              madeRecipes {name id description images}
+              ownedRecipes {name id description images ingredients instructions}
+              savedRecipes {name id description images ingredients instructions}
+              madeRecipes {name id description images ingredients instructions}
               following {id username profilePicture}
               followers {id username profilePicture}
             }
@@ -491,9 +514,11 @@ class Profile extends Component {
                       variant="contained"
                       color="default"
                       className="export-recipes-button"
-                      onClick={() => {
-                        history.push('/exportrecipes');
-                      }}
+                      
+                      /*onClick={() => {
+                        history.push(`/exportrecipes/${this.state.saved_recipes}`);
+                      }}*/
+                      onClick={this.exportToPdf}
                     >
                       Export Recipes
                     </Button>
