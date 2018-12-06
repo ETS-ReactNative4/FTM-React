@@ -547,7 +547,9 @@ class Recipe extends Component {
                 className="print-button btn-margin"
                 onClick={this.pdfToHTML}
               >
-                Print Recipe
+                <i class="material-icons">
+print
+</i>
               </Button>
 
               <Button
