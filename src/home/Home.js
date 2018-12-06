@@ -15,8 +15,7 @@ import gql from 'graphql-tag';
 import SearchResult from './SearchResult/SearchResult';
 import './Home.css';
 import TimeFilterButton from './FilterButton/TimeFilterButton';
-import DifficultyFilterButton from './FilterButton/DifficultyFilterButton';
-import RatingFilterButton from './FilterButton/RatingFilterButton';
+import LevelsFilterButton from './FilterButton/LevelsFilterButton';
 import FilterChipsArray from './FilterChip/FilterChipsArray';
 import FilterDialog from './FilterDialog/FilterDialog';
 
@@ -71,7 +70,6 @@ class Home extends Component {
   };
 
   handleButtonSearch = async () => {
-    console.log(this.state.filters);
     const { client } = this.props;
     const { data } = await client.query({
       query: gql`
@@ -110,6 +108,7 @@ class Home extends Component {
   handleAddFilterChip = (title, label) => {
     this.filterChipsRef.current.handleAddFilterChip(title, label);
     const currentFilters = [...this.state.filters];
+    console.log(label);
     const args = label.split(' ');
     switch (title) {
     case 'Cook Time':
@@ -141,32 +140,10 @@ class Home extends Component {
       }
       break;
     case 'Difficulty':
-      switch (args[0]) {
-      case '<=':
-        currentFilters.push({ field: 'difficulty', operator: 'LTE', value: [args[1]] });
-        break;
-      case '>=':
-        currentFilters.push({ field: 'difficulty', operator: 'GTE', value: [args[1]] });
-        break;
-      case '==':
-        currentFilters.push({ field: 'difficulty', operator: 'EQ', value: [args[1]] });
-        break;
-      default:
-      }
+      currentFilters.push({ field: 'difficulty', operator: 'GTE', value: [args[0]] });
       break;
-    case 'Rating':
-      switch (args[0]) {
-      case '<=':
-        currentFilters.push({ field: 'rating', operator: 'LTE', value: [args[1]] });
-        break;
-      case '>=':
-        currentFilters.push({ field: 'rating', operator: 'GTE', value: [args[1]] });
-        break;
-      case '==':
-        currentFilters.push({ field: 'rating', operator: 'EQ', value: [args[1]] });
-        break;
-      default:
-      }
+		case 'Rating':
+      currentFilters.push({ field: 'rating', operator: 'GTE', value: [args[0]] });
       break;
     default:
     }
@@ -184,39 +161,7 @@ class Home extends Component {
   handleDeleteFilterChips = (data) => {
     this.setState((state, props) => {
       const filters = [...state.filters];
-      let chipToDelete = filters.indexOf();
-      switch (data.title) {
-      case 'Cook Time':
-        switch (data.label) {
-        case '<= 10 min':
-          chipToDelete = filters.indexOf({
-            field: 'cookTime',
-            operator: 'LTE',
-            value: ['10'],
-          });
-          break;
-        case '20 min':
-          break;
-        case '45 min':
-          break;
-        case '>60 min':
-          break;
-        default:
-        }
-        break;
-      case 'Prep. Time':
-        break;
-      case 'Difficulty':
-        break;
-      case 'Rating':
-        break;
-      case 'Include':
-        break;
-      case 'Exclude':
-        break;
-      default:
-      }
-      filters.splice(chipToDelete, 1);
+      filters.splice(data.key, 1);
       return { filters };
     });
   };
@@ -306,10 +251,13 @@ class Home extends Component {
           }
         >
           <TimeFilterButton title="Cook Time" handleAddFilterChip={this.handleAddFilterChip} />
-          {/* <TimeFilterButton title="Prep. Time" handleAddFilterChip={this.handleAddFilterChip} />
-          <DifficultyFilterButton title="Difficulty" handleAddFilterChip={this.handleAddFilterChip} />
-          <RatingFilterButton title="Rating" handleAddFilterChip={this.handleAddFilterChip} />
-          <FilterDialog handleIngredientsFilter={this.handleIngredientsFilter} /> */}
+          <TimeFilterButton title="Prep. Time" handleAddFilterChip={this.handleAddFilterChip} />
+					<LevelsFilterButton
+            title="Difficulty"
+            handleAddFilterChip={this.handleAddFilterChip}
+          />
+					<LevelsFilterButton title="Rating" handleAddFilterChip={this.handleAddFilterChip} />
+          <FilterDialog handleIngredientsFilter={this.handleIngredientsFilter} />
         </div>
 
         <div
