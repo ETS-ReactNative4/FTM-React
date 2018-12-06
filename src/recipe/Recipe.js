@@ -543,7 +543,7 @@ class Recipe extends Component {
             >
               <Button
                 variant="contained"
-                color="secondary"
+                color="primary"
                 className="print-button btn-margin"
                 onClick={this.pdfToHTML}
               >
@@ -554,21 +554,25 @@ print
 
               <Button
                 variant="contained"
-                color="default"
-                className="add-note-button btn-margin"
+                color="secondary"
+                className=" "
                 onClick={this.handleDialogOpen}
               >
-                <Icon>edit_icon</Icon>
-                Add A Note
+                
+                <i class="material-icons">
+create
+</i>
               </Button>
 
               <Button
-                variant="contained"
+                variant="outlined"
                 color="default"
                 className="i-made-this btn-margin"
                 onClick={this.iMadeThis}
               >
-                I Made This!
+                <i class="material-icons">
+                restaurant_menu
+                </i>
               </Button>
 
               <Dialog
