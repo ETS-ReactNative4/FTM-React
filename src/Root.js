@@ -12,16 +12,15 @@ import { HttpLink } from 'apollo-link-http';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 import { decode } from 'jsonwebtoken';
-
-
+import { createUploadLink } from 'apollo-upload-client';
 
 const theme = createMuiTheme({
   palette: {
-    primary: red,
+    primary: red
   },
   typography: {
-    useNextVariants: true,
-  },
+    useNextVariants: true
+  }
 });
 class Root extends Component {
   constructor(props) {
@@ -38,14 +37,14 @@ class Root extends Component {
           cache,
           defaults: {
             token,
-            userId,
-          },
+            userId
+          }
         }),
-        new HttpLink({
-          uri: 'https://api.foodtomake.com/graphql',
-        }),
+        createUploadLink({
+          uri: 'https://api.foodtomake.com/graphql'
+        })
       ]),
-      cache,
+      cache
     });
   }
 

@@ -128,7 +128,7 @@ class CreateRecipe extends Component {
           recipe: {
             description: data.description,
             system: 'us',
-            images: [data.images[0]],
+            images: data.images,
             name: data.name,
             ingredients: data.ingredients,
             instructions: data.instructions,
