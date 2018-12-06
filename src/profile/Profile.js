@@ -13,7 +13,6 @@ import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
 import { compose, withApollo } from 'react-apollo';
 import { Route } from 'react-router-dom';
-import jsPDF from 'jspdf';
 import ProfilePicture from './ProfilePicture/ProfilePicture';
 import SearchResult from '../home/SearchResult/SearchResult';
 import Social from './Social/Social';
@@ -23,6 +22,8 @@ import './Profile.css';
 import withLocalData from '../withLocalData';
 
 const jwt = require('jsonwebtoken');
+const jsPDF = require('jspdf');
+require('jspdf-autotable');
 
 const styles = {
   spacing: 24,
@@ -216,20 +217,33 @@ class Profile extends Component {
   exportToPdf() {
     const doc = new jsPDF();
     const rec = this.state.saved_recipes;
+
+
     for (let i = 0; i < rec.length; i++) {
-      
       doc.setFontSize(35);
       doc.text(20, 20, rec[i].name);
+
       doc.setFontSize(16);
-      doc.text(20, 30, rec[i].description);
+      const desc = rec[i].description;
+      const desclines = doc.splitTextToSize(desc, 170);
+      doc.text(20, 30, desclines);
+
       doc.setFontSize(25);
       doc.text(20, 50, 'Ingredients');
       doc.setFontSize(16);
       doc.text(20, 60, rec[i].ingredients);
+
       doc.setFontSize(25);
-      doc.text(20, doc.internal.pageSize.height, 'Instructions');
+      doc.text(20, 170, 'Instructions');
+      doc.setFontSize(16);
+      const inst = rec[i].instructions;
+      const lines = doc.splitTextToSize(inst, 170);
+      doc.text(20, 180, lines);
+      
+      if (i+1 < rec.length) {
+        doc.addPage('a4', 'p');
+      }
        
-      doc.addPage('a4', 'p');
     }
     doc.save('recipes.pdf');
   }
