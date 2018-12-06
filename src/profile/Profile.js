@@ -101,11 +101,7 @@ class Profile extends Component {
       this.setState({
         searchSavedOrOwned: false
       });
-    } else if (this.state.currently_viewing === followingString) {
-      this.setState({
-        searchSavedOrOwned: false
-      });
-    } else if (this.state.currently_viewing === madeThisString) {
+    } else {
       this.setState({
         searchSavedOrOwned: false
       });
@@ -216,7 +212,14 @@ class Profile extends Component {
 
   exportToPdf() {
     const doc = new jsPDF();
-    const rec = this.state.saved_recipes;
+    let rec = null;
+    if (this.state.currently_viewing === savedString) {
+      rec = this.state.saved_recipes;
+    } else if (this.state.currently_viewing === ownedString) {
+      rec = this.state.owned_recipes;
+    } else if (this.state.currently_viewing === madeThisString) {
+      rec = this.state.made_recipes;
+    }
 
 
     for (let i = 0; i < rec.length; i++) {
