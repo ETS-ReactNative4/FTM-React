@@ -95,7 +95,7 @@ class TimeFilterButton extends React.Component {
             <Grow
               {...TransitionProps}
               id="filter-list-grow"
-              style={{ transformOrigin: placement === 'bottom' ? 'right top' : 'right bottom' }}
+              style={{ transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom' }}
             >
               <Paper style={{ width: '100%', height: '100%' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

@@ -65,7 +65,7 @@ class LevelsFilterButton extends React.Component {
               {...TransitionProps}
               id="filter-list-grow"
               style={{
-                transformOrigin: placement === 'bottom' ? 'right top' : 'right bottom',
+                transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
               }}
             >
               <Paper style={{ width: '100%', height: '100%' }}>
