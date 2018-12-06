@@ -529,7 +529,7 @@ class Profile extends Component {
                   render={({ history }) => (
                     <Button
                       variant="contained"
-                      color="default"
+                      color="secondary"
                       className="export-recipes-button"
                       
                       /*onClick={() => {
@@ -537,7 +537,9 @@ class Profile extends Component {
                       }}*/
                       onClick={this.exportToPdf}
                     >
-                      Export Recipes
+                      <i class="material-icons">
+                      picture_as_pdf
+                      </i>
                     </Button>
                   )}
                 />
@@ -546,13 +548,15 @@ class Profile extends Component {
                   render={({ history }) => (
                     <Button
                       variant="contained"
-                      color="default"
+                      color="primary"
                       className="create-recipe-button"
                       onClick={() => {
                         history.push('/createrecipe');
                       }}
                     >
-                      Create A Recipe
+                      <i class="material-icons">
+                      import_contacts
+                      </i>
                     </Button>
                   )}
                 />
@@ -591,7 +595,9 @@ class Profile extends Component {
                               id="searchButton"
                               onClick={this.handleButtonSearch}
                             >
-                              Search
+                              <i class="material-icons">
+                              search
+                              </i>
                             </Button>
                           </InputAdornment>
                         }

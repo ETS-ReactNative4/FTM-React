@@ -16,13 +16,20 @@ class RecipeIngredients extends Component {
       servings: null
     };
   }
+  
 
   render() {
     return (
+      
       <div className="fullSize">
         <Card>
           <Typography component="p" className="ingredients-title">
-            Ingredients
+           <i class="material-icons">
+          
+            
+room_service
+</i>
+            
           </Typography>
           <List>
             {this.props.ingredients.map((ingredient, index) => {

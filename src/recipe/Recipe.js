@@ -550,6 +550,7 @@ class Recipe extends Component {
                 <i class="material-icons">
 print
 </i>
+
               </Button>
 
               <Button
@@ -565,7 +566,7 @@ create
               </Button>
 
               <Button
-                variant="outlined"
+                variant="contained"
                 color="default"
                 className="i-made-this btn-margin"
                 onClick={this.iMadeThis}
@@ -573,6 +574,8 @@ create
                 <i class="material-icons">
                 restaurant_menu
                 </i>
+              
+
               </Button>
 
               <Dialog
@@ -679,7 +682,7 @@ create
               <div className="comment-loggedin">
                 <Button
                   variant="contained"
-                  color="default"
+                  color="primary"
                   className="post-comment-button"
                   onClick={this.handleCommentOpen}
                 >
