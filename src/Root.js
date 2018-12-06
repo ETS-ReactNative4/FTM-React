@@ -41,7 +41,7 @@ class Root extends Component {
           }
         }),
         createUploadLink({
-          uri: 'http://localhost:8081/graphql'
+          uri: 'https://api.foodtomake.com/graphql'
         })
       ]),
       cache
