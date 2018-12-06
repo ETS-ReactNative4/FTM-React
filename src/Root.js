@@ -12,6 +12,7 @@ import { HttpLink } from 'apollo-link-http';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 import { decode } from 'jsonwebtoken';
+import { createUploadLink } from 'apollo-upload-client';
 
 const theme = createMuiTheme({
   palette: {
@@ -39,7 +40,7 @@ class Root extends Component {
             userId
           }
         }),
-        new HttpLink({
+        createUploadLink({
           uri: 'http://localhost:8081/graphql'
         })
       ]),
