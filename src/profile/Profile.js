@@ -5,7 +5,7 @@ import {
   Input,
   InputLabel,
   InputAdornment,
-  IconButton,
+  Icon,
   Button
 } from '@material-ui/core';
 import { FilterList } from '@material-ui/icons';
@@ -221,7 +221,6 @@ class Profile extends Component {
       rec = this.state.made_recipes;
     }
 
-
     for (let i = 0; i < rec.length; i++) {
       doc.setFontSize(35);
       doc.text(20, 20, rec[i].name);
@@ -242,11 +241,10 @@ class Profile extends Component {
       const inst = rec[i].instructions;
       const lines = doc.splitTextToSize(inst, 170);
       doc.text(20, 180, lines);
-      
-      if (i+1 < rec.length) {
+
+      if (i + 1 < rec.length) {
         doc.addPage('a4', 'p');
       }
-       
     }
     doc.save('recipes.pdf');
   }
@@ -532,15 +530,13 @@ class Profile extends Component {
                       color="secondary"
                       Title="Export to .pdf"
                       className="export-recipes-button"
-                      
                       /*onClick={() => {
                         history.push(`/exportrecipes/${this.state.saved_recipes}`);
                       }}*/
                       onClick={this.exportToPdf}
                     >
-                      <i class="material-icons">
-                      picture_as_pdf
-                      </i>
+                      <Icon>picture_as_pdf</Icon>
+                      Export to PDF
                     </Button>
                   )}
                 />
@@ -556,9 +552,8 @@ class Profile extends Component {
                         history.push('/createrecipe');
                       }}
                     >
-                      <i class="material-icons">
-                      import_contacts
-                      </i>
+                      <Icon>import_contacts</Icon>
+                      Create Recipe
                     </Button>
                   )}
                 />
@@ -577,7 +572,7 @@ class Profile extends Component {
                 from={{ marginTop: 0 }}
                 to={
                   this.state.saved_recipes.length > 0
-                    ? { marginTop:10 }
+                    ? { marginTop: 10 }
                     : { marginTop: 10 }
                 }
               >
@@ -597,9 +592,7 @@ class Profile extends Component {
                               id="searchButton"
                               onClick={this.handleButtonSearch}
                             >
-                              <i class="material-icons">
-                              search
-                              </i>
+                              <i class="material-icons">search</i>
                             </Button>
                           </InputAdornment>
                         }
@@ -668,7 +661,6 @@ class Profile extends Component {
                                 description={recipe.description}
                                 images={recipe.images}
                                 r_id={recipe.id}
-                                
                               />
                             </animated.div>
                           </Grid>

@@ -559,23 +559,17 @@ class Recipe extends Component {
                 className=" "
                 onClick={this.handleDialogOpen}
               >
-                
-                <i class="material-icons">
-                  create
-                  </i>
+                <Icon>create</Icon>
+                Add a Note
               </Button>
               <Button
                 variant="contained"
-                color="default"
+                color="secondary"
                 title="I Made This"
                 className="i-made-this btn-margin"
                 onClick={this.iMadeThis}
               >
-                <i class="material-icons">
-                restaurant_menu
-                </i>
-              
-
+                <Icon>restaurant_menu</Icon>I Made This!
               </Button>
               <Dialog
                 open={this.state.note_dialog_open}
