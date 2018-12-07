@@ -76,7 +76,7 @@ class Profile extends Component {
       followers_length: null,
       query: '',
       currently_viewing: 'saved', // ********** saved, owned, following, or madethis *************
-      searchSavedOrOwned: true // search saved by default, so false means search owned
+      searchSavedOrOwned: true, // search saved by default, so false means search owned
     };
 
     this.showResults = this.showResults.bind(this);
@@ -99,15 +99,11 @@ class Profile extends Component {
     console.log('clicked: ', this.state.currently_viewing);
     if (this.state.currently_viewing === savedString) {
       this.setState({
-        searchSavedOrOwned: true
+        searchSavedOrOwned: true,
       });
     } else if (this.state.currently_viewing === ownedString) {
       this.setState({
-        searchSavedOrOwned: false
-      });
-    } else {
-      this.setState({
-        searchSavedOrOwned: false
+        searchSavedOrOwned: false,
       });
     }
   }
@@ -199,7 +195,7 @@ class Profile extends Component {
           loading: true,
           saved_recipes_searching: data.searchSavedRecipes
         });
-      } else {
+      } else if (!this.state.searchSavedOrOwned) {
       // search through owned
         const { data } = await client.query({
           query: gql`
@@ -218,12 +214,13 @@ class Profile extends Component {
           loading: true,
           owned_recipes_searching: data.searchOwnedRecipes
         });
-      }
+      } 
     }
   };
 
   handleButtonSearch = async () => {
     const { client } = this.props;
+    /*
     if (this.state.searchSavedOrOwned) {
       // search trhough saved
       const { data } = await client.query({
@@ -261,6 +258,87 @@ class Profile extends Component {
       this.setState({
         loading: true,
         owned_recipes: data.searchOwnedRecipes
+      });
+    }
+    */
+    if (this.state.query === '' || this.state.query === null) {
+      client
+        .query({
+          query: gql`{           
+        userById(
+          id: "${this.state.user_id}"
+        ) {
+          id
+          username
+          ownedRecipes (limit: 100) {name id description images ingredients instructions}
+          savedRecipes {name id description images ingredients instructions}
+          madeRecipes {name id description images ingredients instructions}
+          following {id username profilePicture}
+          followers {id username profilePicture}
+        }
+      }
+    `,
+          fetchPolicy: 'network-only'
+        })
+        .then(result => {
+          console.log('empty query: ', result.data.userById);
+          this.setState(
+            {
+              loading: true,
+              owned_recipes: result.data.userById.ownedRecipes,
+              saved_recipes: result.data.userById.savedRecipes,
+              made_recipes: result.data.userById.madeRecipes,
+              following: result.data.userById.following,
+              followers: result.data.userById.followers,
+              owned_recipes_searching: result.data.userById.ownedRecipes,
+              saved_recipes_searching: result.data.userById.savedRecipes,
+              made_recipes_searching: result.data.userById.madeRecipes
+            },
+            () => this.setLengths()
+          );
+          return result.data.userById;
+        })
+        .catch(err => {
+          console.log('error with empty query');
+          console.log(err);
+        });
+    } else if (this.state.searchSavedOrOwned) {
+    // search trhough saved
+      const { data } = await client.query({
+        query: gql`
+            query {
+              searchSavedRecipes(userId: "${this.state.user_id}" query: "${
+          this.state.query
+        }") {
+                id
+                name
+                description
+                images
+              }
+            }`
+      });
+      this.setState({
+        loading: true,
+        saved_recipes_searching: data.searchSavedRecipes
+      });
+    } else if (!this.state.searchSavedOrOwned) {
+    // search through owned
+      const { data } = await client.query({
+        query: gql`
+            query {
+              searchOwnedRecipes(userId: "${this.state.user_id}" query: "${
+          this.state.query
+        }") {
+                id
+                name
+                description
+                images
+              }
+            }`
+      });
+      this.setState({
+        loading: true,
+        owned_recipes_searching: data.searchOwnedRecipes
       });
     }
   };
@@ -660,7 +738,7 @@ class Profile extends Component {
             />
           </Grid>
           <Grid item sm={8} xs={12}>
-            {!followShow && ( // don't show search box if they are looking at followers
+            {!followShow && !madeThisShow && ( // don't show search box if they are looking at followers
               <Spring
                 from={{ marginTop: 0 }}
                 to={
