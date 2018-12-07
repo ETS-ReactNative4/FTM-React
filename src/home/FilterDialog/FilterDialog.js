@@ -80,7 +80,7 @@ class FilterDialog extends React.Component {
 
     return (
       <div style={{ width: '100%', flex: '1' }}>
-        <Button onClick={this.handleClickOpen} color="primary">
+				<Button onClick={this.handleClickOpen} color="primary">
           Ingredients
         </Button>
         <Dialog

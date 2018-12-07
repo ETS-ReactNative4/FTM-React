@@ -53,14 +53,25 @@ class Home extends Component {
     if (event.key === 'Enter') {
       const { data } = await client.query({
         query: gql`
-                query {
-                  searchAllRecipes(query: "${this.state.query}") {
-                    id
-                    name
-                    description
-                    images
-                  }
-                }`,
+          query searchAllRecipes($query: String!, $filters: [SearchFilter]!) {
+            searchAllRecipes(query: $query, filters: $filters) {
+              id
+              name
+              description
+              images
+              cookTime
+              prepTime
+              difficulty
+              rating
+              ingredients
+            }
+          }
+        `,
+        variables: {
+          query: this.state.query,
+          filters: this.state.filters,
+        },
+        fetchPolicy: 'network-only',
       });
       this.setState({
         loading: true,
@@ -142,7 +153,7 @@ class Home extends Component {
     case 'Difficulty':
       currentFilters.push({ field: 'difficulty', operator: 'GTE', value: [args[0]] });
       break;
-		case 'Rating':
+    case 'Rating':
       currentFilters.push({ field: 'rating', operator: 'GTE', value: [args[0]] });
       break;
     default:
@@ -252,11 +263,8 @@ class Home extends Component {
         >
           <TimeFilterButton title="Cook Time" handleAddFilterChip={this.handleAddFilterChip} />
           <TimeFilterButton title="Prep. Time" handleAddFilterChip={this.handleAddFilterChip} />
-					<LevelsFilterButton
-            title="Difficulty"
-            handleAddFilterChip={this.handleAddFilterChip}
-          />
-					<LevelsFilterButton title="Rating" handleAddFilterChip={this.handleAddFilterChip} />
+          <LevelsFilterButton title="Difficulty" handleAddFilterChip={this.handleAddFilterChip} />
+          <LevelsFilterButton title="Rating" handleAddFilterChip={this.handleAddFilterChip} />
           <FilterDialog handleIngredientsFilter={this.handleIngredientsFilter} />
         </div>
 
