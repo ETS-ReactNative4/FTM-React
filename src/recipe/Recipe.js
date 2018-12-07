@@ -761,7 +761,7 @@ class Recipe extends Component {
                   className="post-comment-button"
                   onClick={this.handleCommentOpen}
                 >
-                  <Icon>add_icon</Icon>
+                  <Icon>add_comment</Icon>
                   Post A Comment
                 </Button>
                 <Dialog

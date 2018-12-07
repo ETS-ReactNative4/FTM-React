@@ -20,3 +20,34 @@
   font-weight: bold;
   color: #f44336;
 }
+.pic-container {
+  position: relative;
+}
+/*
+.pic-container:after {
+  content: '\A';
+    position: absolute;
+    width: 200px; 
+    height: 200px;
+    top:0; left:0;
+    background:rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: all 1s;
+    -webkit-transition: all .2s;
+    border-radius: 50%;
+}
+.pic-container:hover:after {
+  opacity: 1;
+}
+*/
+.edit-profile-pic {
+  position: absolute;
+  left: 0;
+  top: calc(100% - 50% - 16px);
+  left: calc(100% - 50% - 16px);
+  background: white;
+  border-radius: 100%;
+  padding: 4px;
+  z-index: 10000;
+  -webkit-transition: all .2s;
+}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withApollo, Mutation, compose } from 'react-apollo';
+import Icon from '@material-ui/core/Icon';
 import gql from 'graphql-tag';
 import './ProfilePicture.css';
 import withLocalData from '../../withLocalData';
@@ -9,10 +10,26 @@ class ProfilePicture extends Component {
     super(props);
     this.state = {
       imageURL: null,
-      name: null
+      name: null,
+      hover: false,
     };
 
     this.uploadFile = this.uploadFile.bind(this);
+    this.hoverEnter = this.hoverEnter.bind(this);
+    this.hoverLeave = this.hoverLeave.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.btnRef = React.createRef();
+  }
+
+  hoverEnter() {
+    this.setState({ hover: true });
+  }
+  hoverLeave() {
+    this.setState({ hover: false });
+  }
+  handleClick(e) {
+    const node = this.btnRef.current;
+    node.click();
   }
 
   uploadFile = async photos => {
@@ -62,14 +79,18 @@ class ProfilePicture extends Component {
   render() {
     return (
       <div className="fullSize user-info">
-        <img alt="user" src={this.props.imageURL} className="profile-pic" />
-        <div className="upload-profile">
+        <div className="pic-container">
+          <img alt="user" title="Edit Profile Picture" src={this.props.imageURL} className="profile-pic" onMouseEnter={this.hoverEnter} onMouseLeave={this.hoverLeave} onClick={this.handleClick} />
+          <div className="overlay"></div>
           <Mutation mutation={this.UPLOAD_FILE}>
             {uploadFile => (
               <input
                 type="file"
+                id="file-uploader"
                 accept="image/jpg, image/jpeg, image/png"
+                ref={this.btnRef}
                 className="upload-pic"
+                style={{display: "none"}}
                 required
                 onChange={({ target: { validity, files } }) => {
                   validity.valid && this.uploadFile(files);
@@ -77,6 +98,12 @@ class ProfilePicture extends Component {
               />
             )}
           </Mutation>
+          {this.state.hover && (
+            <Icon className="edit-profile-pic" title="Edit Profile Picture" onMouseEnter={this.hoverEnter} onMouseLeave={this.hoverLeave} onClick={this.handleClick}>edit</Icon>
+          )}
+        </div>
+        <div className="upload-profile">
+          
         </div>
 
         <div className="info">
