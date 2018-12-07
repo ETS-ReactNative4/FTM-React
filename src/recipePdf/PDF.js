@@ -1,12 +1,10 @@
 import React from 'react';
-import * as download from 'image-downloader';
 import {
   Page,
   Text,
   View,
   Document,
   StyleSheet,
-  Image
 } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
@@ -66,7 +64,6 @@ export const PDF = ({
   name,
   description
 }) => {
-  const options = {};
   return (
     <Document>
       <Page size="A4" style={styles.body}>

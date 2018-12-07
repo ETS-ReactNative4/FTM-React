@@ -24,9 +24,7 @@ class FilterDialog extends React.Component {
     super(props);
     this.state = initialState;
   }
-  reset() {
-    this.setState(initialState);
-  }
+
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -50,7 +48,10 @@ class FilterDialog extends React.Component {
       cleanExcludes.push(element.trim());
     });
     this.props.handleIngredientsFilter(cleanIncludes, cleanExcludes);
-    this.setState({ open: false, isEditing: false });
+
+    this.setState({
+      includes: [], excludes: [], open: false, isEditing: false,
+    });
   };
 
   handleOnChangeIncludes = (event) => {
@@ -70,17 +71,9 @@ class FilterDialog extends React.Component {
   };
 
   render() {
-    if (this.state.includes.length > 0 && this.state.excludes.length > 0 && !this.state.isEditing) {
-      console.log('resetting');
-      this.setState((prevState, props) => ({
-        includes: [],
-        excludes: [],
-      }));
-    }
-
     return (
       <div style={{ width: '100%', flex: '1' }}>
-				<Button onClick={this.handleClickOpen} color="primary">
+        <Button onClick={this.handleClickOpen} color="primary">
           Ingredients
         </Button>
         <Dialog

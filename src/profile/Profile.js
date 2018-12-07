@@ -8,7 +8,6 @@ import {
   Icon,
   Button
 } from '@material-ui/core';
-import { FilterList } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
 import { compose, withApollo } from 'react-apollo';
@@ -521,7 +520,7 @@ class Profile extends Component {
               my_profile={myProfile}
               followUser={this.followUser}
             />
-            {!followShow && ( // don't show export if they are looking at followers
+            {!followShow && myProfile && ( // don't show export if they are looking at followers
               <Grid item>
                 <Route
                   render={({ history }) => (

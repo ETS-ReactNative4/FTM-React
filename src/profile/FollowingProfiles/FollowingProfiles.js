@@ -59,7 +59,6 @@ class FollowingProfiles extends React.Component {
           <Card
             className={classes.card + " card-container"}
             onClick={() => {
-              // console.log(this.props);
               history.push(`/profile/${r_id}`);
             }}
           >

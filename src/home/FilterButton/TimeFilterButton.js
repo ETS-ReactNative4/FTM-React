@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ClickAwayListener, Popper, Grow, Paper, Typography } from '@material-ui/core';
+import { Button, Popper, Grow, Paper, Typography } from '@material-ui/core';
 import { Slider, ToggleButtonGroup, ToggleButton } from '@material-ui/lab';
 import { HourglassEmpty, HourglassFull } from '@material-ui/icons';
 
@@ -9,24 +9,23 @@ class TimeFilterButton extends React.Component {
     anchorEl: null,
     open: false,
     sliderValue: 15,
-    compareSign: 'le',
+    compareSign: 'le'
   };
 
   handleVisivility = (event, checked) => {
     this.setState({ active: checked });
   };
 
-  handleMenu = (event) => {
+  handleMenu = event => {
     const { currentTarget } = event;
     this.setState(state => ({
       anchorEl: currentTarget,
-      open: !state.open,
+      open: !state.open
     }));
   };
 
   handleClose = (item, event) => {
     if (!(item instanceof MouseEvent)) {
-      // console.log(item);
     }
     this.setState(state => ({ open: false }));
   };
@@ -48,31 +47,29 @@ class TimeFilterButton extends React.Component {
   handleSave = () => {
     let sign = '';
     switch (this.state.compareSign) {
-    case 'le':
-      sign = '<= ';
-      break;
-    case 'ge':
-      sign = '>= ';
-      break;
-    default:
-      sign = '== ';
+      case 'le':
+        sign = '<= ';
+        break;
+      case 'ge':
+        sign = '>= ';
+        break;
+      default:
+        sign = '== ';
     }
     this.props.handleAddFilterChip(
       this.props.title,
-      sign.concat(this.state.sliderValue).concat(' min'),
+      sign.concat(this.state.sliderValue).concat(' min')
     );
     this.setState({ open: false });
   };
 
   render() {
-    const {
-      active, anchorEl, sliderValue, compareSign, open,
-    } = this.state;
+    const { sliderValue, compareSign, open } = this.state;
     const { title } = this.props;
     return (
       <div style={{ width: '100%', flex: '1' }}>
         <Button
-          buttonRef={(node) => {
+          buttonRef={node => {
             this.anchorEl = node;
           }}
           style={{ justifySelf: 'center' }}
@@ -94,10 +91,19 @@ class TimeFilterButton extends React.Component {
             <Grow
               {...TransitionProps}
               id="filter-list-grow"
-              style={{ transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom' }}
+              style={{
+                transformOrigin:
+                  placement === 'bottom-start' ? 'left top' : 'left bottom'
+              }}
             >
               <Paper style={{ width: '100%', height: '100%' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
                   <ToggleButtonGroup
                     style={{ marginTop: 25 }}
                     value={compareSign}
@@ -111,13 +117,23 @@ class TimeFilterButton extends React.Component {
                   <Typography
                     id="label"
                     align="center"
-                    style={{ paddingTop: 25, paddingLeft: 25, paddingRight: 25 }}
+                    style={{
+                      paddingTop: 25,
+                      paddingLeft: 25,
+                      paddingRight: 25
+                    }}
                   >
                     {sliderValue} minutes
                   </Typography>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
                   <HourglassEmpty style={{ margin: 5 }} color="primary" />
                   <Slider
                     min={10}
@@ -128,7 +144,7 @@ class TimeFilterButton extends React.Component {
                       paddingTop: 25,
                       paddingBottom: 25,
                       paddingLeft: 10,
-                      paddingRight: 10,
+                      paddingRight: 10
                     }}
                     value={sliderValue}
                     aria-labelledby="label"
@@ -136,11 +152,25 @@ class TimeFilterButton extends React.Component {
                   />
                   <HourglassFull style={{ margin: 5 }} color="primary" />
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                  <Button onClick={this.handleCancel} color="primary" style={{ margin: 5 }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Button
+                    onClick={this.handleCancel}
+                    color="primary"
+                    style={{ margin: 5 }}
+                  >
                     Cancel
                   </Button>
-                  <Button onClick={this.handleSave} color="primary" style={{ margin: 5 }}>
+                  <Button
+                    onClick={this.handleSave}
+                    color="primary"
+                    style={{ margin: 5 }}
+                  >
                     Add
                   </Button>
                 </div>
@@ -154,7 +184,7 @@ class TimeFilterButton extends React.Component {
 }
 
 TimeFilterButton.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 export default TimeFilterButton;

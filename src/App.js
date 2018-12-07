@@ -14,7 +14,6 @@ import helpPage from './helpPage/helpPage';
 
 class App extends Component {
   render() {
-    console.log(this.props);
     const { token } = this.props;
     return (
       <div style={{ width: '100%', height: '100vh' }}>

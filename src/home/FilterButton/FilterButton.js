@@ -32,13 +32,12 @@ class FilterButton extends React.Component {
     this.setState({ active: checked });
   };
 
-  handleMenu = event => {
+  handleMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
   handleClose = (item, event) => {
     if (!(item instanceof MouseEvent)) {
-      // console.log(item);
     }
     this.setState({ anchorEl: null });
   };
@@ -66,7 +65,7 @@ class FilterButton extends React.Component {
     return (
       <div style={{ width: '100%', flex: '1' }}>
         <Button
-          buttonRef={node => {
+          buttonRef={(node) => {
             this.anchorEl = node;
           }}
           style={{ justifySelf: 'center' }}
@@ -83,8 +82,7 @@ class FilterButton extends React.Component {
               {...TransitionProps}
               id="filter-list-grow"
               style={{
-                transformOrigin:
-                  placement === 'bottom' ? 'center top' : 'center bottom'
+                transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
               }}
             >
               <Paper style={{ width: '100%', height: '100%' }}>
@@ -96,7 +94,6 @@ class FilterButton extends React.Component {
                     aria-labelledby="label"
                     onChange={this.handleSliderChange}
                   />
-                  {/* <MenuList>{listItems}</MenuList> */}
                 </ClickAwayListener>
               </Paper>
             </Grow>
@@ -109,7 +106,7 @@ class FilterButton extends React.Component {
 
 FilterButton.propTypes = {
   title: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired
+  items: PropTypes.array.isRequired,
 };
 
 export default withStyles(styles)(FilterButton);
