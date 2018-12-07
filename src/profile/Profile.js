@@ -220,26 +220,45 @@ class Profile extends Component {
       rec = this.state.made_recipes;
     }
 
+    let dim = doc.getTextDimensions('Text');
+    let y = 30;
     for (let i = 0; i < rec.length; i++) {
+      y = 30;
       doc.setFontSize(35);
-      doc.text(20, 20, rec[i].name);
+      doc.text(20, y, rec[i].name);
+      dim = doc.getTextDimensions(rec[i].name);
+      y += dim.h;
+      console.log('title dimensions: ', dim.h );
 
       doc.setFontSize(16);
       const desc = rec[i].description;
       const desclines = doc.splitTextToSize(desc, 170);
-      doc.text(20, 30, desclines);
+      doc.text(20, y, desclines);
+      dim = doc.getTextDimensions(desclines);
+      y += dim.h;
+      console.log('descriptiondimensions: ', y);
 
       doc.setFontSize(25);
-      doc.text(20, 50, 'Ingredients');
+      doc.text(20, y, 'Ingredients');
+      dim = doc.getTextDimensions('Ingredients');
+      y += dim.h;
       doc.setFontSize(16);
-      doc.text(20, 60, rec[i].ingredients);
+      doc.text(20, y, rec[i].ingredients);
+      dim = doc.getTextDimensions(rec[i].ingredients);
+      y += dim.h;
+      console.log('ingredientsdimensions: ', y);
 
       doc.setFontSize(25);
-      doc.text(20, 170, 'Instructions');
+      doc.text(20, y, 'Instructions');
+      dim = doc.getTextDimensions('Instructions');
+      y += dim.h;
       doc.setFontSize(16);
       const inst = rec[i].instructions;
       const lines = doc.splitTextToSize(inst, 170);
-      doc.text(20, 180, lines);
+      doc.text(20, y, lines);
+      dim = doc.getTextDimensions(lines);
+      y += dim.h;
+      console.log(' instructioons dimensions: ', y);
 
       if (i + 1 < rec.length) {
         doc.addPage('a4', 'p');
