@@ -32,21 +32,21 @@ const styles = {
     xs: {
       picture: 12,
       social: 12,
-      recipes: 12,
+      recipes: 12
     },
     sm: {
       picture: 8,
       social: 8,
-      recipes: 8,
-    },
+      recipes: 8
+    }
   },
   gridList: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
     alignItems: 'flex-start',
-    overflow: 'hidden',
-  },
+    overflow: 'hidden'
+  }
 };
 
 const savedString = 'saved';
@@ -76,7 +76,7 @@ class Profile extends Component {
       followers_length: null,
       query: '',
       currently_viewing: 'saved', // ********** saved, owned, following, or madethis *************
-      searchSavedOrOwned: true, // search saved by default, so false means search owned
+      searchSavedOrOwned: true // search saved by default, so false means search owned
     };
 
     this.showResults = this.showResults.bind(this);
@@ -90,24 +90,24 @@ class Profile extends Component {
     console.log('SHOW RESULTS: ', arg);
     this.setState(
       {
-        currently_viewing: arg,
+        currently_viewing: arg
       },
-      () => this.printClicked(),
+      () => this.printClicked()
     );
   }
   printClicked() {
     console.log('clicked: ', this.state.currently_viewing);
     if (this.state.currently_viewing === savedString) {
       this.setState({
-        searchSavedOrOwned: true,
+        searchSavedOrOwned: true
       });
     } else if (this.state.currently_viewing === ownedString) {
       this.setState({
-        searchSavedOrOwned: false,
+        searchSavedOrOwned: false
       });
     } else {
       this.setState({
-        searchSavedOrOwned: false,
+        searchSavedOrOwned: false
       });
     }
   }
@@ -116,17 +116,17 @@ class Profile extends Component {
     this.getDataFromAPI();
   }
 
-  handleQueryChange = (event) => {
+  handleQueryChange = event => {
     this.setState({
-      query: event.target.value,
+      query: event.target.value
     });
   };
 
-  handleMouseDown = (event) => {
+  handleMouseDown = event => {
     event.preventDefault();
   };
 
-  handleEnterSearch = async (event) => {
+  handleEnterSearch = async event => {
     const { client } = this.props;
     if (event.key === 'Enter') {
       if (this.state.query === '' || this.state.query === null) {
@@ -146,9 +146,9 @@ class Profile extends Component {
             }
           }
         `,
-            fetchPolicy: 'network-only',
+            fetchPolicy: 'network-only'
           })
-          .then((result) => {
+          .then(result => {
             console.log('empty query: ', result.data.userById);
             this.setState(
               {
@@ -160,13 +160,13 @@ class Profile extends Component {
                 followers: result.data.userById.followers,
                 owned_recipes_searching: result.data.userById.ownedRecipes,
                 saved_recipes_searching: result.data.userById.savedRecipes,
-                made_recipes_searching: result.data.userById.madeRecipes,
+                made_recipes_searching: result.data.userById.madeRecipes
               },
-              () => this.setLengths(),
+              () => this.setLengths()
             );
             return result.data.userById;
           })
-          .catch((err) => {
+          .catch(err => {
             console.log('error with empty query');
             console.log(err);
           });
@@ -183,11 +183,11 @@ class Profile extends Component {
                   description
                   images
                 }
-              }`,
+              }`
         });
         this.setState({
           loading: true,
-          saved_recipes_searching: data.searchSavedRecipes,
+          saved_recipes_searching: data.searchSavedRecipes
         });
       } else {
         // search through owned
@@ -202,11 +202,11 @@ class Profile extends Component {
                   description
                   images
                 }
-              }`,
+              }`
         });
         this.setState({
           loading: true,
-          owned_recipes_searching: data.searchOwnedRecipes,
+          owned_recipes_searching: data.searchOwnedRecipes
         });
       }
     }
@@ -227,11 +227,11 @@ class Profile extends Component {
               description
               images
             }
-          }`,
+          }`
       });
       this.setState({
         loading: true,
-        saved_recipes: data.searchSavedRecipes,
+        saved_recipes: data.searchSavedRecipes
       });
     } else {
       // search through owned
@@ -246,11 +246,11 @@ class Profile extends Component {
               description
               images
             }
-          }`,
+          }`
       });
       this.setState({
         loading: true,
-        owned_recipes: data.searchOwnedRecipes,
+        owned_recipes: data.searchOwnedRecipes
       });
     }
   };
@@ -329,7 +329,7 @@ class Profile extends Component {
     console.log('--------------------- tyring to get following');
     const { client, userId } = this.props;
     const info = {
-      user_id: userId,
+      user_id: userId
     };
     await client
       .query({
@@ -340,12 +340,12 @@ class Profile extends Component {
             username
             following {id username}
           }
-        }`,
+        }`
       })
-      .then((result) => {
+      .then(result => {
         console.log('result from getting userByID: ', result.data.userById);
         this.setState({
-          following: result.data.userById.following,
+          following: result.data.userById.following
         });
         return result.info;
       });
@@ -360,19 +360,19 @@ class Profile extends Component {
             id
             username
           }
-        }`,
+        }`
       })
-      .then((result) => {
+      .then(result => {
         console.log(
           'result from getting userbyUsername: ',
-          result.data.userByUsername,
+          result.data.userByUsername
         );
         console.log('current following: ', this.state.following);
         this.setState(
           previousState => ({
-            following: [...previousState.following, result.data.userByUserName],
+            following: [...previousState.following, result.data.userByUserName]
           }),
-          this.followUser,
+          this.followUser
         );
         return result.data;
       });
@@ -383,7 +383,7 @@ class Profile extends Component {
       'vieweing profile for user: ',
       this.state.username,
       ', id: ',
-      this.state.user_id,
+      this.state.user_id
     );
 
     try {
@@ -405,9 +405,9 @@ class Profile extends Component {
               following {username}
             }
           }
-          `,
+          `
         })
-        .then((result) => {
+        .then(result => {
           console.log('user followed: ', result.data);
           return result.data;
         });
@@ -439,7 +439,7 @@ class Profile extends Component {
         user_image: user.profilePicture,
         owned_recipes_searching: user.ownedRecipes,
         saved_recipes_searching: user.savedRecipes,
-        made_recipes_searching: user.madeRecipes,
+        made_recipes_searching: user.madeRecipes
       },
       () => this.setLengths()
     );
@@ -451,7 +451,7 @@ class Profile extends Component {
       saved_recipes_length: this.state.saved_recipes.length,
       made_recipes_length: this.state.made_recipes.length,
       following_length: this.state.following.length,
-      followers_length: this.state.followers.length,
+      followers_length: this.state.followers.length
     });
   }
 
@@ -478,9 +478,9 @@ class Profile extends Component {
             }
           }
         `,
-          fetchPolicy: 'network-only',
+          fetchPolicy: 'network-only'
         })
-        .then((result) => {
+        .then(result => {
           console.log('fetchUser: ', result.data.userById);
           return result.data.userById;
         });
@@ -513,9 +513,9 @@ class Profile extends Component {
             }
           }
         `,
-          fetchPolicy: 'network-only',
+          fetchPolicy: 'network-only'
         })
-        .then((result) => {
+        .then(result => {
           console.log('data got back: \n', result.data.userByUsername);
           return result.data.userByUsername;
         });
@@ -588,6 +588,30 @@ class Profile extends Component {
       `,
       variables: {
         recipeId,
+        userId
+      }
+    });
+  };
+
+  unfollow = async followingId => {
+    const following = this.state.following.filter(
+      follower => follower.id !== followingId
+    );
+    this.setState({
+      following: following,
+      following_length: following.length
+    });
+    const { client, userId } = this.props;
+    client.mutate({
+      mutation: gql`
+        mutation($followingId: String!, $userId: String!) {
+          unfollowUser(userId: $userId, followingId: $followingId) {
+            username
+          }
+        }
+      `,
+      variables: {
+        followingId,
         userId
       }
     });
@@ -750,7 +774,9 @@ class Profile extends Component {
                 <Grid container>
                   <Trail
                     native
-                    keys={this.state.saved_recipes_searching.map(item => item.id)}
+                    keys={this.state.saved_recipes_searching.map(
+                      item => item.id
+                    )}
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
@@ -781,7 +807,9 @@ class Profile extends Component {
                 <Grid container>
                   <Trail
                     native
-                    keys={this.state.owned_recipes_searching.map(item => item.id)}
+                    keys={this.state.owned_recipes_searching.map(
+                      item => item.id
+                    )}
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
@@ -812,7 +840,9 @@ class Profile extends Component {
                 <Grid container>
                   <Trail
                     native
-                    keys={this.state.made_recipes_searching.map(item => item.id)}
+                    keys={this.state.made_recipes_searching.map(
+                      item => item.id
+                    )}
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
@@ -849,21 +879,24 @@ class Profile extends Component {
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.following.map(userProfile => (marginTop, index) => {
-                      return (
-                        <Grid item md={4} sm={6} xs={6} zeroMinWidth>
-                          <animated.div key={index} style={marginTop}>
-                            <FollowingProfile
-                              key={userProfile.id}
-                              name={userProfile.username}
-                              style={marginTop}
-                              images={userProfile.profilePicture}
-                              r_id={userProfile.username}
-                            />
-                          </animated.div>
-                        </Grid>
-                      );
-                    })}
+                    {this.state.following.map(
+                      userProfile => (marginTop, index) => {
+                        return (
+                          <Grid item md={4} sm={6} xs={6} zeroMinWidth>
+                            <animated.div key={index} style={marginTop}>
+                              <FollowingProfile
+                                key={userProfile.id}
+                                name={userProfile.username}
+                                style={marginTop}
+                                images={userProfile.profilePicture}
+                                r_id={userProfile.username}
+                                onDelete={() => this.unfollow(userProfile.id)}
+                              />
+                            </animated.div>
+                          </Grid>
+                        );
+                      }
+                    )}
                   </Trail>
                 </Grid>
               )}
@@ -890,5 +923,5 @@ class Profile extends Component {
 
 export default compose(
   withLocalData,
-  withApollo,
+  withApollo
 )(Profile);
