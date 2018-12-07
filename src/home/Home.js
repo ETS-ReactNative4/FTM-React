@@ -53,14 +53,25 @@ class Home extends Component {
     if (event.key === 'Enter') {
       const { data } = await client.query({
         query: gql`
-                query {
-                  searchAllRecipes(query: "${this.state.query}") {
-                    id
-                    name
-                    description
-                    images
-                  }
-                }`,
+          query searchAllRecipes($query: String!, $filters: [SearchFilter]!) {
+            searchAllRecipes(query: $query, filters: $filters) {
+              id
+              name
+              description
+              images
+              cookTime
+              prepTime
+              difficulty
+              rating
+              ingredients
+            }
+          }
+        `,
+        variables: {
+          query: this.state.query,
+          filters: this.state.filters,
+        },
+        fetchPolicy: 'network-only',
       });
       this.setState({
         loading: true,
@@ -142,7 +153,7 @@ class Home extends Component {
     case 'Difficulty':
       currentFilters.push({ field: 'difficulty', operator: 'GTE', value: [args[0]] });
       break;
-		case 'Rating':
+    case 'Rating':
       currentFilters.push({ field: 'rating', operator: 'GTE', value: [args[0]] });
       break;
     default:
@@ -168,18 +179,18 @@ class Home extends Component {
 
   render() {
     return (
-      <div className="home-container">
+			<div className="home-container">
         <Spring
-          from={{ marginTop: 0 }}
-          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
+          native
+          from={{ height: 390, opacity: 1.0 }}
+          to={
+            this.state.recipes.length > 0 ? { height: 0, opacity: 0.0 } : { height: 390, opacity: 1.0 }
+          }
         >
-          {({ marginTop, opacity }) => (
-            <img
-              className="logo"
-              style={{ marginTop }}
-              src="http://i63.tinypic.com/14joi09.png"
-              alt="logo"
-            />
+          {({ height, opacity }) => (
+						<animated.div className="logo" style={{ height, opacity }}>
+              <img src="http://i63.tinypic.com/14joi09.png" alt="logo" />
+            </animated.div>
           )}
         </Spring>
         <Spring
@@ -190,8 +201,9 @@ class Home extends Component {
             <div className="search-box" style={{ marginTop }}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="search">Search for a recipe...</InputLabel>
-                <Input
-                  id="search"
+								<Input
+									autoFocus
+									id="search"
                   onKeyPress={this.handleEnterSearch}
                   onChange={this.handleQueryChange}
                   endAdornment={
@@ -204,19 +216,6 @@ class Home extends Component {
                 />
               </FormControl>
             </div>
-          )}
-        </Spring>
-        <Spring
-          from={{ marginTop: 0 }}
-          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
-        >
-          {({ marginTop, opacity }) => (
-            <img
-              className="logo"
-              style={{ marginTop }}
-              src="http://i63.tinypic.com/14joi09.png"
-              alt="logo"
-            />
           )}
         </Spring>
         <Spring
@@ -252,11 +251,8 @@ class Home extends Component {
         >
           <TimeFilterButton title="Cook Time" handleAddFilterChip={this.handleAddFilterChip} />
           <TimeFilterButton title="Prep. Time" handleAddFilterChip={this.handleAddFilterChip} />
-					<LevelsFilterButton
-            title="Difficulty"
-            handleAddFilterChip={this.handleAddFilterChip}
-          />
-					<LevelsFilterButton title="Rating" handleAddFilterChip={this.handleAddFilterChip} />
+          <LevelsFilterButton title="Difficulty" handleAddFilterChip={this.handleAddFilterChip} />
+          <LevelsFilterButton title="Rating" handleAddFilterChip={this.handleAddFilterChip} />
           <FilterDialog handleIngredientsFilter={this.handleIngredientsFilter} />
         </div>
 
@@ -277,12 +273,13 @@ class Home extends Component {
                     <Grid item md={4} sm={6} xs={6} zeroMinWidth>
                       <animated.div key={index} style={marginTop}>
                         <SearchResult
-                          key={recipe.id}
-                          name={recipe.name}
-                          style={marginTop}
-                          description={recipe.description}
-                          images={recipe.images}
-                          r_id={recipe.id}
+													key={recipe.id}
+													name={recipe.name}
+													style={marginTop}
+													description={recipe.description}
+													images={recipe.images}
+													r_id={recipe.id}
+													rating={recipe.rating}
                         />
                       </animated.div>
                     </Grid>

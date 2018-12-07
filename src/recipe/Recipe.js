@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Button, TextField } from '@material-ui/core';
+import { Grid, Button, TextField, Fab } from '@material-ui/core';
 import { Favorite, FavoriteBorder } from '@material-ui/icons';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,6 +15,7 @@ import {
   TwitterIcon
 } from 'react-share';
 import './Recipe.css';
+import Loading from '../loading/Loading';
 import RecipeInstructions from './Instructions/Instructions';
 import RecipeInfo from './Info/Info';
 import RecipeIngredients from './Ingredients/Ingredients';
@@ -25,8 +26,8 @@ import Comments from './Comments/Comments';
 import withLocalData from '../withLocalData';
 import Fraction from 'fraction.js';
 import * as jsPDF from 'jspdf';
-import { PDF } from '../recipePdf/PDF';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+// import { PDFDownloadLin, BlobProvider } from '@react-pdf/renderer';
+// import { PDF2 } from '../recipePdf/PDF';
 const styles = {
   spacing: 24,
   sizes: {
@@ -74,7 +75,9 @@ class Recipe extends Component {
       new_note: null,
       new_comment: null,
       note_dialog_open: false,
-      comment_dialog_open: false
+      comment_dialog_open: false,
+      authorId: null,
+      published: null
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
@@ -90,6 +93,9 @@ class Recipe extends Component {
     this.handleNoteInput = this.handleNoteInput.bind(this);
     this.iMadeThis = this.iMadeThis.bind(this);
     this.pdfToHTML = this.pdfToHTML.bind(this);
+    this.isUserLoggedIn = this.isUserLoggedIn.bind(this);
+    this.userIsOwner = this.userIsOwner.bind(this);
+    this.publishRecipe = this.publishRecipe.bind(this);
   }
 
   isUserLoggedIn() {
@@ -124,36 +130,72 @@ class Recipe extends Component {
     });
   };
 
+  publishRecipe() {
+    console.log('publish this recipe');
+    const { client } = this.props;
+    const data = {
+      recipeid: this.state.recipe_id
+    };
+    client
+      .mutate({
+        mutation: gql`
+          mutation UpdateRecipe($id: String, $recipe: UpdateRecipeInput) {
+            updateRecipe(id: $id, recipe: $recipe) {
+              id
+              published
+            }
+          }
+        `,
+        variables: {
+          recipe: {
+            published: true
+          },
+          id: data.recipeid
+        }
+      })
+      .then(result => {
+        console.log('published: ', result.data);
+        this.setState({ published: result.data.updateRecipe.published });
+      })
+      .catch(err => {
+        console.log('failed to publish, err: ');
+        console.log(err);
+      });
+  }
   iMadeThis() {
-    console.log('show youve made this');
-    try {
-      const { client, userId } = this.props;
-      const data = {
-        user_id: userId,
-        recipe_id: this.state.recipe_id
-      };
-      const result = client
-        .mutate({
-          mutation: gql`
-            mutation MadeThis {
-              toggleIMadeThis(
-                userId: "${data.user_id}"
-                recipeId: "${data.recipe_id}"
-                newVal: true
-              ) {
-                madeRecipes { name }
+    const newVal = !this.state.iMadeThis;
+    this.setState({ iMadeThis: newVal });
+    const { client, userId } = this.props;
+    return client
+      .mutate({
+        mutation: gql`
+          mutation MadeThis(
+            $userId: String!
+            $recipeId: String!
+            $newVal: Boolean!
+          ) {
+            toggleIMadeThis(
+              userId: $userId
+              recipeId: $recipeId
+              newVal: $newVal
+            ) {
+              madeRecipes {
+                name
               }
-            }`
-        })
-        .then(result => {
-          console.log('made this result: ', result);
-          return result;
-        });
-      return result;
-    } catch (err) {
-      console.log(err);
-      return {};
-    }
+            }
+          }
+        `,
+        variables: {
+          userId,
+          recipeId: this.state.recipe_id,
+          newVal
+        }
+      })
+      .then(result => {
+        console.log('made this result: ', result);
+        return result;
+      })
+      .catch(err => console.log(err));
   }
   pdfToHTML() {
     // var doc = new jsPDF();
@@ -357,18 +399,12 @@ class Recipe extends Component {
   }
 
   fetchRecipe = async () => {
-    const data = {
-      recipe_id: this.state.recipe_id
-    };
-    try {
-      const { client } = this.props;
-      const result = client
-        .query({
-          query: gql`
-          query getRecipe {           
-            recipeById(
-              id: "${data.recipe_id}"
-            ) {
+    const { client, userId } = this.props;
+    return client
+      .query({
+        query: gql`
+          query getRecipe($recipeId: String!, $userId: String) {
+            recipeById(id: $recipeId) {
               id
               created
               description
@@ -388,22 +424,27 @@ class Recipe extends Component {
               numShares
               tags
               comments
-              author {username}
+              author {
+                id
+                username
+              }
+              iMadeThis(userId: $userId)
+              published
             }
           }
-        `
-        })
-        .then(result => {
-          console.log('recipe result: ', result.data.recipeById);
-          return result.data.recipeById;
-        });
-      return result;
-    } catch (err) {
-      return {};
-    }
+        `,
+        variables: {
+          userId,
+          recipeId: this.state.recipe_id
+        }
+      })
+      .then(result => {
+        return result.data.recipeById;
+      })
+      .catch(err => console.log(err));
   };
 
-  async getDataFromAPI() {
+  getDataFromAPI = async () => {
     const recipe = await this.fetchRecipe();
     this.setState({
       title: recipe.name,
@@ -421,7 +462,10 @@ class Recipe extends Component {
       scale: recipe.servings,
       stars: Math.round(recipe.rating),
       notes: recipe.notes,
-      comments: recipe.comments
+      comments: recipe.comments,
+      authorId: recipe.author.id,
+      iMadeThis: recipe.iMadeThis,
+      published: recipe.published
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
@@ -429,7 +473,7 @@ class Recipe extends Component {
           'https://s3-us-west-2.amazonaws.com/foodtomake-photo-storage/person5-128.png'
       });
     }
-  }
+  };
 
   handleScaleChange = ({ target: { value } }) => {
     if (!value || Number(value) < 1) {
@@ -458,20 +502,30 @@ class Recipe extends Component {
     });
   };
 
+  userIsOwner = () => {
+    return (
+      this.isUserLoggedIn() &&
+      this.state.authorId !== null &&
+      this.state.authorId === this.props.userId
+    );
+  };
+
   render() {
     // don't render until we have data loaded
     if (!this.state.title) {
-      return <div />;
+      return <Loading />;
     }
 
     const isLoggedIn = this.isUserLoggedIn();
-    console.log('user is logged in: ', isLoggedIn);
+    const userOwnsRecipe = this.userIsOwner();
+    console.log('user owns: ', userOwnsRecipe);
+    console.log('logged in: ', isLoggedIn);
 
     const shareUrl = `http://www.foodtomake.com${this.props.location.pathname}`; // TODO:  Change this later for live
 
     return (
       <div>
-        <Notes notes={this.state.notes} />
+        {userOwnsRecipe && <Notes notes={this.state.notes} />}
         <Grid
           className="pic-des-container"
           container
@@ -534,24 +588,31 @@ class Recipe extends Component {
           >
             <RecipeInstructions value={this.state.instructions} />
           </Grid>
-
-          {isLoggedIn && (
-            <Grid
-              className="recipe-buttons"
-              item
-              xs={styles.sizes.xs.ingredients}
-              sm={styles.sizes.sm.ingredients}
+          <Grid className="recipe-buttons" container justify={'center'}>
+            <Button
+              variant="contained"
+              color="secondary"
+              title="print"
+              className="print-button btn-margin"
             >
-              <Button
-                variant="contained"
-                color="primary"
-                title="print"
-                className="print-button btn-margin"
-              >
-                <PDFDownloadLink document={PDF} fileName="test.pdf">
-                  {() => 'Print'}
-                </PDFDownloadLink>
-              </Button>
+              <i className="material-icons">print</i>
+              Export to PDF
+            </Button>
+            {/* <BlobProvider document={PDF2}>
+              {() => (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  title="print"
+                  className="print-button btn-margin"
+                >
+                  <i className="material-icons">print</i>
+                  Export to PDF
+                </Button>
+              )}
+            </BlobProvider> */}
+
+            {userOwnsRecipe && (
               <Button
                 variant="contained"
                 color="secondary"
@@ -562,68 +623,43 @@ class Recipe extends Component {
                 <Icon>create</Icon>
                 Add a Note
               </Button>
+            )}
+
+            {userOwnsRecipe && !this.state.published && (
               <Button
                 variant="contained"
                 color="secondary"
+                title="Publish Recipe"
+                className=" "
+                onClick={this.publishRecipe}
+              >
+                <Icon>publish</Icon>
+                Publish To Public
+              </Button>
+            )}
+
+            {isLoggedIn && (
+              <Button
+                variant="contained"
+                color={this.state.iMadeThis ? 'secondary' : 'default'}
                 title="I Made This"
                 className="i-made-this btn-margin"
                 onClick={this.iMadeThis}
               >
-                <Icon>restaurant_menu</Icon>I Made This!
+                <Icon>restaurant_menu</Icon>
+                {this.state.iMadeThis ? "You've Made This!" : 'I Made This!'}
               </Button>
-              <Dialog
-                open={this.state.note_dialog_open}
-                onClose={this.handleDialogClose}
-                aria-labelledby="form-dialog-title"
-                fullWidth={true}
-              >
-                <DialogTitle id="form-dialog-title">New Note</DialogTitle>
-                <DialogContent>
-                  <TextField
-                    autoFocus
-                    multiline
-                    fullWidth
-                    id="note-input"
-                    label="New Note"
-                    type="text"
-                    onChange={this.handleNoteInput.bind(this)}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleDialogClose} color="primary">
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={this.noteSubmit}
-                    color="primary"
-                    variant="contained"
-                  >
-                    Add Note
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </Grid>
-          )}
-
-          <Grid
-            className="source-url"
-            item
-            xs={styles.sizes.xs.ingredients}
-            sm={styles.sizes.sm.ingredients}
-          >
-            <span>
-              <a
-                href={
-                  this.state.sourceURL === '' || this.state.sourceURL === null
-                    ? 'http://www.foodtomake.com'
-                    : this.state.sourceURL
-                }
-              >
-                {this.state.sourceURL === '' || this.state.sourceURL === null
-                  ? 'http://www.foodtomake.com'
-                  : this.state.sourceURL}
-              </a>
-            </span>
+            )}
+            <Button
+              variant="contained"
+              color="secondary"
+              className="post-comment-button"
+              onClick={this.handleCommentOpen}
+              disabled={!isLoggedIn}
+            >
+              <Icon>add_icon</Icon>
+              Post A Comment
+            </Button>
           </Grid>
           <Grid
             className="comments"
@@ -631,35 +667,32 @@ class Recipe extends Component {
             xs={styles.sizes.xs.ingredients}
             sm={styles.sizes.sm.ingredients}
           >
-            <Button
+            <Fab
               style={{
                 position: 'absolute',
                 bottom: 160,
                 right: 20,
                 backgroundColor: '#3b5998'
               }}
-              variant="fab"
             >
               <FacebookShareButton url={shareUrl} className="share-btn">
                 <FacebookIcon size={48} round={true} className="share-btn" />
               </FacebookShareButton>
-            </Button>
-            <Button
+            </Fab>
+            <Fab
               style={{
                 position: 'absolute',
                 bottom: 90,
                 right: 20,
                 backgroundColor: '#00aced'
               }}
-              variant="fab"
             >
               <TwitterShareButton url={shareUrl} className="share-btn">
                 <TwitterIcon size={48} round={true} className="share-btn" />
               </TwitterShareButton>
-            </Button>
-            <Button
+            </Fab>
+            <Fab
               style={{ position: 'absolute', bottom: 20, right: 20 }}
-              variant="fab"
               color="primary"
               onClick={this.toggleSavedRecipe}
               disabled={!isLoggedIn}
@@ -669,59 +702,86 @@ class Recipe extends Component {
               ) : (
                 <FavoriteBorder />
               )}
-            </Button>
+            </Fab>
             <Comments comments={this.state.comments} />
-            {isLoggedIn ? (
-              <div className="comment-loggedin">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className="post-comment-button"
-                  onClick={this.handleCommentOpen}
-                >
-                  <Icon>add_icon</Icon>
-                  Post A Comment
-                </Button>
-                <Dialog
-                  open={this.state.comment_dialog_open}
-                  onClose={this.handleCommentClose}
-                  aria-labelledby="comment-dialog-title"
-                  className="comment-dialog"
-                  fullWidth={true}
-                >
-                  <DialogTitle id="comment-dialog-title">
-                    New Comment
-                  </DialogTitle>
-                  <DialogContent>
-                    <TextField
-                      autoFocus
-                      multiline
-                      id="comment-input"
-                      label="New Comment"
-                      type="text"
-                      fullWidth
-                      onChange={this.handleCommentInput}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={this.handleCommentClose} color="primary">
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={this.commentSubmit}
-                      color="primary"
-                      variant="contained"
-                    >
-                      Post Comment
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </div>
-            ) : (
-              <h3>Log in to post a comment</h3>
-            )}
+          </Grid>
+          <Grid container>
+            <span style={{ marginBottom: 10, marginLeft: 10 }}>
+              <a
+                href={
+                  this.state.sourceURL === '' || this.state.sourceURL === null
+                    ? 'http://www.foodtomake.com'
+                    : this.state.sourceURL
+                }
+              >
+                source
+              </a>
+            </span>
           </Grid>
         </Grid>
+        <Dialog
+          open={this.state.comment_dialog_open}
+          onClose={this.handleCommentClose}
+          aria-labelledby="comment-dialog-title"
+          className="comment-dialog"
+          fullWidth={true}
+        >
+          <DialogTitle id="comment-dialog-title">New Comment</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              multiline
+              id="comment-input"
+              label="New Comment"
+              type="text"
+              fullWidth
+              onChange={this.handleCommentInput}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleCommentClose} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={this.commentSubmit}
+              color="primary"
+              variant="contained"
+            >
+              Post Comment
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={this.state.note_dialog_open}
+          onClose={this.handleDialogClose}
+          aria-labelledby="form-dialog-title"
+          fullWidth={true}
+        >
+          <DialogTitle id="form-dialog-title">New Note</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              multiline
+              fullWidth
+              id="note-input"
+              label="New Note"
+              type="text"
+              onChange={this.handleNoteInput.bind(this)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleDialogClose} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={this.noteSubmit}
+              color="primary"
+              variant="contained"
+            >
+              Add Note
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }

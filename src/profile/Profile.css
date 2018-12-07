@@ -22,3 +22,11 @@ div.title-container {
   margin-left: 10px !important;
   margin-right: 10px !important;
 }
+
+.search-box {
+	height: 60px;
+}
+
+.search-box-grid {
+	margin-bottom: 5px;
+}

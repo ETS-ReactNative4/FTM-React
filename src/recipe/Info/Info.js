@@ -1,22 +1,8 @@
 import React, { Component } from 'react';
-import { Avatar, Card, Chip, Input } from '@material-ui/core';
+import { Avatar, Card, Input } from '@material-ui/core';
 import TimerIcon from '@material-ui/icons/Timer';
 import { Route } from 'react-router-dom';
 import './Info.css';
-
-const styles = {
-  chip: {
-    margin: 4
-  },
-  wrapper: {
-    display: 'flex',
-    flexWrap: 'wrap'
-  }
-};
-
-function handleClick() {
-  alert('Possibly more information about this chip?');
-}
 
 /**
  * This is recipe author, tags, difficulty, cook time...
@@ -36,53 +22,44 @@ class RecipeInfo extends Component {
 
   render() {
     return (
-      <Card className="recipeInfo">
-        <div className="recipeAuthor">
-          <Avatar src={this.props.authorImage} />
-          <Route
-            render={({ history }) => (
-              <span
-                className="authorName"
-                onClick={() => {
-                  history.push(`/profile/${this.props.authorName}`);
-                }}
-              >
-                {this.props.authorName}
-              </span>
-            )}
-          />
-          <span className="time">
+      <Card className="infoCard">
+        <div className="infoRoot">
+          <div className="infoColumn">
+            <Avatar className="avatar" src={this.props.authorImage} />
+            <Route
+              render={({ history }) => (
+                <div
+                  className="authorName"
+                  onClick={() => {
+                    history.push(`/profile/${this.props.authorName}`);
+                  }}
+                >
+                  {this.props.authorName}
+                </div>
+              )}
+            />
+          </div>
+
+          <div className="infoColumn">
             <TimerIcon /> Prep: {this.props.prepTime} mins
-          </span>
-          <span className="time">
+          </div>
+          <div className="infoColumn">
             <TimerIcon /> Cook: {this.props.cookTime} mins
-          </span>
-          <span className="difficulty">
-            Difficulty: {this.props.difficulty}
-          </span>
-        </div>
-        <div className="tags">
-          <div style={styles.wrapper}>
-            {this.props.tags.map((name, index) => {
-              return (
-                <Chip
-                  key={index}
-                  onClick={handleClick}
-                  style={styles.chip}
-                  className="chip"
-                  label={name}
-                />
-              );
-            })}
+          </div>
+          <div className="infoColumn">Difficulty: {this.props.difficulty}</div>
+          <div className="infoColumn">
+            <label className="servingsLabel" htmlFor="servingsInput">
+              Servings:
+            </label>
+            <Input
+              className="servingsCounter"
+              id="servingsInput"
+              type="number"
+              value={this.props.servings}
+              onChange={this.props.onScaleChange}
+            />
           </div>
         </div>
-        <label for="servingsInput">Servings</label>
-        <Input
-          id="servingsInput"
-          type="number"
-          value={this.props.servings}
-          onChange={this.props.onScaleChange}
-        />
       </Card>
     );
   }
