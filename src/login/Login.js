@@ -6,11 +6,12 @@ import './Login.css';
 import Auth from '../auth/Auth';
 import fbLogo from '../assets/images/fb-logo.png';
 import ggLogo from '../assets/images/g-ico.png';
+import { decode } from 'jsonwebtoken';
 
 class Login extends Component {
   state = {
     account: '',
-    password: '',
+    password: ''
   };
   auth = new Auth();
 
@@ -37,22 +38,25 @@ class Login extends Component {
             }
           }
         }
-      `,
+      `
     });
     // successful login
     if (data.login.token) {
       console.log(data.login);
+      const payload = decode(data.login.token);
       localStorage.setItem('FTM_TOKEN', data.login.token);
-      client.writeData({ data: { token: data.login.token } });
+      client.writeData({
+        data: { token: data.login.token, userId: payload.id }
+      });
       history.replace('/');
     }
   };
 
-  handleAccountChange = (event) => {
+  handleAccountChange = event => {
     this.setState({ account: event.target.value });
   };
 
-  handlePasswordChange = (event) => {
+  handlePasswordChange = event => {
     this.setState({ password: event.target.value });
   };
 
