@@ -76,7 +76,6 @@ class ProfilePicture extends Component {
   `;
 
   render() {
-    console.log('viewing my profile: ', this.state.viewingMyProfile);
     return (
       <div className="fullSize user-info">
         <div className="container">

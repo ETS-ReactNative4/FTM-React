@@ -139,8 +139,49 @@ class Profile extends Component {
   handleEnterSearch = async event => {
     const { client } = this.props;
     if (event.key === 'Enter') {
-      if (this.state.searchSavedOrOwned) {
-        // search trhough saved
+      if (this.state.query === '' || this.state.query === null) {
+        client
+          .query({
+            query: gql`{           
+          userById(
+            id: "${this.state.user_id}"
+          ) {
+            id
+            username
+            ownedRecipes (limit: 100) {name id description images ingredients instructions}
+            savedRecipes {name id description images ingredients instructions}
+            madeRecipes {name id description images ingredients instructions}
+            following {id username profilePicture}
+            followers {id username profilePicture}
+          }
+        }
+      `,
+            fetchPolicy: 'network-only'
+          })
+          .then(result => {
+            console.log('empty query: ', result.data.userById);
+            this.setState(
+              {
+                loading: true,
+                owned_recipes: result.data.userById.ownedRecipes,
+                saved_recipes: result.data.userById.savedRecipes,
+                made_recipes: result.data.userById.madeRecipes,
+                following: result.data.userById.following,
+                followers: result.data.userById.followers,
+                owned_recipes_searching: result.data.userById.ownedRecipes,
+                saved_recipes_searching: result.data.userById.savedRecipes,
+                made_recipes_searching: result.data.userById.madeRecipes
+              },
+              () => this.setLengths()
+            );
+            return result.data.userById;
+          })
+          .catch(err => {
+            console.log('error with empty query');
+            console.log(err);
+          });
+      } else if (this.state.searchSavedOrOwned) {
+      // search trhough saved
         const { data } = await client.query({
           query: gql`
               query {
@@ -156,10 +197,10 @@ class Profile extends Component {
         });
         this.setState({
           loading: true,
-          saved_recipes: data.searchSavedRecipes
+          saved_recipes_searching: data.searchSavedRecipes
         });
       } else {
-        // search through owned
+      // search through owned
         const { data } = await client.query({
           query: gql`
               query {
@@ -175,7 +216,7 @@ class Profile extends Component {
         });
         this.setState({
           loading: true,
-          owned_recipes: data.searchOwnedRecipes
+          owned_recipes_searching: data.searchOwnedRecipes
         });
       }
     }
@@ -582,8 +623,6 @@ class Profile extends Component {
       madeThisShow = true;
     }
 
-    console.log('myProfile: ', this.isMyProfile());
-
     return (
       <div style={{ display: 'flex' }}>
         <Grid
@@ -662,19 +701,19 @@ class Profile extends Component {
 
                       {!followShow &&
                       this.isMyProfile() && ( // don't show export if they are looking at followers
-                          <Grid item xs={3} sm={3}>
-                            <Button
-                              variant="contained"
-                              color="secondary"
-                              Title="Export to PDF"
-                              className="export-recipes-button"
-                              onClick={this.exportToPdf}
-                            >
-                              <Icon>picture_as_pdf</Icon>
-                              {exportString}
-                            </Button>
-                          </Grid>
-                        )}
+                        <Grid item xs={3} sm={3}>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            Title="Export to PDF"
+                            className="export-recipes-button"
+                            onClick={this.exportToPdf}
+                          >
+                            <Icon>picture_as_pdf</Icon>
+                            {exportString}
+                          </Button>
+                        </Grid>
+                      )}
                     </Grid>
                   </div>
                 )}
@@ -699,7 +738,7 @@ class Profile extends Component {
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.saved_recipes.map(
+                    {this.state.saved_recipes_searching.map(
                       recipe => (marginTop, index) => {
                         return (
                           <Grid item md={4} sm={6} xs={6} zeroMinWidth>
@@ -732,7 +771,7 @@ class Profile extends Component {
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.owned_recipes.map(
+                    {this.state.owned_recipes_searching.map(
                       recipe => (marginTop, index) => {
                         return (
                           <Grid item md={4} sm={6} xs={6} zeroMinWidth>
@@ -765,7 +804,7 @@ class Profile extends Component {
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.made_recipes.map(
+                    {this.state.made_recipes_searching.map(
                       recipe => (marginTop, index) => {
                         return (
                           <Grid item md={4} sm={6} xs={6} zeroMinWidth>
