@@ -32,10 +32,10 @@ class ProfilePicture extends Component {
     node.click();
   }
 
-  uploadFile = async photos => {
+  uploadFile = async (photos) => {
     const { client, userId } = this.props;
     const data = {
-      image: photos
+      image: photos,
     };
     const u_id = userId;
     console.log('new profile photo ', data.image);
@@ -43,10 +43,7 @@ class ProfilePicture extends Component {
     client
       .mutate({
         mutation: gql`
-          mutation UpdateUser(
-            $userId: String!
-            $userUpdates: UpdateUserInput!
-          ) {
+          mutation UpdateUser($userId: String!, $userUpdates: UpdateUserInput!) {
             updateUser(userId: $userId, userUpdates: $userUpdates) {
               id
               profilePicture
@@ -55,16 +52,16 @@ class ProfilePicture extends Component {
         `,
         variables: {
           userUpdates: {
-            profilePicture: data.image[0]
+            profilePicture: data.image[0],
           },
-          userId: u_id
-        }
+          userId: u_id,
+        },
       })
-      .then(result => {
+      .then((result) => {
         console.log('uploaded photo: ', result.data);
         this.setState({ imageURL: result.data.updateUser.profilePicture });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('failed to upload photo, err: ');
         console.log(err);
       });
@@ -79,32 +76,52 @@ class ProfilePicture extends Component {
   render() {
     return (
       <div className="fullSize user-info">
-        <div className="pic-container">
-          <img alt="user" title="Edit Profile Picture" src={this.props.imageURL} className="profile-pic" onMouseEnter={this.hoverEnter} onMouseLeave={this.hoverLeave} onClick={this.handleClick} />
-          <div className="overlay"></div>
-          <Mutation mutation={this.UPLOAD_FILE}>
-            {uploadFile => (
-              <input
-                type="file"
-                id="file-uploader"
-                accept="image/jpg, image/jpeg, image/png"
-                ref={this.btnRef}
-                className="upload-pic"
-                style={{display: "none"}}
-                required
-                onChange={({ target: { validity, files } }) => {
-                  validity.valid && this.uploadFile(files);
-                }}
-              />
+        <div className="container">
+          <div className="pic-container">
+            <img
+              alt="user"
+              title="Edit Profile Picture"
+              src={
+                this.props.imageURL !== null
+                  ? this.props.imageURL
+                  : 'http://i65.tinypic.com/2rnvc7k.png'
+              }
+              className="profile-pic"
+              onMouseEnter={this.hoverEnter}
+              onMouseLeave={this.hoverLeave}
+              onClick={this.handleClick}
+            />
+            <div className="overlay" />
+            <Mutation mutation={this.UPLOAD_FILE}>
+              {uploadFile => (
+                <input
+                  type="file"
+                  id="file-uploader"
+                  accept="image/jpg, image/jpeg, image/png"
+                  ref={this.btnRef}
+                  className="upload-pic"
+                  style={{ display: 'none' }}
+                  required
+                  onChange={({ target: { validity, files } }) => {
+                    validity.valid && this.uploadFile(files);
+                  }}
+                />
+              )}
+            </Mutation>
+            {this.state.hover && (
+              <Icon
+                className="edit-profile-pic"
+                title="Edit Profile Picture"
+                onMouseEnter={this.hoverEnter}
+                onMouseLeave={this.hoverLeave}
+                onClick={this.handleClick}
+              >
+                edit
+              </Icon>
             )}
-          </Mutation>
-          {this.state.hover && (
-            <Icon className="edit-profile-pic" title="Edit Profile Picture" onMouseEnter={this.hoverEnter} onMouseLeave={this.hoverLeave} onClick={this.handleClick}>edit</Icon>
-          )}
+          </div>
         </div>
-        <div className="upload-profile">
-          
-        </div>
+        <div className="upload-profile" />
 
         <div className="info">
           <div className="username">
@@ -118,5 +135,5 @@ class ProfilePicture extends Component {
 
 export default compose(
   withLocalData,
-  withApollo
+  withApollo,
 )(ProfilePicture);
