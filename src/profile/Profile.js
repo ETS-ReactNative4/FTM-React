@@ -363,9 +363,10 @@ class Profile extends Component {
         saved_recipes: user.savedRecipes,
         made_recipes: user.madeRecipes,
         following: user.following,
-        followers: user.followers
+        followers: user.followers,
+        user_image: user.profilePicture,
       },
-      () => this.setLengths()
+      () => this.setLengths(),
     );
   }
 
@@ -398,6 +399,7 @@ class Profile extends Component {
               madeRecipes {name id description images ingredients instructions}
               following {id username profilePicture}
               followers {id username profilePicture}
+              profilePicture
             }
           }
         `,
@@ -432,6 +434,7 @@ class Profile extends Component {
               madeRecipes {name id description images}
               following {id username profilePicture}
               followers {id username profilePicture}
+              profilePicture
             }
           }
         `,
