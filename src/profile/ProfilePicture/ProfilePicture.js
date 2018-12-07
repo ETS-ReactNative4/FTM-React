@@ -14,7 +14,7 @@ class ProfilePicture extends Component {
       imageURL: null,
       name: null,
       hover: false,
-      viewingMyProfile: this.props.viewingMyProfile,
+      viewingMyProfile: this.props.viewingMyProfile
     };
 
     this.uploadFile = this.uploadFile.bind(this);
@@ -86,7 +86,13 @@ class ProfilePicture extends Component {
     return (
       <div className="fullSize user-info">
         <div className="container">
-          <div className={this.state.viewingMyProfile ? 'pic-container pic-overlay pic-cursor' : 'pic-container'}>
+          <div
+            className={
+              this.state.viewingMyProfile
+                ? 'pic-container pic-overlay pic-cursor'
+                : 'pic-container'
+            }
+          >
             {this.state.viewingMyProfile ? (
               <React.Fragment>
                 <img
@@ -144,7 +150,6 @@ class ProfilePicture extends Component {
                 edit
               </Icon>
             )}
-            
           </div>
         </div>
         <div className="upload-profile" />
@@ -152,21 +157,6 @@ class ProfilePicture extends Component {
         <div className="info">
           <div className="username">
             <span>{this.props.name}</span>
-            {!this.props.myProfile && (
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ marginLeft: 5 }}
-                onClick={() => this.props.toggleFollow(!this.props.following)}
-              >
-                {this.props.following ? (
-                  <Check style={{ marginRight: 5 }} />
-                ) : (
-                  <Add style={{ marginRight: 5 }} />
-                )}
-                {this.props.following ? 'Following' : 'Follow'}
-              </Button>
-            )}
           </div>
         </div>
       </div>

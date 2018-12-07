@@ -104,6 +104,12 @@ class Social extends Component {
             delegateShowResults={this.delegateShowResults}
             classActive={this.state.followActive}
           />
+          {!this.props.my_profile &&
+            <Card className="num-container follow-button" onClick={() => this.props.followUser()}>
+              <Icon>people</Icon>
+              <span>Follow this user</span><br />
+            </Card>
+          }
         </div>
       </div>
     );
