@@ -60,6 +60,7 @@ class ProfilePicture extends Component {
       .then((result) => {
         console.log('uploaded photo: ', result.data);
         this.setState({ imageURL: result.data.updateUser.profilePicture });
+        window.location.reload();
       })
       .catch((err) => {
         console.log('failed to upload photo, err: ');
