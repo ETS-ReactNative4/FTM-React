@@ -1,6 +1,17 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Card, CardContent, Typography, Avatar, CardHeader, CardMedia } from '@material-ui/core';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Avatar,
+  CardHeader,
+  CardMedia,
+  MenuList,
+  MenuItem,
+  ListItemIcon,
+} from '@material-ui/core';
+import { Star, StarBorder } from '@material-ui/icons';
 import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './SearchResult.css';
@@ -15,15 +26,14 @@ const styles = {
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '75%', // 16:9
   },
   actions: {
     display: 'flex',
   },
   avatar: {
-    margin: 5,
-    width: 45,
-    height: 45,
+    width: 30,
+    height: 30,
   },
   title: {
     marginBottom: 5,
@@ -46,7 +56,7 @@ class SearchResult extends React.Component {
 
   render() {
     const {
-      classes, name, r_id, description, images,
+      classes, name, r_id, description, images, rating,
     } = this.props;
 
     return (
@@ -60,6 +70,7 @@ class SearchResult extends React.Component {
             }}
           >
             <CardHeader
+              className="recipe-header"
               avatar={
                 <Avatar
                   alt={name}
@@ -70,8 +81,8 @@ class SearchResult extends React.Component {
               title={name}
             />
             <CardMedia className={classes.media} image={images[0]} />
-            <CardContent>
-              <Typography className="recipe-description" component="p">
+            <CardContent style={{ padding: '5px' }}>
+              <Typography className="recipe-description" variant="caption">
                 {description}
               </Typography>
             </CardContent>

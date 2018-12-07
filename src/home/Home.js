@@ -273,12 +273,13 @@ class Home extends Component {
                     <Grid item md={4} sm={6} xs={6} zeroMinWidth>
                       <animated.div key={index} style={marginTop}>
                         <SearchResult
-                          key={recipe.id}
-                          name={recipe.name}
-                          style={marginTop}
-                          description={recipe.description}
-                          images={recipe.images}
-                          r_id={recipe.id}
+													key={recipe.id}
+													name={recipe.name}
+													style={marginTop}
+													description={recipe.description}
+													images={recipe.images}
+													r_id={recipe.id}
+													rating={recipe.rating}
                         />
                       </animated.div>
                     </Grid>
