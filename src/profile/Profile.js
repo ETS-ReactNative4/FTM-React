@@ -6,7 +6,7 @@ import {
   InputLabel,
   InputAdornment,
   Icon,
-  Button
+  Button,
 } from '@material-ui/core';
 import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
@@ -30,21 +30,21 @@ const styles = {
     xs: {
       picture: 12,
       social: 12,
-      recipes: 12
+      recipes: 12,
     },
     sm: {
       picture: 8,
       social: 8,
-      recipes: 8
-    }
+      recipes: 8,
+    },
   },
   gridList: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
     alignItems: 'flex-start',
-    overflow: 'hidden'
-  }
+    overflow: 'hidden',
+  },
 };
 
 const savedString = 'saved';
@@ -62,6 +62,9 @@ class Profile extends Component {
       owned_recipes: [],
       saved_recipes: [],
       made_recipes: [],
+      owned_recipes_searching: [],
+      saved_recipes_searching: [],
+      made_recipes_searching: [],
       owned_recipes_length: null,
       saved_recipes_length: null,
       made_recipes_length: null,
@@ -71,7 +74,7 @@ class Profile extends Component {
       followers_length: null,
       query: '',
       currently_viewing: 'saved', // ********** saved, owned, following, or madethis *************
-      searchSavedOrOwned: true // search saved by default, so false means search owned
+      searchSavedOrOwned: true, // search saved by default, so false means search owned
     };
 
     this.showResults = this.showResults.bind(this);
@@ -85,24 +88,24 @@ class Profile extends Component {
     console.log('SHOW RESULTS: ', arg);
     this.setState(
       {
-        currently_viewing: arg
+        currently_viewing: arg,
       },
-      () => this.printClicked()
+      () => this.printClicked(),
     );
   }
   printClicked() {
     console.log('clicked: ', this.state.currently_viewing);
     if (this.state.currently_viewing === savedString) {
       this.setState({
-        searchSavedOrOwned: true
+        searchSavedOrOwned: true,
       });
     } else if (this.state.currently_viewing === ownedString) {
       this.setState({
-        searchSavedOrOwned: false
+        searchSavedOrOwned: false,
       });
     } else {
       this.setState({
-        searchSavedOrOwned: false
+        searchSavedOrOwned: false,
       });
     }
   }
@@ -111,56 +114,97 @@ class Profile extends Component {
     this.getDataFromAPI();
   }
 
-  handleQueryChange = event => {
+  handleQueryChange = (event) => {
     this.setState({
-      query: event.target.value
+      query: event.target.value,
     });
   };
 
-  handleMouseDown = event => {
+  handleMouseDown = (event) => {
     event.preventDefault();
   };
 
-  handleEnterSearch = async event => {
+  handleEnterSearch = async (event) => {
     const { client } = this.props;
     if (event.key === 'Enter') {
-      if (this.state.searchSavedOrOwned) {
+      if (this.state.query === '' || this.state.query === null) {
+        client
+          .query({
+            query: gql`{           
+            userById(
+              id: "${this.state.user_id}"
+            ) {
+              id
+              username
+              ownedRecipes (limit: 100) {name id description images ingredients instructions}
+              savedRecipes {name id description images ingredients instructions}
+              madeRecipes {name id description images ingredients instructions}
+              following {id username profilePicture}
+              followers {id username profilePicture}
+            }
+          }
+        `,
+            fetchPolicy: 'network-only',
+          })
+          .then((result) => {
+            console.log('empty query: ', result.data.userById);
+            this.setState(
+              {
+                loading: true,
+                owned_recipes: result.data.userById.ownedRecipes,
+                saved_recipes: result.data.userById.savedRecipes,
+                made_recipes: result.data.userById.madeRecipes,
+                following: result.data.userById.following,
+                followers: result.data.userById.followers,
+                owned_recipes_searching: result.data.userById.ownedRecipes,
+                saved_recipes_searching: result.data.userById.savedRecipes,
+                made_recipes_searching: result.data.userById.madeRecipes,
+              },
+              () => this.setLengths(),
+            );
+            return result.data.userById;
+          })
+          .catch((err) => {
+            console.log('error with empty query');
+            console.log(err);
+          });
+      } else if (this.state.searchSavedOrOwned) {
         // search trhough saved
         const { data } = await client.query({
           query: gql`
-            query {
-              searchSavedRecipes(userId: "${this.state.user_id}" query: "${
+              query {
+                searchSavedRecipes(userId: "${this.state.user_id}" query: "${
             this.state.query
           }") {
-                id
-                name
-                description
-                images
-              }
-            }`
+                  id
+                  name
+                  description
+                  images
+                }
+              }`,
         });
         this.setState({
           loading: true,
-          saved_recipes: data.searchSavedRecipes
+          saved_recipes_searching: data.searchSavedRecipes,
         });
       } else {
         // search through owned
         const { data } = await client.query({
           query: gql`
-            query {
-              searchOwnedRecipes(userId: "${this.state.user_id}" query: "${
+              query {
+                searchOwnedRecipes(userId: "${this.state.user_id}" query: "${
             this.state.query
           }") {
-                id
-                name
-                description
-                images
-              }
-            }`
+                  id
+                  name
+                  description
+                  images
+                }
+              }`,
         });
         this.setState({
           loading: true,
-          owned_recipes: data.searchOwnedRecipes
+          owned_recipes_searching: data.searchOwnedRecipes,
         });
       }
     }
@@ -181,11 +225,11 @@ class Profile extends Component {
               description
               images
             }
-          }`
+          }`,
       });
       this.setState({
         loading: true,
-        saved_recipes: data.searchSavedRecipes
+        saved_recipes: data.searchSavedRecipes,
       });
     } else {
       // search through owned
@@ -200,17 +244,17 @@ class Profile extends Component {
               description
               images
             }
-          }`
+          }`,
       });
       this.setState({
         loading: true,
-        owned_recipes: data.searchOwnedRecipes
+        owned_recipes: data.searchOwnedRecipes,
       });
     }
   };
 
   exportToPdf() {
-    const doc = new jsPDF();
+    const doc = new jsPDF('pt');
     let rec = null;
     if (this.state.currently_viewing === savedString) {
       rec = this.state.saved_recipes;
@@ -225,8 +269,10 @@ class Profile extends Component {
     for (let i = 0; i < rec.length; i++) {
       y = 20;
       doc.setFontSize(35);
-      doc.text(20, y, rec[i].name);
-      dim = doc.getTextDimensions(rec[i].name);
+
+      const lines = doc.splitTextToSize(rec[i].name, 170);
+      doc.text(20, y, lines);
+      dim = doc.getTextDimensions(lines);
       y += dim.h - 30;
 
       doc.setFontSize(14);
@@ -241,7 +287,7 @@ class Profile extends Component {
       dim = doc.getTextDimensions('Ingredients');
       y += dim.h - 20;
       doc.setFontSize(14);
-      let ingredients = rec[i].ingredients;
+      const ingredients = rec[i].ingredients;
       for (let j = 0; j < ingredients.length; j++) {
         const ing = ingredients[j];
         doc.text(20, y, ing);
@@ -260,7 +306,7 @@ class Profile extends Component {
         const lines = doc.splitTextToSize(inst[m], 170);
         doc.text(20, y, lines);
         dim = doc.getTextDimensions(lines);
-        y += dim.h - 5; // WHY IS THE LAST INSTRUCTION NOT IN THE RIGH SPOT????
+        y += dim.h - 5; // WHY IS THE LAST INSTRUCTION NOT IN THE RIGH SPOT!!!!????
         if (m + 2 >= inst.length) {
           y += 12;
         }
@@ -281,7 +327,7 @@ class Profile extends Component {
     console.log('--------------------- tyring to get following');
     const { client, userId } = this.props;
     const info = {
-      user_id: userId
+      user_id: userId,
     };
     await client
       .query({
@@ -292,12 +338,12 @@ class Profile extends Component {
             username
             following {id username}
           }
-        }`
+        }`,
       })
-      .then(result => {
+      .then((result) => {
         console.log('result from getting userByID: ', result.data.userById);
         this.setState({
-          following: result.data.userById.following
+          following: result.data.userById.following,
         });
         return result.info;
       });
@@ -312,19 +358,19 @@ class Profile extends Component {
             id
             username
           }
-        }`
+        }`,
       })
-      .then(result => {
+      .then((result) => {
         console.log(
           'result from getting userbyUsername: ',
-          result.data.userByUsername
+          result.data.userByUsername,
         );
         console.log('current following: ', this.state.following);
         this.setState(
           previousState => ({
-            following: [...previousState.following, result.data.userByUserName]
+            following: [...previousState.following, result.data.userByUserName],
           }),
-          this.followUser
+          this.followUser,
         );
         return result.data;
       });
@@ -335,7 +381,7 @@ class Profile extends Component {
       'vieweing profile for user: ',
       this.state.username,
       ', id: ',
-      this.state.user_id
+      this.state.user_id,
     );
 
     try {
@@ -357,9 +403,9 @@ class Profile extends Component {
               following {username}
             }
           }
-          `
+          `,
         })
-        .then(result => {
+        .then((result) => {
           console.log('user followed: ', result.data);
           return result.data;
         });
@@ -389,6 +435,9 @@ class Profile extends Component {
         following: user.following,
         followers: user.followers,
         user_image: user.profilePicture,
+        owned_recipes_searching: user.ownedRecipes,
+        saved_recipes_searching: user.savedRecipes,
+        made_recipes_searching: user.madeRecipes,
       },
       () => this.setLengths(),
     );
@@ -400,7 +449,7 @@ class Profile extends Component {
       saved_recipes_length: this.state.saved_recipes.length,
       made_recipes_length: this.state.made_recipes.length,
       following_length: this.state.following.length,
-      followers_length: this.state.followers.length
+      followers_length: this.state.followers.length,
     });
   }
 
@@ -427,9 +476,9 @@ class Profile extends Component {
             }
           }
         `,
-          fetchPolicy: 'network-only'
+          fetchPolicy: 'network-only',
         })
-        .then(result => {
+        .then((result) => {
           console.log('fetchUser: ', result.data.userById);
           return result.data.userById;
         });
@@ -462,9 +511,9 @@ class Profile extends Component {
             }
           }
         `,
-          fetchPolicy: 'network-only'
+          fetchPolicy: 'network-only',
         })
-        .then(result => {
+        .then((result) => {
           console.log('data got back: \n', result.data.userByUsername);
           return result.data.userByUsername;
         });
@@ -557,9 +606,9 @@ class Profile extends Component {
                       color="secondary"
                       Title="Export to .pdf"
                       className="export-recipes-button"
-                      /*onClick={() => {
+                      /* onClick={() => {
                         history.push(`/exportrecipes/${this.state.saved_recipes}`);
-                      }}*/
+                      }} */
                       onClick={this.exportToPdf}
                     >
                       <Icon>picture_as_pdf</Icon>
@@ -619,7 +668,7 @@ class Profile extends Component {
                               id="searchButton"
                               onClick={this.handleButtonSearch}
                             >
-                              <i class="material-icons">search</i>
+                              <i className="material-icons">search</i>
                             </Button>
                           </InputAdornment>
                         }
@@ -642,28 +691,26 @@ class Profile extends Component {
                 <Grid container>
                   <Trail
                     native
-                    keys={this.state.saved_recipes.map(item => item.id)}
+                    keys={this.state.saved_recipes_searching.map(item => item.id)}
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.saved_recipes.map(
-                      recipe => (marginTop, index) => {
-                        return (
-                          <Grid item md={4} sm={6} xs={6} zeroMinWidth>
-                            <animated.div key={index} style={marginTop}>
-                              <SearchResult
-                                key={recipe.id}
-                                name={recipe.name}
-                                style={marginTop}
-                                description={recipe.description}
-                                images={recipe.images}
-                                r_id={recipe.id}
-                              />
-                            </animated.div>
-                          </Grid>
-                        );
-                      }
-                    )}
+                    {this.state.saved_recipes_searching.map(recipe => (marginTop, index) => {
+                      return (
+                        <Grid item md={4} sm={6} xs={6} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <SearchResult
+                              key={recipe.id}
+                              name={recipe.name}
+                              style={marginTop}
+                              description={recipe.description}
+                              images={recipe.images}
+                              r_id={recipe.id}
+                            />
+                          </animated.div>
+                        </Grid>
+                      );
+                    })}
                   </Trail>
                 </Grid>
               )}
@@ -672,28 +719,26 @@ class Profile extends Component {
                 <Grid container>
                   <Trail
                     native
-                    keys={this.state.owned_recipes.map(item => item.id)}
+                    keys={this.state.owned_recipes_searching.map(item => item.id)}
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.owned_recipes.map(
-                      recipe => (marginTop, index) => {
-                        return (
-                          <Grid item md={4} sm={6} xs={6} zeroMinWidth>
-                            <animated.div key={index} style={marginTop}>
-                              <SearchResult
-                                key={recipe.id}
-                                name={recipe.name}
-                                style={marginTop}
-                                description={recipe.description}
-                                images={recipe.images}
-                                r_id={recipe.id}
-                              />
-                            </animated.div>
-                          </Grid>
-                        );
-                      }
-                    )}
+                    {this.state.owned_recipes_searching.map(recipe => (marginTop, index) => {
+                      return (
+                        <Grid item md={4} sm={6} xs={6} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <SearchResult
+                              key={recipe.id}
+                              name={recipe.name}
+                              style={marginTop}
+                              description={recipe.description}
+                              images={recipe.images}
+                              r_id={recipe.id}
+                            />
+                          </animated.div>
+                        </Grid>
+                      );
+                    })}
                   </Trail>
                 </Grid>
               )}
@@ -702,28 +747,26 @@ class Profile extends Component {
                 <Grid container>
                   <Trail
                     native
-                    keys={this.state.made_recipes.map(item => item.id)}
+                    keys={this.state.made_recipes_searching.map(item => item.id)}
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.made_recipes.map(
-                      recipe => (marginTop, index) => {
-                        return (
-                          <Grid item md={4} sm={6} xs={6} zeroMinWidth>
-                            <animated.div key={index} style={marginTop}>
-                              <SearchResult
-                                key={recipe.id}
-                                name={recipe.name}
-                                style={marginTop}
-                                description={recipe.description}
-                                images={recipe.images}
-                                r_id={recipe.id}
-                              />
-                            </animated.div>
-                          </Grid>
-                        );
-                      }
-                    )}
+                    {this.state.made_recipes_searching.map(recipe => (marginTop, index) => {
+                      return (
+                        <Grid item md={4} sm={6} xs={6} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <SearchResult
+                              key={recipe.id}
+                              name={recipe.name}
+                              style={marginTop}
+                              description={recipe.description}
+                              images={recipe.images}
+                              r_id={recipe.id}
+                            />
+                          </animated.div>
+                        </Grid>
+                      );
+                    })}
                   </Trail>
                 </Grid>
               )}
@@ -736,23 +779,21 @@ class Profile extends Component {
                     from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
-                    {this.state.following.map(
-                      userProfile => (marginTop, index) => {
-                        return (
-                          <Grid item md={4} sm={6} xs={6} zeroMinWidth>
-                            <animated.div key={index} style={marginTop}>
-                              <FollowingProfile
-                                key={userProfile.id}
-                                name={userProfile.username}
-                                style={marginTop}
-                                images={userProfile.profilePicture}
-                                r_id={userProfile.username}
-                              />
-                            </animated.div>
-                          </Grid>
-                        );
-                      }
-                    )}
+                    {this.state.following.map(userProfile => (marginTop, index) => {
+                      return (
+                        <Grid item md={4} sm={6} xs={6} zeroMinWidth>
+                          <animated.div key={index} style={marginTop}>
+                            <FollowingProfile
+                              key={userProfile.id}
+                              name={userProfile.username}
+                              style={marginTop}
+                              images={userProfile.profilePicture}
+                              r_id={userProfile.username}
+                            />
+                          </animated.div>
+                        </Grid>
+                      );
+                    })}
                   </Trail>
                 </Grid>
               )}
@@ -766,5 +807,5 @@ class Profile extends Component {
 
 export default compose(
   withLocalData,
-  withApollo
+  withApollo,
 )(Profile);
