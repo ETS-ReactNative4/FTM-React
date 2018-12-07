@@ -34,11 +34,11 @@ class HomeAppBar extends React.Component {
     this.setState({ user_image: user.profilePicture });
   }
 
-  // componentWillMount() {
-  //   this.getDataFromAPI();
-  // }
+  componentWillMount() {
+    this.getDataFromAPI();
+  }
   componentDidUpdate(prevProps) {
-    if (this.props.token !== prevProps.token) {
+    if (this.props.token !== prevProps.token || this.props.client !== prevProps.client) {
       this.getDataFromAPI();
     }
   }
