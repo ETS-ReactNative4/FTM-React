@@ -11,13 +11,17 @@ class Comments extends Component {
   }
 
   render() {
+    let comments = [...this.props.comments];
+    if(!comments.length) {
+      comments.push('No Comments')
+    }
     return (
       <div className="comment-container">
         <h1 className="comments-title">Comments</h1>
         <div className="comment-card-placement">
           {
-            this.props.comments.map((comment, index) => {
-              return <Card className="comment-card" key={index}> <CardContent><h3>Author:</h3> {comment} </CardContent></Card>;
+            comments.map((comment, index) => {
+              return <Card className="comment-card" key={index}> <CardContent>{comment}</CardContent></Card>;
             })
           }
         </div>
