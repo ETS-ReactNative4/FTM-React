@@ -25,6 +25,8 @@ import Comments from './Comments/Comments';
 import withLocalData from '../withLocalData';
 import Fraction from 'fraction.js';
 import * as jsPDF from 'jspdf';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PDF } from '../recipePdf/PDF';
 const styles = {
   spacing: 24,
   sizes: {
@@ -550,18 +552,20 @@ class Recipe extends Component {
             xs={styles.sizes.xs.ingredients}
             sm={styles.sizes.sm.ingredients}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              title="print"
-              className="print-button btn-margin"
-            >
-              <i className="material-icons">print</i>
-              {/* <PDFDownloadLink document={<PDF />} fileName="test.pdf">
-                {() => ' '}
-                
-              </PDFDownloadLink> */}
-            </Button>
+            <PDFDownloadLink document={<PDF />} fileName="test.pdf">
+              {() => (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  title="print"
+                  className="print-button btn-margin"
+                >
+                  <i className="material-icons">print</i>
+                  Export to PDF
+                </Button>
+              )}
+            </PDFDownloadLink>
+
             {userOwnsRecipe && (
               <Button
                 variant="contained"
