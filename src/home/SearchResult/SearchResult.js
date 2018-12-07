@@ -1,17 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Avatar,
-  CardHeader,
-  CardMedia,
-  MenuList,
-  MenuItem,
-  ListItemIcon,
-} from '@material-ui/core';
-import { Star, StarBorder } from '@material-ui/icons';
+import { Card, CardContent, Typography, Avatar, CardHeader, CardMedia } from '@material-ui/core';
 import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './SearchResult.css';
@@ -68,19 +57,18 @@ class SearchResult extends React.Component {
               history.push(`/recipe/${r_id}`);
             }}
           >
-
-						<CardMedia className={classes.media} image={images[0]} />
-						<CardHeader
-							className="recipe-header"
-							avatar={
-								<Avatar
-									alt={name}
-									className={classes.avatar}
-									src="http://i65.tinypic.com/2rnvc7k.png"
-								/>
-							}
-							title={name}
-						/>
+            <CardMedia className={classes.media} image={images[0]} />
+            <CardHeader
+              className="recipe-header"
+              avatar={
+                <Avatar
+                  alt={name}
+                  className={classes.avatar}
+                  src="http://i65.tinypic.com/2rnvc7k.png"
+                />
+              }
+              title={name}
+            />
             <CardContent style={{ padding: '5px' }}>
               <Typography className="recipe-description" variant="caption">
                 {description}

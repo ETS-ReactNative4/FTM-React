@@ -1,23 +1,34 @@
 import React, { Component } from 'react';
-import {
-  Card,
-  Grid,
-  List,
-  ListItem,
-  Checkbox,
-  Typography
-} from '@material-ui/core';
+import { Card, Grid, List, ListItem, Checkbox, Typography } from '@material-ui/core';
 import './Instructions.css';
 
 class RecipeInstructions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: null
+      value: null,
     };
   }
 
   render() {
+    console.log(this.props.images);
+    function InstructionImage(props) {
+      if (props.images !== undefined) {
+        return (
+          <img
+            className="listImage"
+            alt="user"
+            title="Edit Profile Picture"
+            src={
+              props.images[props.index] !== undefined
+                ? props.images[props.index]
+                : 'https://i.imgur.com/Uy1Ln6x.jpg'
+            }
+          />
+        );
+      }
+      return null;
+    }
     return (
       <Card>
         <Typography className="instructions-title">
@@ -29,8 +40,11 @@ class RecipeInstructions extends Component {
             {this.props.value.map((name, index) => {
               return (
                 <ListItem key={index}>
-                  <Checkbox />
-                  {name}
+                  <div className="listRoot">
+                    <InstructionImage images={this.props.images} index={index} />
+                    <Checkbox />
+                    {name}
+                  </div>
                 </ListItem>
               );
             })}
