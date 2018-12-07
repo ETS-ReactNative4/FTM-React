@@ -25,8 +25,8 @@ import Comments from './Comments/Comments';
 import withLocalData from '../withLocalData';
 import Fraction from 'fraction.js';
 import * as jsPDF from 'jspdf';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import { PDF } from '../recipePdf/PDF';
+// import { PDFDownloadLin, BlobProvider } from '@react-pdf/renderer';
+// import { PDF2 } from '../recipePdf/PDF';
 const styles = {
   spacing: 24,
   sizes: {
@@ -126,7 +126,7 @@ class Recipe extends Component {
   };
 
   iMadeThis() {
-    console.log('show youve made this');
+    this.setState({ iMadeThis: !this.state.iMadeThis });
     try {
       const { client, userId } = this.props;
       const data = {
@@ -358,44 +358,44 @@ class Recipe extends Component {
   }
 
   fetchRecipe = async () => {
-    const data = {
-      recipe_id: this.state.recipe_id
-    };
     try {
-      const { client } = this.props;
+      const { client, userId } = this.props;
       const result = client
         .query({
           query: gql`
-          query getRecipe {           
-            recipeById(
-              id: "${data.recipe_id}"
-            ) {
-              id
-              created
-              description
-              system
-              images
-              name
-              ingredients
-              instructions
-              sourceURL
-              prepTime
-              cookTime
-              difficulty
-              servings
-              rating
-              notes
-              numReviews
-              numShares
-              tags
-              comments
-              author {
+            query getRecipe($recipeId: String!, $userId: String!) {
+              recipeById(id: $recipeId) {
                 id
-                username
+                created
+                description
+                system
+                images
+                name
+                ingredients
+                instructions
+                sourceURL
+                prepTime
+                cookTime
+                difficulty
+                servings
+                rating
+                notes
+                numReviews
+                numShares
+                tags
+                comments
+                author {
+                  id
+                  username
+                }
+                iMadeThis(userId: $userId)
               }
             }
+          `,
+          variables: {
+            userId: userId,
+            recipeId: this.state.recipe_id
           }
-        `
         })
         .then(result => {
           return result.data.recipeById;
@@ -425,7 +425,8 @@ class Recipe extends Component {
       stars: Math.round(recipe.rating),
       notes: recipe.notes,
       comments: recipe.comments,
-      authorId: recipe.author.id
+      authorId: recipe.author.id,
+      iMadeThis: recipe.iMadeThis
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
@@ -552,7 +553,16 @@ class Recipe extends Component {
             xs={styles.sizes.xs.ingredients}
             sm={styles.sizes.sm.ingredients}
           >
-            <PDFDownloadLink document={<PDF />} fileName="test.pdf">
+            <Button
+              variant="contained"
+              color="secondary"
+              title="print"
+              className="print-button btn-margin"
+            >
+              <i className="material-icons">print</i>
+              Export to PDF
+            </Button>
+            {/* <BlobProvider document={PDF2}>
               {() => (
                 <Button
                   variant="contained"
@@ -564,7 +574,7 @@ class Recipe extends Component {
                   Export to PDF
                 </Button>
               )}
-            </PDFDownloadLink>
+            </BlobProvider> */}
 
             {userOwnsRecipe && (
               <Button
@@ -582,12 +592,13 @@ class Recipe extends Component {
             {isLoggedIn && (
               <Button
                 variant="contained"
-                color="secondary"
+                color={this.state.iMadeThis ? 'primary' : 'default'}
                 title="I Made This"
                 className="i-made-this btn-margin"
                 onClick={this.iMadeThis}
               >
-                <Icon>restaurant_menu</Icon>I Made This!
+                <Icon>restaurant_menu</Icon>
+                {this.state.iMadeThis ? "You've Made This!" : 'I Made This!'}
               </Button>
             )}
             <Dialog
