@@ -95,6 +95,7 @@ class Recipe extends Component {
     this.pdfToHTML = this.pdfToHTML.bind(this);
     this.isUserLoggedIn = this.isUserLoggedIn.bind(this);
     this.userIsOwner = this.userIsOwner.bind(this);
+    this.publishRecipe = this.publishRecipe.bind(this);
   }
 
   isUserLoggedIn() {
@@ -129,6 +130,9 @@ class Recipe extends Component {
     });
   };
 
+  publishRecipe() {
+    console.log('publish this recipe');
+  }
   iMadeThis() {
     this.setState({ iMadeThis: !this.state.iMadeThis });
     try {
@@ -602,10 +606,11 @@ class Recipe extends Component {
               <Button
                 variant="contained"
                 color="secondary"
-                title="Add Notes"
+                title="Publish Recipe"
                 className=" "
+                onClick={this.publishRecipe}
               >
-                <Icon>create</Icon>
+                <Icon>publish</Icon>
                 Publish To Public
               </Button>
             )}
