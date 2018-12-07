@@ -9,6 +9,10 @@
   flex-direction: column;
 }
 .profile-pic {
+	opacity: 1;
+	display: block;
+	transition: .5s ease;
+	backface-visibility: hidden;
   position: relative;
   width: 200px;
   height: 200px;
@@ -22,6 +26,39 @@
 }
 .pic-container {
   position: relative;
+}
+
+.overlay {
+	transition: .5s ease;
+	opacity: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.container {
+	  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+	flex-direction: column;
+	  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.container:hover .pic-container {
+	opacity: 0.3;
+}
+
+.container:hover .overlay {
+	opacity: 1,
+}
+
+.upload-pic {
+
 }
 /*
 .pic-container:after {
