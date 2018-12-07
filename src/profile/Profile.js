@@ -393,7 +393,7 @@ class Profile extends Component {
             ) {
               id
               username
-              ownedRecipes {name id description images ingredients instructions}
+              ownedRecipes (limit: 100) {name id description images ingredients instructions}
               savedRecipes {name id description images ingredients instructions}
               madeRecipes {name id description images ingredients instructions}
               following {id username profilePicture}
