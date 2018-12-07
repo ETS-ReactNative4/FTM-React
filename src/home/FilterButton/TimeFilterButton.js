@@ -28,12 +28,11 @@ class TimeFilterButton extends React.Component {
     if (!(item instanceof MouseEvent)) {
       // console.log(item);
     }
-		this.setState(state => ({ open: false }));
+    this.setState(state => ({ open: false }));
   };
 
   handleCancel = () => {
-	
-		this.setState(state => ({ open: false }));
+    this.setState(state => ({ open: false }));
   };
 
   handleSliderChange = (event, value) => {
