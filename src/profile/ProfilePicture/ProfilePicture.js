@@ -12,6 +12,7 @@ class ProfilePicture extends Component {
       imageURL: null,
       name: null,
       hover: false,
+      viewingMyProfile: this.props.viewingMyProfile,
     };
 
     this.uploadFile = this.uploadFile.bind(this);
@@ -75,41 +76,58 @@ class ProfilePicture extends Component {
   `;
 
   render() {
+    console.log('viewing my profile: ', this.state.viewingMyProfile);
     return (
       <div className="fullSize user-info">
         <div className="container">
-          <div className="pic-container">
-            <img
-              alt="user"
-              title="Edit Profile Picture"
-              src={
-                this.props.imageURL !== null
-                  ? this.props.imageURL
-                  : 'http://i65.tinypic.com/2rnvc7k.png'
-              }
-              className="profile-pic"
-              onMouseEnter={this.hoverEnter}
-              onMouseLeave={this.hoverLeave}
-              onClick={this.handleClick}
-            />
-            <div className="overlay" />
-            <Mutation mutation={this.UPLOAD_FILE}>
-              {uploadFile => (
-                <input
-                  type="file"
-                  id="file-uploader"
-                  accept="image/jpg, image/jpeg, image/png"
-                  ref={this.btnRef}
-                  className="upload-pic"
-                  style={{ display: 'none' }}
-                  required
-                  onChange={({ target: { validity, files } }) => {
-                    validity.valid && this.uploadFile(files);
-                  }}
+          <div className={this.state.viewingMyProfile ? 'pic-container pic-overlay pic-cursor' : 'pic-container'}>
+            {this.state.viewingMyProfile ? (
+              <React.Fragment>
+                <img
+                  alt="user"
+                  title="Edit Profile Picture"
+                  src={
+                    this.props.imageURL !== null
+                      ? this.props.imageURL
+                      : 'http://i65.tinypic.com/2rnvc7k.png'
+                  }
+                  className="profile-pic pic-cursor"
+                  onMouseEnter={this.hoverEnter}
+                  onMouseLeave={this.hoverLeave}
+                  onClick={this.handleClick}
                 />
-              )}
-            </Mutation>
-            {this.state.hover && (
+                <div className="overlay" />
+                <Mutation mutation={this.UPLOAD_FILE}>
+                  {uploadFile => (
+                    <input
+                      type="file"
+                      id="file-uploader"
+                      accept="image/jpg, image/jpeg, image/png"
+                      ref={this.btnRef}
+                      className="upload-pic"
+                      style={{ display: 'none' }}
+                      required
+                      onChange={({ target: { validity, files } }) => {
+                        validity.valid && this.uploadFile(files);
+                      }}
+                    />
+                  )}
+                </Mutation>
+              </React.Fragment>
+            ) : (
+              <img
+                alt="user"
+                title="Edit Profile Picture"
+                src={
+                  this.props.imageURL !== null
+                    ? this.props.imageURL
+                    : 'http://i65.tinypic.com/2rnvc7k.png'
+                }
+                className="profile-pic"
+              />
+            )}
+
+            {this.state.hover && this.state.viewingMyProfile && (
               <Icon
                 className="edit-profile-pic"
                 title="Edit Profile Picture"
@@ -120,6 +138,7 @@ class ProfilePicture extends Component {
                 edit
               </Icon>
             )}
+            
           </div>
         </div>
         <div className="upload-profile" />

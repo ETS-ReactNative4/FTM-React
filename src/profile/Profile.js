@@ -81,8 +81,8 @@ class Profile extends Component {
 
     this.showResults = this.showResults.bind(this);
     this.followUser = this.followUser.bind(this);
-    this.updateFollowing = this.updateFollowing.bind(this);
     this.exportToPdf = this.exportToPdf.bind(this);
+    this.isMyProfile = this.isMyProfile.bind(this);
     // this.getDataFromAPI();
   }
 
@@ -114,6 +114,16 @@ class Profile extends Component {
 
   componentWillMount() {
     this.getDataFromAPI();
+    console.log('in the component will mount now');
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.match.params.username !== this.props.match.params.username) {
+      console.log('NEW PROPS');
+      this.forceUpdate();
+      window.location.reload();
+    }
+    console.log('in receive props');
   }
 
   handleQueryChange = (event) => {
@@ -321,63 +331,6 @@ class Profile extends Component {
     doc.save('recipes.pdf');
   }
 
-  /** This whole function is garbage right now. ignore it */
-  updateFollowing = async () => {
-    console.log('Update Following');
-
-    // First need to get the logged in users followers
-    console.log('--------------------- tyring to get following');
-    const { client, userId } = this.props;
-    const info = {
-      user_id: userId,
-    };
-    await client
-      .query({
-        query: gql`
-        query {
-          userById(id: "${info.user_id}") {
-            id
-            username
-            following {id username}
-          }
-        }`,
-      })
-      .then((result) => {
-        console.log('result from getting userByID: ', result.data.userById);
-        this.setState({
-          following: result.data.userById.following,
-        });
-        return result.info;
-      });
-    console.log('------------ after get following');
-
-    // then get the other users info to follow them.
-    await client
-      .query({
-        query: gql`
-        query {
-          userByUsername(username: "${this.state.username}") {
-            id
-            username
-          }
-        }`,
-      })
-      .then((result) => {
-        console.log(
-          'result from getting userbyUsername: ',
-          result.data.userByUsername,
-        );
-        console.log('current following: ', this.state.following);
-        this.setState(
-          previousState => ({
-            following: [...previousState.following, result.data.userByUserName],
-          }),
-          this.followUser,
-        );
-        return result.data;
-      });
-  };
-
   followUser = async () => {
     console.log(
       'vieweing profile for user: ',
@@ -526,6 +479,17 @@ class Profile extends Component {
     }
   };
 
+  isMyProfile() {
+    let myProfile = true;
+    if (this.props.match.params.username) {
+      myProfile = false; // viewing somebody elses profile
+    } else {
+      myProfile = true;
+    }
+
+    return myProfile;
+  }
+
   render() {
     // don't render until we have data loaded
     if (!this.state.username) {
@@ -568,12 +532,7 @@ class Profile extends Component {
       madeThisShow = true;
     }
 
-    let myProfile = true;
-    if (this.props.match.params.username) {
-      myProfile = false; // viewing somebody elses profile
-    } else {
-      myProfile = true;
-    }
+    console.log('myProfile: ', this.isMyProfile());
 
     return (
       <div style={{ display: 'flex' }}>
@@ -592,6 +551,7 @@ class Profile extends Component {
             <ProfilePicture
               name={this.state.username}
               imageURL={this.state.user_image}
+              viewingMyProfile={this.isMyProfile()}
             />
           </Grid>
           <Grid
@@ -606,7 +566,7 @@ class Profile extends Component {
               made_this_number={this.state.made_recipes_length}
               following_number={this.state.following_length}
               showResults={this.showResults}
-              my_profile={myProfile}
+              my_profile={this.isMyProfile()}
               followUser={this.followUser}
             />
           </Grid>
@@ -651,7 +611,7 @@ class Profile extends Component {
                       </Grid>
 
                       {!followShow &&
-                      myProfile && ( // don't show export if they are looking at followers
+                      this.isMyProfile() && ( // don't show export if they are looking at followers
                           <Grid item xs={3} sm={3}>
                             <Button
                               variant="contained"
@@ -707,7 +667,7 @@ class Profile extends Component {
                 </Grid>
               )}
 
-              {ownedShow && myProfile && (
+              {ownedShow && this.isMyProfile() && (
                 <Grid container>
                   <Trail
                     native

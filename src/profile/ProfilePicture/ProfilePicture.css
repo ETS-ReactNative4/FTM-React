@@ -18,6 +18,8 @@
   height: 200px;
   border-radius: 50%;
   object-fit: cover;
+}
+.pic-cursor {
   cursor: pointer;
 }
 .username {
@@ -50,7 +52,7 @@
   border-radius: 50%;
   object-fit: cover;
 }
-.container:hover .pic-container {
+.container:hover .pic-overlay {
   opacity: 0.3;
 }
 
