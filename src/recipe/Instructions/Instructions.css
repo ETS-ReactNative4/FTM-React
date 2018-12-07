@@ -8,3 +8,15 @@ p.instructions-title {
 .instructions-list li {
   padding-left: .75em;
 }
+
+.listRoot {
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+}
+
+.listImage {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+}
