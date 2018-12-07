@@ -58,7 +58,8 @@ class Recipe extends Component {
       ingredients: [],
       instructions: [],
       description: null,
-      image: [],
+			image: [],
+			instructionImages: [],
       title: null,
       stars: null,
       tags: [],
@@ -449,7 +450,8 @@ class Recipe extends Component {
     this.setState({
       title: recipe.name,
       author: recipe.author.username,
-      image: recipe.images[0],
+			image: recipe.images[0],
+			instructionImages: recipe.images.slice(1),
       cookTime: recipe.cookTime,
       prepTime: recipe.prepTime,
       difficulty: recipe.difficulty,
@@ -585,8 +587,8 @@ class Recipe extends Component {
             item
             xs={styles.sizes.xs.ingredients}
             sm={styles.sizes.sm.ingredients}
-          >
-            <RecipeInstructions value={this.state.instructions} />
+					>
+						<RecipeInstructions value={this.state.instructions} images={this.state.instructionImages} />
           </Grid>
           <Grid className="recipe-buttons" container justify={'center'}>
             <Button
