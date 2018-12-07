@@ -521,7 +521,7 @@ class Profile extends Component {
               my_profile={myProfile}
               followUser={this.followUser}
             />
-            {!followShow && ( // don't show export if they are looking at followers
+            {!followShow && myProfile && ( // don't show export if they are looking at followers
               <Grid item>
                 <Route
                   render={({ history }) => (
