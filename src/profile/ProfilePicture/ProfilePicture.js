@@ -31,7 +31,8 @@ class ProfilePicture extends Component {
     this.setState({ hover: false });
   }
   handleClick(e) {
-    if (this.props.myProfile) {
+    console.log('clicked profile picture');
+    if (this.props.viewingMyProfile) {
       const node = this.btnRef.current;
       node.click();
     }
