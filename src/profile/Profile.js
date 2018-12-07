@@ -222,26 +222,51 @@ class Profile extends Component {
       rec = this.state.made_recipes;
     }
 
+    let dim = doc.getTextDimensions('Text');
+    let y = 0;
     for (let i = 0; i < rec.length; i++) {
+      y = 20;
       doc.setFontSize(35);
-      doc.text(20, 20, rec[i].name);
+      doc.text(20, y, rec[i].name);
+      dim = doc.getTextDimensions(rec[i].name);
+      y += dim.h - 30;
 
-      doc.setFontSize(16);
+      doc.setFontSize(14);
       const desc = rec[i].description;
       const desclines = doc.splitTextToSize(desc, 170);
-      doc.text(20, 30, desclines);
+      doc.text(20, y, desclines);
+      dim = doc.getTextDimensions(desclines);
+      y += dim.h;
 
       doc.setFontSize(25);
-      doc.text(20, 50, 'Ingredients');
-      doc.setFontSize(16);
-      doc.text(20, 60, rec[i].ingredients);
+      doc.text(20, y, 'Ingredients');
+      dim = doc.getTextDimensions('Ingredients');
+      y += dim.h - 20;
+      doc.setFontSize(14);
+      let ingredients = rec[i].ingredients;
+      for (let j = 0; j < ingredients.length; j++) {
+        const ing = ingredients[j];
+        doc.text(20, y, ing);
+        dim = doc.getTextDimensions(ing);
+        y += dim.h - 10;
+      }
 
+      y += 10;
       doc.setFontSize(25);
-      doc.text(20, 170, 'Instructions');
-      doc.setFontSize(16);
+      doc.text(20, y, 'Instructions');
+      dim = doc.getTextDimensions('Instructions');
+      y += dim.h - 20;
+      doc.setFontSize(14);
       const inst = rec[i].instructions;
-      const lines = doc.splitTextToSize(inst, 170);
-      doc.text(20, 180, lines);
+      for (let m = 0; m < inst.length; m++) {
+        const lines = doc.splitTextToSize(inst[m], 170);
+        doc.text(20, y, lines);
+        dim = doc.getTextDimensions(lines);
+        y += dim.h - 5; // WHY IS THE LAST INSTRUCTION NOT IN THE RIGH SPOT????
+        if (m + 2 >= inst.length) {
+          y += 12;
+        }
+      }
 
       if (i + 1 < rec.length) {
         doc.addPage('a4', 'p');
