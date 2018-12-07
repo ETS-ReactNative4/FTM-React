@@ -75,13 +75,16 @@ class SearchResult extends React.Component {
                 />
               }
               action={
-                <IconButton
-                  onClick={e => {
-                    e.preventDefault();
-                  }}
-                >
-                  <Close />
-                </IconButton>
+                this.props.onDelete ? (
+                  <IconButton
+                    onClick={e => {
+                      e.stopPropagation();
+                      this.props.onDelete();
+                    }}
+                  >
+                    <Close />
+                  </IconButton>
+                ) : null
               }
               title={name}
             />
