@@ -477,6 +477,73 @@ class Profile extends Component {
     }
   };
 
+  deleteOwned = async recipeId => {
+    const owned = this.state.owned_recipes.filter(
+      recipe => recipe.id !== recipeId
+    );
+    this.setState({
+      owned_recipes: owned,
+      owned_recipes_length: owned.length
+    });
+    const { client } = this.props;
+    client.mutate({
+      mutation: gql`
+        mutation deleteOwned($recipeId: String!) {
+          deleteRecipe(id: $recipeId)
+        }
+      `,
+      variables: {
+        recipeId
+      }
+    });
+  };
+
+  deleteSaved = async recipeId => {
+    const saved = this.state.saved_recipes.filter(
+      recipe => recipe.id !== recipeId
+    );
+    this.setState({
+      saved_recipes: saved,
+      saved_recipes_length: saved.length
+    });
+    const { client, userId } = this.props;
+    client.mutate({
+      mutation: gql`
+        mutation($recipeId: String!, $userId: String!) {
+          deleteSavedRecipe(recipeId: $recipeId, userId: $userId)
+        }
+      `,
+      variables: {
+        recipeId,
+        userId
+      }
+    });
+  };
+
+  removeMadeRecipe = async recipeId => {
+    const made = this.state.made_recipes.filter(
+      recipe => recipe.id !== recipeId
+    );
+    this.setState({
+      made_recipes: made,
+      made_recipes_length: made.length
+    });
+    const { client, userId } = this.props;
+    client.mutate({
+      mutation: gql`
+        mutation($recipeId: String!, $userId: String!) {
+          toggleIMadeThis(userId: $userId, recipeId: $recipeId, newVal: false) {
+            username
+          }
+        }
+      `,
+      variables: {
+        recipeId,
+        userId
+      }
+    });
+  };
+
   render() {
     // don't render until we have data loaded
     if (!this.state.username) {
@@ -650,6 +717,7 @@ class Profile extends Component {
                                 description={recipe.description}
                                 images={recipe.images}
                                 r_id={recipe.id}
+                                onDelete={() => this.deleteSaved(recipe.id)}
                               />
                             </animated.div>
                           </Grid>
@@ -680,6 +748,7 @@ class Profile extends Component {
                                 description={recipe.description}
                                 images={recipe.images}
                                 r_id={recipe.id}
+                                onDelete={() => this.deleteOwned(recipe.id)}
                               />
                             </animated.div>
                           </Grid>
@@ -710,6 +779,9 @@ class Profile extends Component {
                                 description={recipe.description}
                                 images={recipe.images}
                                 r_id={recipe.id}
+                                onDelete={() =>
+                                  this.removeMadeRecipe(recipe.id)
+                                }
                               />
                             </animated.div>
                           </Grid>
