@@ -1,38 +1,41 @@
-.recipeAuthor,
-.tags {
-    padding: 1em;
-    width: 50%;
-    display: flex;
+.infoCard {	
+	height: 100%;
+	width: 100%;
 }
 
-.recipeInfo {
-    display: flex;
-    width: 100%;
+.infoRoot {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 }
 
-.chip {
-    width: auto;
+.servingsLabel {
+	margin-right: 10px;
 }
 
-.authorName,
-.time,
-.difficulty {
-  display: flex;
-  align-items: center;
+.servingsCounter {
+margin-right: 1px;
+width: 30px;
+}
+
+
+.infoColumn {
+	display: flex;
+	align-items: center;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+.avatar {
+	margin-left: 15px;
 }
 
 .authorName {
-  margin-left: .5em;
-  
+	margin-left: 5px;
 }
+
 .authorName:hover {
   cursor:pointer;
   color: #3f51b5;
-}
-
-.time,
-.difficulty {
-  font-size: .8em;
-  color: gray;
-  margin-left: 2em;
 }
