@@ -179,18 +179,18 @@ class Home extends Component {
 
   render() {
     return (
-      <div className="home-container">
+			<div className="home-container">
         <Spring
-          from={{ marginTop: 0 }}
-          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
+          native
+          from={{ height: 390, opacity: 1.0 }}
+          to={
+            this.state.recipes.length > 0 ? { height: 0, opacity: 0.0 } : { height: 390, opacity: 1.0 }
+          }
         >
-          {({ marginTop, opacity }) => (
-            <img
-              className="logo"
-              style={{ marginTop }}
-              src="http://i63.tinypic.com/14joi09.png"
-              alt="logo"
-            />
+          {({ height, opacity }) => (
+						<animated.div className="logo" style={{ height, opacity }}>
+              <img src="http://i63.tinypic.com/14joi09.png" alt="logo" />
+            </animated.div>
           )}
         </Spring>
         <Spring
@@ -215,19 +215,6 @@ class Home extends Component {
                 />
               </FormControl>
             </div>
-          )}
-        </Spring>
-        <Spring
-          from={{ marginTop: 0 }}
-          to={this.state.recipes.length > 0 ? { marginTop: 0 } : { marginTop: 0 }}
-        >
-          {({ marginTop, opacity }) => (
-            <img
-              className="logo"
-              style={{ marginTop }}
-              src="http://i63.tinypic.com/14joi09.png"
-              alt="logo"
-            />
           )}
         </Spring>
         <Spring
