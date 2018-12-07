@@ -201,8 +201,9 @@ class Home extends Component {
             <div className="search-box" style={{ marginTop }}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="search">Search for a recipe...</InputLabel>
-                <Input
-                  id="search"
+								<Input
+									autoFocus
+									id="search"
                   onKeyPress={this.handleEnterSearch}
                   onChange={this.handleQueryChange}
                   endAdornment={
