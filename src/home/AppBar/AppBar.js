@@ -31,7 +31,6 @@ const styles = {
 
 function HomeAppBar(props) {
   const { classes, token } = props;
-  console.log(token);
   return (
     <div className={classes.root}>
       <AppBar id="main-app-bar" position="fixed">

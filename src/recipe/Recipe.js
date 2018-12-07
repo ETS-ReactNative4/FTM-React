@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Button, TextField } from '@material-ui/core';
+import { Grid, Button, TextField, Fab } from '@material-ui/core';
 import { Favorite, FavoriteBorder } from '@material-ui/icons';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -25,8 +25,6 @@ import Comments from './Comments/Comments';
 import withLocalData from '../withLocalData';
 import Fraction from 'fraction.js';
 import * as jsPDF from 'jspdf';
-import { PDF, PDF2 } from '../recipePdf/PDF';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 const styles = {
   spacing: 24,
   sizes: {
@@ -74,7 +72,8 @@ class Recipe extends Component {
       new_note: null,
       new_comment: null,
       note_dialog_open: false,
-      comment_dialog_open: false
+      comment_dialog_open: false,
+      authorId: null
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
@@ -388,13 +387,15 @@ class Recipe extends Component {
               numShares
               tags
               comments
-              author {username}
+              author {
+                id
+                username
+              }
             }
           }
         `
         })
         .then(result => {
-          console.log('recipe result: ', result.data.recipeById);
           return result.data.recipeById;
         });
       return result;
@@ -421,7 +422,8 @@ class Recipe extends Component {
       scale: recipe.servings,
       stars: Math.round(recipe.rating),
       notes: recipe.notes,
-      comments: recipe.comments
+      comments: recipe.comments,
+      authorId: recipe.author.id
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
@@ -458,6 +460,14 @@ class Recipe extends Component {
     });
   };
 
+  userIsOwner = () => {
+    return (
+      this.isLoggedIn &&
+      this.state.authorId !== null &&
+      this.state.authorId === this.props.userId
+    );
+  };
+
   render() {
     // don't render until we have data loaded
     if (!this.state.title) {
@@ -465,13 +475,13 @@ class Recipe extends Component {
     }
 
     const isLoggedIn = this.isUserLoggedIn();
-    console.log('user is logged in: ', isLoggedIn);
+    const userOwnsRecipe = this.userIsOwner();
 
     const shareUrl = `http://www.foodtomake.com${this.props.location.pathname}`; // TODO:  Change this later for live
 
     return (
       <div>
-        <Notes notes={this.state.notes} />
+        {userOwnsRecipe && <Notes notes={this.state.notes} />}
         <Grid
           className="pic-des-container"
           container
@@ -534,40 +544,25 @@ class Recipe extends Component {
           >
             <RecipeInstructions value={this.state.instructions} />
           </Grid>
-
-          {isLoggedIn && (
-            <Grid
-              className="recipe-buttons"
-              item
-              xs={styles.sizes.xs.ingredients}
-              sm={styles.sizes.sm.ingredients}
+          <Grid
+            className="recipe-buttons"
+            item
+            xs={styles.sizes.xs.ingredients}
+            sm={styles.sizes.sm.ingredients}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              title="print"
+              className="print-button btn-margin"
             >
-              <Button
-                variant="contained"
-                color="primary"
-                title="print"
-                className="print-button btn-margin"
-              >
-                {/* <PDFDownloadLink
-                  document={PDF({
-                    imageUrl: this.state.image,
-                    instructions: this.state.instructions,
-                    ingredients: this.state.ingredients,
-                    name: this.state.name,
-                    description: this.state.description
-                  })}
-                  fileName="test.pdf"
-                >
-                  {() => 'Export to PDF'}
-                </PDFDownloadLink> */}
-                <PDFDownloadLink document={PDF2} fileName="test.pdf">
-                  {() => ' '}
-                  <i class="material-icons">
-                    print
-                        </i>
-                  
-                </PDFDownloadLink>
-              </Button>
+              <i className="material-icons">print</i>
+              {/* <PDFDownloadLink document={<PDF />} fileName="test.pdf">
+                {() => ' '}
+                
+              </PDFDownloadLink> */}
+            </Button>
+            {userOwnsRecipe && (
               <Button
                 variant="contained"
                 color="secondary"
@@ -578,6 +573,9 @@ class Recipe extends Component {
                 <Icon>create</Icon>
                 Add a Note
               </Button>
+            )}
+
+            {isLoggedIn && (
               <Button
                 variant="contained"
                 color="secondary"
@@ -587,39 +585,39 @@ class Recipe extends Component {
               >
                 <Icon>restaurant_menu</Icon>I Made This!
               </Button>
-              <Dialog
-                open={this.state.note_dialog_open}
-                onClose={this.handleDialogClose}
-                aria-labelledby="form-dialog-title"
-                fullWidth={true}
-              >
-                <DialogTitle id="form-dialog-title">New Note</DialogTitle>
-                <DialogContent>
-                  <TextField
-                    autoFocus
-                    multiline
-                    fullWidth
-                    id="note-input"
-                    label="New Note"
-                    type="text"
-                    onChange={this.handleNoteInput.bind(this)}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleDialogClose} color="primary">
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={this.noteSubmit}
-                    color="primary"
-                    variant="contained"
-                  >
-                    Add Note
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </Grid>
-          )}
+            )}
+            <Dialog
+              open={this.state.note_dialog_open}
+              onClose={this.handleDialogClose}
+              aria-labelledby="form-dialog-title"
+              fullWidth={true}
+            >
+              <DialogTitle id="form-dialog-title">New Note</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  multiline
+                  fullWidth
+                  id="note-input"
+                  label="New Note"
+                  type="text"
+                  onChange={this.handleNoteInput.bind(this)}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleDialogClose} color="primary">
+                  Cancel
+                </Button>
+                <Button
+                  onClick={this.noteSubmit}
+                  color="primary"
+                  variant="contained"
+                >
+                  Add Note
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Grid>
 
           <Grid
             className="source-url"
@@ -647,35 +645,32 @@ class Recipe extends Component {
             xs={styles.sizes.xs.ingredients}
             sm={styles.sizes.sm.ingredients}
           >
-            <Button
+            <Fab
               style={{
                 position: 'absolute',
                 bottom: 160,
                 right: 20,
                 backgroundColor: '#3b5998'
               }}
-              variant="fab"
             >
               <FacebookShareButton url={shareUrl} className="share-btn">
                 <FacebookIcon size={48} round={true} className="share-btn" />
               </FacebookShareButton>
-            </Button>
-            <Button
+            </Fab>
+            <Fab
               style={{
                 position: 'absolute',
                 bottom: 90,
                 right: 20,
                 backgroundColor: '#00aced'
               }}
-              variant="fab"
             >
               <TwitterShareButton url={shareUrl} className="share-btn">
                 <TwitterIcon size={48} round={true} className="share-btn" />
               </TwitterShareButton>
-            </Button>
-            <Button
+            </Fab>
+            <Fab
               style={{ position: 'absolute', bottom: 20, right: 20 }}
-              variant="fab"
               color="primary"
               onClick={this.toggleSavedRecipe}
               disabled={!isLoggedIn}
@@ -685,7 +680,7 @@ class Recipe extends Component {
               ) : (
                 <FavoriteBorder />
               )}
-            </Button>
+            </Fab>
             <Comments comments={this.state.comments} />
             {isLoggedIn ? (
               <div className="comment-loggedin">

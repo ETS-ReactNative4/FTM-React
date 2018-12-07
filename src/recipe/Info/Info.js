@@ -76,7 +76,7 @@ class RecipeInfo extends Component {
             })}
           </div>
         </div>
-        <label for="servingsInput">Servings</label>
+        <label htmlFor="servingsInput">Servings</label>
         <Input
           id="servingsInput"
           type="number"
