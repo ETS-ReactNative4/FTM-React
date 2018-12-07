@@ -25,7 +25,7 @@ import Comments from './Comments/Comments';
 import withLocalData from '../withLocalData';
 import Fraction from 'fraction.js';
 import * as jsPDF from 'jspdf';
-import { PDF } from '../recipePdf/PDF';
+import { PDF, PDF2 } from '../recipePdf/PDF';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 const styles = {
   spacing: 24,
@@ -548,7 +548,19 @@ class Recipe extends Component {
                 title="print"
                 className="print-button btn-margin"
               >
-                <PDFDownloadLink document={PDF} fileName="test.pdf">
+                {/* <PDFDownloadLink
+                  document={PDF({
+                    imageUrl: this.state.image,
+                    instructions: this.state.instructions,
+                    ingredients: this.state.ingredients,
+                    name: this.state.name,
+                    description: this.state.description
+                  })}
+                  fileName="test.pdf"
+                >
+                  {() => 'Export to PDF'}
+                </PDFDownloadLink> */}
+                <PDFDownloadLink document={PDF2} fileName="test.pdf">
                   {() => 'Print'}
                 </PDFDownloadLink>
               </Button>

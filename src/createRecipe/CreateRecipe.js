@@ -91,7 +91,12 @@ class CreateRecipe extends Component {
   }
 
   uploadFile = async (photos) => {
-    this.setState({ images: photos });
+    console.log('current images: ', this.state.images);
+    console.log('new image: ', photos);
+
+    this.setState(previousState => ({
+      images: photos,
+    }), console.log('new images: ', this.state.images));
   };
 
   UPLOAD_FILE = gql`
@@ -109,7 +114,7 @@ class CreateRecipe extends Component {
   };
 
   successful = (arg) => {
-    console.log('recipe id: ', arg)
+    console.log('recipe id: ', arg);
     this.setState({
       success: true,
       recipe_id: arg,
@@ -173,6 +178,7 @@ class CreateRecipe extends Component {
         console.log('created result: ', result.data);
         // this.addToPublished(result.data.createRecipe.id);
         this.successful(result.data.createRecipe.id);
+        this.openDialog();
         return result.data;
       })
       .catch((err) => {
@@ -301,11 +307,11 @@ class CreateRecipe extends Component {
             sm={styles.sizes.sm.instructions}
           >
             <div className="fullSize">
-            
+
               <Card>
-                <Typography className="instructions-title"> Instructions </Typography>
-                
-                
+                <Typography className="ingredients-title"> Ingredients </Typography>
+
+
                 <TextField
                   id="textarea"
                   label="Ingredients Separated by comma"
@@ -327,7 +333,8 @@ class CreateRecipe extends Component {
           >
             <Card>
               <Typography className="instructions-title"> Directions </Typography>
-              <span>You can upload pictures to go to specific directions</span>
+              <span>You can upload pictures to go to specific directions.</span>
+              {/* }
               <Mutation mutation={this.UPLOAD_FILE}>
                 {uploadFile => (
                   <input
@@ -341,6 +348,7 @@ class CreateRecipe extends Component {
                   />
                 )}
               </Mutation>
+              */}
               <Grid item>
                 <TextField
                   id="textarea"
@@ -364,9 +372,26 @@ class CreateRecipe extends Component {
           </Grid>
         </Grid>
 
-        {this.state.success ?
-          {/*<Redirect to={`/recipe/${this.state.recipe_id}`} />*/}
-          :
+
+        {this.state.success ? (
+          /* <Redirect to={`/recipe/${this.state.recipe_id}`} />*/
+          <Dialog
+            open={this.state.dialogOpen}
+            onClose={this.handleCloseDialog}
+          >
+            <DialogTitle>{'Success'}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Successfully created your recipe! Go to Your Profile > Owned Recipes to see it!
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleCloseDialog} color="primary" autoFocus>
+              OK
+              </Button>
+            </DialogActions>
+          </Dialog>
+        ) : (
           <Dialog
             open={this.state.dialogOpen}
             onClose={this.handleCloseDialog}
@@ -374,16 +399,17 @@ class CreateRecipe extends Component {
             <DialogTitle>{'Error'}</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                There was an error creating the recipe. Please fill in all the fields.
+              There was an error creating the recipe. Please fill in all the fields.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.handleCloseDialog} color="primary" autoFocus>
-                OK
+              OK
               </Button>
             </DialogActions>
           </Dialog>
-        }
+        )}
+
       </div>
     );
   }

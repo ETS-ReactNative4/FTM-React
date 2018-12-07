@@ -71,9 +71,12 @@ div.info {
   margin: 0 15px 10px 15px !important;
 }
 
-.ingredients,
-.instructions {
+.ingredients {
   margin: 1.5em !important;
+  max-width: 96%;
+}
+.instructions {
+  margin: 0 1.5em 1.5em !important;
   max-width: 96%;
 }
 
