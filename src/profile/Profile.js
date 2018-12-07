@@ -76,7 +76,8 @@ class Profile extends Component {
       followers_length: null,
       query: '',
       currently_viewing: 'saved', // ********** saved, owned, following, or madethis *************
-      searchSavedOrOwned: true // search saved by default, so false means search owned
+      searchSavedOrOwned: true, // search saved by default, so false means search owned
+      following: false
     };
 
     this.showResults = this.showResults.bind(this);
@@ -558,12 +559,8 @@ class Profile extends Component {
   };
 
   unfollow = async followingId => {
-    const following = this.state.following.filter(
-      follower => follower.id !== followingId
-    );
     this.setState({
-      following: following,
-      following_length: following.length
+      follow: false
     });
     const { client, userId } = this.props;
     client.mutate({
@@ -579,6 +576,36 @@ class Profile extends Component {
         userId
       }
     });
+  };
+
+  follow = async followingId => {
+    this.setState({ following: true });
+    const { client, userId } = this.props;
+    client.mutate({
+      mutation: gql`
+        mutation($followingId: String!, $userId: String!) {
+          followUser(userId: $userId, followingId: $followingId) {
+            following {
+              id
+              username
+              profilePicture
+            }
+          }
+        }
+      `,
+      variables: {
+        followingId,
+        userId
+      }
+    });
+  };
+
+  toggleFollow = newVal => {
+    if (newVal) {
+      this.follow(this.state.user_id);
+    } else {
+      this.unfollow(this.state.user_id);
+    }
   };
 
   render() {
@@ -761,7 +788,7 @@ class Profile extends Component {
                 </Grid>
               )}
 
-              {ownedShow && this.isMyProfile() && (
+              {ownedShow && (
                 <Grid container>
                   <Trail
                     native

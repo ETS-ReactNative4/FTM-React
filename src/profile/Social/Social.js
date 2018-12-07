@@ -5,7 +5,6 @@ import SocialButton from './SocialButton/SocialButton';
 import withLocalData from '../../withLocalData';
 import './Social.css';
 
-
 const savedString = 'saved';
 const ownedString = 'owned';
 const followingString = 'following';
@@ -24,13 +23,11 @@ class Social extends Component {
       ownActive: false,
       saveActive: true,
       madeActive: false,
-      followActive: false,
+      followActive: false
     };
 
     this.delegateShowResults = this.delegateShowResults.bind(this);
   }
-
- 
 
   delegateShowResults(arg) {
     console.log('delegate show results clicked: ', arg);
@@ -39,28 +36,28 @@ class Social extends Component {
         ownActive: false,
         saveActive: true,
         madeActive: false,
-        followActive: false,
+        followActive: false
       });
     } else if (arg === ownedString) {
       this.setState({
         ownActive: true,
         saveActive: false,
         madeActive: false,
-        followActive: false,
+        followActive: false
       });
     } else if (arg === followingString) {
       this.setState({
         ownActive: false,
         saveActive: false,
         madeActive: false,
-        followActive: true,
+        followActive: true
       });
     } else if (arg === madeThisString) {
       this.setState({
         ownActive: false,
         saveActive: false,
         madeActive: true,
-        followActive: false,
+        followActive: false
       });
     }
     console.log('saveActive: ', this.state.saveActive);
@@ -73,19 +70,16 @@ class Social extends Component {
   render() {
     console.log('my profile: ', this.state.my_profile);
     return (
-      <div className='fullSize social-info'>
-
+      <div className="fullSize social-info">
         <div className="info">
-          {this.props.my_profile &&
-            <SocialButton
-              icon={'library_books'}
-              number={this.props.owned_recipes_number}
-              title={'Owned Recipes'}
-              delegateShow={ ownedString}
-              delegateShowResults={this.delegateShowResults}
-              classActive={this.state.ownActive}
-            />
-          }
+          <SocialButton
+            icon={'library_books'}
+            number={this.props.owned_recipes_number}
+            title={'Owned Recipes'}
+            delegateShow={ownedString}
+            delegateShowResults={this.delegateShowResults}
+            classActive={this.state.ownActive}
+          />
           <SocialButton
             icon={'library_books'}
             number={this.props.saved_recipes_number}
@@ -102,24 +96,15 @@ class Social extends Component {
             delegateShowResults={this.delegateShowResults}
             classActive={this.state.madeActive}
           />
-          {this.props.my_profile &&
-            <SocialButton
-              icon={'people'}
-              number={this.props.following_number}
-              title={'Following'}
-              delegateShow={followingString}
-              delegateShowResults={this.delegateShowResults}
-              classActive={this.state.followActive}
-            />
-          }
-          {!this.props.my_profile &&
-            <Card className="num-container follow-button" onClick={() => this.props.followUser()}>
-              <Icon>people</Icon>
-              <span>Follow this user</span><br />
-            </Card>
-          }
+          <SocialButton
+            icon={'people'}
+            number={this.props.following_number}
+            title={'Following'}
+            delegateShow={followingString}
+            delegateShowResults={this.delegateShowResults}
+            classActive={this.state.followActive}
+          />
         </div>
-
       </div>
     );
   }
@@ -127,5 +112,5 @@ class Social extends Component {
 
 export default compose(
   withLocalData,
-  withApollo,
+  withApollo
 )(Social);

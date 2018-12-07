@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withApollo, Mutation, compose } from 'react-apollo';
 import Icon from '@material-ui/core/Icon';
+import { Add, Check } from '@material-ui/icons';
+import { Button } from '@material-ui/core';
 import gql from 'graphql-tag';
 import './ProfilePicture.css';
 import withLocalData from '../../withLocalData';
@@ -29,14 +31,16 @@ class ProfilePicture extends Component {
     this.setState({ hover: false });
   }
   handleClick(e) {
-    const node = this.btnRef.current;
-    node.click();
+    if (this.props.myProfile) {
+      const node = this.btnRef.current;
+      node.click();
+    }
   }
 
-  uploadFile = async (photos) => {
+  uploadFile = async photos => {
     const { client, userId } = this.props;
     const data = {
-      image: photos,
+      image: photos
     };
     const u_id = userId;
     console.log('new profile photo ', data.image);
@@ -44,7 +48,10 @@ class ProfilePicture extends Component {
     client
       .mutate({
         mutation: gql`
-          mutation UpdateUser($userId: String!, $userUpdates: UpdateUserInput!) {
+          mutation UpdateUser(
+            $userId: String!
+            $userUpdates: UpdateUserInput!
+          ) {
             updateUser(userId: $userId, userUpdates: $userUpdates) {
               id
               profilePicture
@@ -53,17 +60,17 @@ class ProfilePicture extends Component {
         `,
         variables: {
           userUpdates: {
-            profilePicture: data.image[0],
+            profilePicture: data.image[0]
           },
-          userId: u_id,
-        },
+          userId: u_id
+        }
       })
-      .then((result) => {
+      .then(result => {
         console.log('uploaded photo: ', result.data);
         this.setState({ imageURL: result.data.updateUser.profilePicture });
         window.location.reload();
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('failed to upload photo, err: ');
         console.log(err);
       });
@@ -145,6 +152,21 @@ class ProfilePicture extends Component {
         <div className="info">
           <div className="username">
             <span>{this.props.name}</span>
+            {!this.props.myProfile && (
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginLeft: 5 }}
+                onClick={() => this.props.toggleFollow(!this.props.following)}
+              >
+                {this.props.following ? (
+                  <Check style={{ marginRight: 5 }} />
+                ) : (
+                  <Add style={{ marginRight: 5 }} />
+                )}
+                {this.props.following ? 'Following' : 'Follow'}
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -154,5 +176,5 @@ class ProfilePicture extends Component {
 
 export default compose(
   withLocalData,
-  withApollo,
+  withApollo
 )(ProfilePicture);
