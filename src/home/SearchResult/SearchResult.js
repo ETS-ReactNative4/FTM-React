@@ -68,18 +68,19 @@ class SearchResult extends React.Component {
               history.push(`/recipe/${r_id}`);
             }}
           >
-            <CardHeader
-              className="recipe-header"
-              avatar={
-                <Avatar
-                  alt={name}
-                  className={classes.avatar}
-                  src="http://i65.tinypic.com/2rnvc7k.png"
-                />
-              }
-              title={name}
-            />
-            <CardMedia className={classes.media} image={images[0]} />
+
+						<CardMedia className={classes.media} image={images[0]} />
+						<CardHeader
+							className="recipe-header"
+							avatar={
+								<Avatar
+									alt={name}
+									className={classes.avatar}
+									src="http://i65.tinypic.com/2rnvc7k.png"
+								/>
+							}
+							title={name}
+						/>
             <CardContent style={{ padding: '5px' }}>
               <Typography className="recipe-description" variant="caption">
                 {description}
