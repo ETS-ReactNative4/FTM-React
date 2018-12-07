@@ -561,7 +561,11 @@ class Recipe extends Component {
                   {() => 'Export to PDF'}
                 </PDFDownloadLink> */}
                 <PDFDownloadLink document={PDF2} fileName="test.pdf">
-                  {() => 'Print'}
+                  {() => ' '}
+                  <i class="material-icons">
+                    print
+                        </i>
+                  
                 </PDFDownloadLink>
               </Button>
               <Button
