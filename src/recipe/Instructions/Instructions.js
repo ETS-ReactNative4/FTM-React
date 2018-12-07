@@ -5,7 +5,8 @@ import {
   List,
   ListItem,
   Checkbox,
-  Typography
+  Typography,
+  FormControlLabel
 } from '@material-ui/core';
 import './Instructions.css';
 
@@ -52,8 +53,7 @@ class RecipeInstructions extends Component {
                       images={this.props.images}
                       index={index}
                     />
-                    <Checkbox />
-                    {name}
+                    <FormControlLabel control={<Checkbox />} label={name} />
                   </div>
                 </ListItem>
               );

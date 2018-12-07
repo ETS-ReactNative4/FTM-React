@@ -657,7 +657,7 @@ class Recipe extends Component {
                 variant="contained"
                 color="secondary"
                 title="Add Notes"
-                className=" "
+                className="btn-margin"
                 onClick={this.handleDialogOpen}
               >
                 <Icon>create</Icon>
@@ -670,7 +670,7 @@ class Recipe extends Component {
                 variant="contained"
                 color="secondary"
                 title="Publish Recipe"
-                className=" "
+                className="btn-margin"
                 onClick={this.publishRecipe}
               >
                 <Icon>publish</Icon>
@@ -693,7 +693,7 @@ class Recipe extends Component {
             <Button
               variant="contained"
               color="secondary"
-              className="post-comment-button"
+              className="post-comment-button btn-margin"
               onClick={this.handleCommentOpen}
               disabled={!isLoggedIn}
             >
