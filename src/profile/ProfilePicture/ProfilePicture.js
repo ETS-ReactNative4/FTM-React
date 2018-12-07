@@ -9,28 +9,28 @@ class ProfilePicture extends Component {
     super(props);
     this.state = {
       imageURL: null,
-      name: null,
+      name: null
     };
 
     this.uploadFile = this.uploadFile.bind(this);
   }
 
-  uploadFile = async (photos) => {
+  uploadFile = async photos => {
     const { client, userId } = this.props;
     const data = {
-      image: photos,
+      image: photos
     };
     const u_id = userId;
     console.log('new profile photo ', data.image);
     console.log('u_id: ', u_id);
-    const result = await client
+    client
       .mutate({
         mutation: gql`
-          mutation UpdateUser($userId: String! $userUpdates: UpdateUserInput!) {
-            updateUser(
-              userId: $userId
-              userUpdates: $userUpdates
-            ) {
+          mutation UpdateUser(
+            $userId: String!
+            $userUpdates: UpdateUserInput!
+          ) {
+            updateUser(userId: $userId, userUpdates: $userUpdates) {
               id
               profilePicture
             }
@@ -38,26 +38,26 @@ class ProfilePicture extends Component {
         `,
         variables: {
           userUpdates: {
-            profilePicture: data.image,
+            profilePicture: data.image[0]
           },
-          userId: u_id,
-        },
+          userId: u_id
+        }
       })
-      .catch((err) => {
+      .then(result => {
+        console.log('uploaded photo: ', result.data);
+        this.setState({ imageURL: result.data.updateUser.profilePicture });
+      })
+      .catch(err => {
         console.log('failed to upload photo, err: ');
         console.log(err);
-        return {};
       });
-    console.log('uploaded photo: ', result.data);
-    this.setState({ imageURL: result.data.updateUser.profilePicture });
-    return result.data;
   };
 
   UPLOAD_FILE = gql`
-  mutation UploadPhoto($file: Upload!) {
-    uploadPhoto(file: $file)
-  }
-`;
+    mutation UploadPhoto($file: Upload!) {
+      uploadPhoto(file: $file)
+    }
+  `;
 
   render() {
     return (
@@ -91,5 +91,5 @@ class ProfilePicture extends Component {
 
 export default compose(
   withLocalData,
-  withApollo,
+  withApollo
 )(ProfilePicture);
