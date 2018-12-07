@@ -163,35 +163,39 @@ class Recipe extends Component {
       });
   }
   iMadeThis() {
-    this.setState({ iMadeThis: !this.state.iMadeThis });
-    try {
-      const { client, userId } = this.props;
-      const data = {
-        user_id: userId,
-        recipe_id: this.state.recipe_id
-      };
-      const result = client
-        .mutate({
-          mutation: gql`
-            mutation MadeThis {
-              toggleIMadeThis(
-                userId: "${data.user_id}"
-                recipeId: "${data.recipe_id}"
-                newVal: true
-              ) {
-                madeRecipes { name }
+    const newVal = !this.state.iMadeThis;
+    this.setState({ iMadeThis: newVal });
+    const { client, userId } = this.props;
+    return client
+      .mutate({
+        mutation: gql`
+          mutation MadeThis(
+            $userId: String!
+            $recipeId: String!
+            $newVal: Boolean!
+          ) {
+            toggleIMadeThis(
+              userId: $userId
+              recipeId: $recipeId
+              newVal: $newVal
+            ) {
+              madeRecipes {
+                name
               }
-            }`
-        })
-        .then(result => {
-          console.log('made this result: ', result);
-          return result;
-        });
-      return result;
-    } catch (err) {
-      console.log(err);
-      return {};
-    }
+            }
+          }
+        `,
+        variables: {
+          userId,
+          recipeId: this.state.recipe_id,
+          newVal
+        }
+      })
+      .then(result => {
+        console.log('made this result: ', result);
+        return result;
+      })
+      .catch(err => console.log(err));
   }
   pdfToHTML() {
     // var doc = new jsPDF();
@@ -656,37 +660,6 @@ class Recipe extends Component {
               <Icon>add_icon</Icon>
               Post A Comment
             </Button>
-            <Dialog
-              open={this.state.note_dialog_open}
-              onClose={this.handleDialogClose}
-              aria-labelledby="form-dialog-title"
-              fullWidth={true}
-            >
-              <DialogTitle id="form-dialog-title">New Note</DialogTitle>
-              <DialogContent>
-                <TextField
-                  autoFocus
-                  multiline
-                  fullWidth
-                  id="note-input"
-                  label="New Note"
-                  type="text"
-                  onChange={this.handleNoteInput.bind(this)}
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleDialogClose} color="primary">
-                  Cancel
-                </Button>
-                <Button
-                  onClick={this.noteSubmit}
-                  color="primary"
-                  variant="contained"
-                >
-                  Add Note
-                </Button>
-              </DialogActions>
-            </Dialog>
           </Grid>
           <Grid
             className="comments"
@@ -731,46 +704,6 @@ class Recipe extends Component {
               )}
             </Fab>
             <Comments comments={this.state.comments} />
-            {isLoggedIn ? (
-              <div className="comment-loggedin">
-                <Dialog
-                  open={this.state.comment_dialog_open}
-                  onClose={this.handleCommentClose}
-                  aria-labelledby="comment-dialog-title"
-                  className="comment-dialog"
-                  fullWidth={true}
-                >
-                  <DialogTitle id="comment-dialog-title">
-                    New Comment
-                  </DialogTitle>
-                  <DialogContent>
-                    <TextField
-                      autoFocus
-                      multiline
-                      id="comment-input"
-                      label="New Comment"
-                      type="text"
-                      fullWidth
-                      onChange={this.handleCommentInput}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={this.handleCommentClose} color="primary">
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={this.commentSubmit}
-                      color="primary"
-                      variant="contained"
-                    >
-                      Post Comment
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </div>
-            ) : (
-              <h3>Log in to post a comment</h3>
-            )}
           </Grid>
           <Grid container>
             <span style={{ marginBottom: 10, marginLeft: 10 }}>
@@ -786,6 +719,69 @@ class Recipe extends Component {
             </span>
           </Grid>
         </Grid>
+        <Dialog
+          open={this.state.comment_dialog_open}
+          onClose={this.handleCommentClose}
+          aria-labelledby="comment-dialog-title"
+          className="comment-dialog"
+          fullWidth={true}
+        >
+          <DialogTitle id="comment-dialog-title">New Comment</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              multiline
+              id="comment-input"
+              label="New Comment"
+              type="text"
+              fullWidth
+              onChange={this.handleCommentInput}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleCommentClose} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={this.commentSubmit}
+              color="primary"
+              variant="contained"
+            >
+              Post Comment
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={this.state.note_dialog_open}
+          onClose={this.handleDialogClose}
+          aria-labelledby="form-dialog-title"
+          fullWidth={true}
+        >
+          <DialogTitle id="form-dialog-title">New Note</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              multiline
+              fullWidth
+              id="note-input"
+              label="New Note"
+              type="text"
+              onChange={this.handleNoteInput.bind(this)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleDialogClose} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={this.noteSubmit}
+              color="primary"
+              variant="contained"
+            >
+              Add Note
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
