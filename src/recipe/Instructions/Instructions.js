@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
-import { Card, Grid, List, ListItem, Checkbox, Typography } from '@material-ui/core';
+import {
+  Card,
+  Grid,
+  List,
+  ListItem,
+  Checkbox,
+  Typography
+} from '@material-ui/core';
 import './Instructions.css';
 
 class RecipeInstructions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: null,
+      value: null
     };
   }
 
   render() {
     console.log(this.props.images);
     function InstructionImage(props) {
-      if (props.images !== undefined) {
+      if (props.images !== undefined && props.images.length > 1) {
         return (
           <img
             className="listImage"
@@ -41,7 +48,10 @@ class RecipeInstructions extends Component {
               return (
                 <ListItem key={index}>
                   <div className="listRoot">
-                    <InstructionImage images={this.props.images} index={index} />
+                    <InstructionImage
+                      images={this.props.images}
+                      index={index}
+                    />
                     <Checkbox />
                     {name}
                   </div>
