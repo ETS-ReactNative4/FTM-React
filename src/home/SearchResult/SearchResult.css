@@ -4,8 +4,7 @@
   margin-top: 10px;
   display: grid;
   grid-template-columns: 325px auto;
-  grid-template-areas:
-    "pic content content content";
+  grid-template-areas: 'pic content content content';
 }
 
 .search-item {
@@ -26,5 +25,4 @@
 }
 
 .recipe-header {
-
 }
