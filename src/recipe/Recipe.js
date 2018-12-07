@@ -93,6 +93,8 @@ class Recipe extends Component {
     this.handleNoteInput = this.handleNoteInput.bind(this);
     this.iMadeThis = this.iMadeThis.bind(this);
     this.pdfToHTML = this.pdfToHTML.bind(this);
+    this.isUserLoggedIn = this.isUserLoggedIn.bind(this);
+    this.userIsOwner = this.userIsOwner.bind(this);
   }
 
   isUserLoggedIn() {
@@ -430,7 +432,7 @@ class Recipe extends Component {
       comments: recipe.comments,
       authorId: recipe.author.id,
       iMadeThis: recipe.iMadeThis,
-      published: published,
+      published: recipe.published,
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
@@ -469,7 +471,7 @@ class Recipe extends Component {
 
   userIsOwner = () => {
     return (
-      this.isLoggedIn &&
+      this.isUserLoggedIn() &&
       this.state.authorId !== null &&
       this.state.authorId === this.props.userId
     );
@@ -483,6 +485,9 @@ class Recipe extends Component {
 
     const isLoggedIn = this.isUserLoggedIn();
     const userOwnsRecipe = this.userIsOwner();
+    console.log('user owns: ', userOwnsRecipe);
+    console.log('logged in: ', isLoggedIn);
+
 
     const shareUrl = `http://www.foodtomake.com${this.props.location.pathname}`; // TODO:  Change this later for live
 
@@ -590,6 +595,18 @@ class Recipe extends Component {
               >
                 <Icon>create</Icon>
                 Add a Note
+              </Button>
+            )}
+
+            {userOwnsRecipe && !this.state.published && (
+              <Button
+                variant="contained"
+                color="secondary"
+                title="Add Notes"
+                className=" "
+              >
+                <Icon>create</Icon>
+                Publish To Public
               </Button>
             )}
 
