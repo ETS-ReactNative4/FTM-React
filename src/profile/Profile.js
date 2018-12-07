@@ -139,48 +139,7 @@ class Profile extends Component {
   handleEnterSearch = async event => {
     const { client } = this.props;
     if (event.key === 'Enter') {
-      if (this.state.query === '' || this.state.query === null) {
-        client
-          .query({
-            query: gql`{           
-            userById(
-              id: "${this.state.user_id}"
-            ) {
-              id
-              username
-              ownedRecipes (limit: 100) {name id description images ingredients instructions}
-              savedRecipes {name id description images ingredients instructions}
-              madeRecipes {name id description images ingredients instructions}
-              following {id username profilePicture}
-              followers {id username profilePicture}
-            }
-          }
-        `,
-            fetchPolicy: 'network-only'
-          })
-          .then(result => {
-            console.log('empty query: ', result.data.userById);
-            this.setState(
-              {
-                loading: true,
-                owned_recipes: result.data.userById.ownedRecipes,
-                saved_recipes: result.data.userById.savedRecipes,
-                made_recipes: result.data.userById.madeRecipes,
-                following: result.data.userById.following,
-                followers: result.data.userById.followers,
-                owned_recipes_searching: result.data.userById.ownedRecipes,
-                saved_recipes_searching: result.data.userById.savedRecipes,
-                made_recipes_searching: result.data.userById.madeRecipes
-              },
-              () => this.setLengths()
-            );
-            return result.data.userById;
-          })
-          .catch(err => {
-            console.log('error with empty query');
-            console.log(err);
-          });
-      } else if (this.state.searchSavedOrOwned) {
+      if (this.state.searchSavedOrOwned) {
         // search trhough saved
         const { data } = await client.query({
           query: gql`
@@ -197,7 +156,7 @@ class Profile extends Component {
         });
         this.setState({
           loading: true,
-          saved_recipes_searching: data.searchSavedRecipes
+          saved_recipes: data.searchSavedRecipes
         });
       } else {
         // search through owned
@@ -216,7 +175,7 @@ class Profile extends Component {
         });
         this.setState({
           loading: true,
-          owned_recipes_searching: data.searchOwnedRecipes
+          owned_recipes: data.searchOwnedRecipes
         });
       }
     }
