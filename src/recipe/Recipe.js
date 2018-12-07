@@ -15,6 +15,7 @@ import {
   TwitterIcon
 } from 'react-share';
 import './Recipe.css';
+import Loading from '../loading/Loading';
 import RecipeInstructions from './Instructions/Instructions';
 import RecipeInfo from './Info/Info';
 import RecipeIngredients from './Ingredients/Ingredients';
@@ -75,7 +76,8 @@ class Recipe extends Component {
       new_comment: null,
       note_dialog_open: false,
       comment_dialog_open: false,
-      authorId: null
+      authorId: null,
+      published: null,
     };
     this.saveRecipe = this.saveRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
@@ -389,6 +391,7 @@ class Recipe extends Component {
                   username
                 }
                 iMadeThis(userId: $userId)
+                published
               }
             }
           `,
@@ -426,7 +429,8 @@ class Recipe extends Component {
       notes: recipe.notes,
       comments: recipe.comments,
       authorId: recipe.author.id,
-      iMadeThis: recipe.iMadeThis
+      iMadeThis: recipe.iMadeThis,
+      published: published,
     });
     if (this.state.authorImage == null || this.state.authorImage === '') {
       this.setState({
@@ -474,7 +478,7 @@ class Recipe extends Component {
   render() {
     // don't render until we have data loaded
     if (!this.state.title) {
-      return <div />;
+      return <Loading />;
     }
 
     const isLoggedIn = this.isUserLoggedIn();
