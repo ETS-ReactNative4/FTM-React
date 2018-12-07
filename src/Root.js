@@ -8,7 +8,6 @@ import App from './App';
 import AppBar from './home/AppBar/AppBar';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 import { decode } from 'jsonwebtoken';

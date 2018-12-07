@@ -8,7 +8,6 @@ import {
   Icon,
   Button
 } from '@material-ui/core';
-import { FilterList } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
 import { compose, withApollo } from 'react-apollo';
@@ -491,7 +490,7 @@ class Profile extends Component {
     }
 
     return (
-      <div>
+      <div style={{ display: 'flex' }}>
         <Grid
           className="user-container"
           container
@@ -566,7 +565,7 @@ class Profile extends Component {
 
           {!followShow && ( // don't show search box if they are looking at followers
             <Grid
-              className="search-box"
+              className="search-box-grid"
               item
               xs={styles.sizes.xs.social}
               sm={styles.sizes.sm.social}
@@ -625,7 +624,7 @@ class Profile extends Component {
                     {this.state.saved_recipes.map(
                       recipe => (marginTop, index) => {
                         return (
-                          <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <Grid item md={4} sm={6} xs={6} zeroMinWidth>
                             <animated.div key={index} style={marginTop}>
                               <SearchResult
                                 key={recipe.id}
@@ -649,13 +648,13 @@ class Profile extends Component {
                   <Trail
                     native
                     keys={this.state.owned_recipes.map(item => item.id)}
-                    from={{ marginTop: 500, opacity: 1 }}
-                    to={{ marginTop: -2, opacity: 1 }}
+                    from={{ marginTop: 500, opacity: 0 }}
+                    to={{ marginTop: 0, opacity: 1 }}
                   >
                     {this.state.owned_recipes.map(
                       recipe => (marginTop, index) => {
                         return (
-                          <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <Grid item md={4} sm={6} xs={6} zeroMinWidth>
                             <animated.div key={index} style={marginTop}>
                               <SearchResult
                                 key={recipe.id}
@@ -679,13 +678,13 @@ class Profile extends Component {
                   <Trail
                     native
                     keys={this.state.made_recipes.map(item => item.id)}
-                    from={{ marginTop: 500, opacity: 1 }}
+                    from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
                     {this.state.made_recipes.map(
                       recipe => (marginTop, index) => {
                         return (
-                          <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <Grid item md={4} sm={6} xs={6} zeroMinWidth>
                             <animated.div key={index} style={marginTop}>
                               <SearchResult
                                 key={recipe.id}
@@ -709,13 +708,13 @@ class Profile extends Component {
                   <Trail
                     native
                     keys={this.state.following.map(item => item.id)}
-                    from={{ marginTop: 500, opacity: 1 }}
+                    from={{ marginTop: 500, opacity: 0 }}
                     to={{ marginTop: 0, opacity: 1 }}
                   >
                     {this.state.following.map(
                       userProfile => (marginTop, index) => {
                         return (
-                          <Grid item md={6} sm={4} xs={12} zeroMinWidth>
+                          <Grid item md={4} sm={6} xs={6} zeroMinWidth>
                             <animated.div key={index} style={marginTop}>
                               <FollowingProfile
                                 key={userProfile.id}

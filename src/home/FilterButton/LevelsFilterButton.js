@@ -19,7 +19,7 @@ class LevelsFilterButton extends React.Component {
     numOfStars: 0,
   };
 
-  handleChange = (event, checked) => {
+  handleChange = (_, checked) => {
     this.setState({ active: checked });
   };
 
@@ -33,11 +33,11 @@ class LevelsFilterButton extends React.Component {
 
   handleOnClick = (number, event) => {
     this.props.handleAddFilterChip(this.props.title, String(number));
-    this.setState(state => ({ open: false }));
+    this.setState(() => ({ open: false }));
   };
 
   render() {
-    const { active, anchorEl, open } = this.state;
+    const { open } = this.state;
     const { title } = this.props;
     return (
       <div style={{ width: '100%', flex: '1' }}>

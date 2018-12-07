@@ -38,7 +38,6 @@ class FilterButton extends React.Component {
 
   handleClose = (item, event) => {
     if (!(item instanceof MouseEvent)) {
-      // console.log(item);
     }
     this.setState({ anchorEl: null });
   };

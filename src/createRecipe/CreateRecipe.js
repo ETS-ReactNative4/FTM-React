@@ -3,7 +3,6 @@ import { Grid, TextField, Button } from 'material-ui';
 import { Card, Typography, Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText } from '@material-ui/core';
 import { withApollo, Mutation, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Route, Redirect } from 'react-router-dom';
 import './CreateRecipe.css';
 import withLocalData from '../withLocalData';
 
@@ -154,7 +153,7 @@ class CreateRecipe extends Component {
       images: this.state.images,
     };
     console.log('new recipe info: ', data);
-    const result = client
+    client
       .mutate({
         mutation: gql`
           mutation CreateRecipe($recipe: NewRecipeInput!) {
