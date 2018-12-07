@@ -65,7 +65,6 @@ class SearchResult extends React.Component {
           <Card
             className={classes.card}
             onClick={() => {
-              // console.log(this.props);
               history.push(`/recipe/${r_id}`);
             }}
           >

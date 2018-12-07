@@ -8,7 +8,6 @@ import {
   Icon,
   Button
 } from '@material-ui/core';
-import { FilterList } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
 import { compose, withApollo } from 'react-apollo';

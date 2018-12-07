@@ -5,28 +5,25 @@ import {
   List,
   ListItem,
   Checkbox,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import './Instructions.css';
-import Tooltip from '@material-ui/core/Tooltip';
 
 class RecipeInstructions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: null,
+      value: null
     };
   }
 
   render() {
-    
     return (
-      
       <Card>
-        <Typography className="instructions-title"><b>Directions</b><i class="material-icons">
-        
-                                 library_books
-</i> </Typography>
+        <Typography className="instructions-title">
+          <b>Directions</b>
+          <i className="material-icons">library_books</i>{' '}
+        </Typography>
         <Grid item>
           <List className="instructions-list">
             {this.props.value.map((name, index) => {
