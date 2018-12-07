@@ -94,9 +94,12 @@ class CreateRecipe extends Component {
     console.log('current images: ', this.state.images);
     console.log('new image: ', photos);
 
-    this.setState(previousState => ({
-      images: photos,
-    }), console.log('new images: ', this.state.images));
+    this.setState(
+      previousState => ({
+        images: [...previousState.images, photos],
+      }),
+      console.log('new images: ', this.state.images),
+    );
   };
 
   UPLOAD_FILE = gql`
@@ -334,7 +337,7 @@ class CreateRecipe extends Component {
             <Card>
               <Typography className="instructions-title"> Directions </Typography>
               <span>You can upload pictures to go to specific directions.</span>
-              {/* }
+              
               <Mutation mutation={this.UPLOAD_FILE}>
                 {uploadFile => (
                   <input
@@ -348,7 +351,7 @@ class CreateRecipe extends Component {
                   />
                 )}
               </Mutation>
-              */}
+              
               <Grid item>
                 <TextField
                   id="textarea"
