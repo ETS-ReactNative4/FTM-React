@@ -57,9 +57,9 @@ class Recipe extends Component {
       scale: 1,
       ingredients: [],
       instructions: [],
+      instructionImages: [],
       description: null,
       image: [],
-      instructionImages: [],
       title: null,
       stars: null,
       tags: [],
@@ -93,10 +93,11 @@ class Recipe extends Component {
     this.handleCommentOpen = this.handleCommentOpen.bind(this);
     this.handleNoteInput = this.handleNoteInput.bind(this);
     this.iMadeThis = this.iMadeThis.bind(this);
-    this.pdfToHTML = this.pdfToHTML.bind(this);
+    this.exportToPDF = this.exportToPDF.bind(this);
     this.isUserLoggedIn = this.isUserLoggedIn.bind(this);
     this.userIsOwner = this.userIsOwner.bind(this);
     this.publishRecipe = this.publishRecipe.bind(this);
+    this.exportToPDF = this.exportToPDF.bind(this);
   }
 
   isUserLoggedIn() {
@@ -164,49 +165,88 @@ class Recipe extends Component {
       });
   }
   iMadeThis() {
-    const newVal = !this.state.iMadeThis;
-    this.setState({ iMadeThis: newVal });
-    const { client, userId } = this.props;
-    return client
-      .mutate({
-        mutation: gql`
-          mutation MadeThis(
-            $userId: String!
-            $recipeId: String!
-            $newVal: Boolean!
-          ) {
-            toggleIMadeThis(
-              userId: $userId
-              recipeId: $recipeId
-              newVal: $newVal
-            ) {
-              madeRecipes {
-                name
+    this.setState({ iMadeThis: !this.state.iMadeThis });
+    try {
+      const { client, userId } = this.props;
+      const data = {
+        user_id: userId,
+        recipe_id: this.state.recipe_id
+      };
+      const result = client
+        .mutate({
+          mutation: gql`
+            mutation MadeThis {
+              toggleIMadeThis(
+                userId: "${data.user_id}"
+                recipeId: "${data.recipe_id}"
+                newVal: true
+              ) {
+                madeRecipes { name }
               }
-            }
-          }
-        `,
-        variables: {
-          userId,
-          recipeId: this.state.recipe_id,
-          newVal
-        }
-      })
-      .then(result => {
-        console.log('made this result: ', result);
-        return result;
-      })
-      .catch(err => console.log(err));
+            }`
+        })
+        .then(result => {
+          console.log('made this result: ', result);
+          return result;
+        });
+      return result;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
   }
-  pdfToHTML() {
-    // var doc = new jsPDF();
 
-    // We'll make our own renderer to skip this editor
+  exportToPDF() {
+    const doc = new jsPDF('pt');
 
-    const doc = new jsPDF();
-    doc.text(20, 40, this.state.title);
-    doc.addPage('a4', 'p');
-    doc.save('test.pdf');
+    let dim = doc.getTextDimensions('Text');
+    let y = 0;
+    y = 20;
+    doc.setFontSize(35);
+
+    const lines = doc.splitTextToSize(this.state.title, 170);
+    doc.text(20, y, lines);
+    dim = doc.getTextDimensions(lines);
+    y += dim.h - 30;
+
+    doc.setFontSize(14);
+    const desc = this.state.description;
+    const desclines = doc.splitTextToSize(desc, 170);
+    doc.text(20, y, desclines);
+    dim = doc.getTextDimensions(desclines);
+    y += dim.h;
+
+    doc.setFontSize(25);
+    doc.text(20, y, 'Ingredients');
+    dim = doc.getTextDimensions('Ingredients');
+    y += dim.h - 20;
+    doc.setFontSize(14);
+    const ingredients = this.state.ingredients;
+    for (let j = 0; j < ingredients.length; j++) {
+      const ing = ingredients[j];
+      doc.text(20, y, ing);
+      dim = doc.getTextDimensions(ing);
+      y += dim.h - 10;
+    }
+
+    y += 10;
+    doc.setFontSize(25);
+    doc.text(20, y, 'Instructions');
+    dim = doc.getTextDimensions('Instructions');
+    y += dim.h - 20;
+    doc.setFontSize(14);
+    const inst = this.state.instructions;
+    for (let m = 0; m < inst.length; m++) {
+      const lines = doc.splitTextToSize(inst[m], 170);
+      doc.text(20, y, lines);
+      dim = doc.getTextDimensions(lines);
+      y += dim.h - 5; // WHY IS THE LAST INSTRUCTION NOT IN THE RIGH SPOT!!!!????
+      if (m + 2 >= inst.length) {
+        y += 12;
+      }
+    }
+
+    doc.save(`${this.state.title}-recipe.pdf`);
   }
 
   recipeAlreadySaved(recipeId) {
@@ -604,6 +644,7 @@ class Recipe extends Component {
               color="secondary"
               title="print"
               className="print-button btn-margin"
+              onClick={this.exportToPDF}
             >
               <i className="material-icons">print</i>
               Export to PDF
@@ -670,6 +711,37 @@ class Recipe extends Component {
               <Icon>add_icon</Icon>
               Post A Comment
             </Button>
+            <Dialog
+              open={this.state.note_dialog_open}
+              onClose={this.handleDialogClose}
+              aria-labelledby="form-dialog-title"
+              fullWidth={true}
+            >
+              <DialogTitle id="form-dialog-title">New Note</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  multiline
+                  fullWidth
+                  id="note-input"
+                  label="New Note"
+                  type="text"
+                  onChange={this.handleNoteInput.bind(this)}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleDialogClose} color="primary">
+                  Cancel
+                </Button>
+                <Button
+                  onClick={this.noteSubmit}
+                  color="primary"
+                  variant="contained"
+                >
+                  Add Note
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Grid>
           <Grid
             className="comments"
@@ -714,6 +786,46 @@ class Recipe extends Component {
               )}
             </Fab>
             <Comments comments={this.state.comments} />
+            {isLoggedIn ? (
+              <div className="comment-loggedin">
+                <Dialog
+                  open={this.state.comment_dialog_open}
+                  onClose={this.handleCommentClose}
+                  aria-labelledby="comment-dialog-title"
+                  className="comment-dialog"
+                  fullWidth={true}
+                >
+                  <DialogTitle id="comment-dialog-title">
+                    New Comment
+                  </DialogTitle>
+                  <DialogContent>
+                    <TextField
+                      autoFocus
+                      multiline
+                      id="comment-input"
+                      label="New Comment"
+                      type="text"
+                      fullWidth
+                      onChange={this.handleCommentInput}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={this.handleCommentClose} color="primary">
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={this.commentSubmit}
+                      color="primary"
+                      variant="contained"
+                    >
+                      Post Comment
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+            ) : (
+              <h3>Log in to post a comment</h3>
+            )}
           </Grid>
           <Grid container>
             <span style={{ marginBottom: 10, marginLeft: 10 }}>
@@ -729,69 +841,6 @@ class Recipe extends Component {
             </span>
           </Grid>
         </Grid>
-        <Dialog
-          open={this.state.comment_dialog_open}
-          onClose={this.handleCommentClose}
-          aria-labelledby="comment-dialog-title"
-          className="comment-dialog"
-          fullWidth={true}
-        >
-          <DialogTitle id="comment-dialog-title">New Comment</DialogTitle>
-          <DialogContent>
-            <TextField
-              autoFocus
-              multiline
-              id="comment-input"
-              label="New Comment"
-              type="text"
-              fullWidth
-              onChange={this.handleCommentInput}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleCommentClose} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={this.commentSubmit}
-              color="primary"
-              variant="contained"
-            >
-              Post Comment
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog
-          open={this.state.note_dialog_open}
-          onClose={this.handleDialogClose}
-          aria-labelledby="form-dialog-title"
-          fullWidth={true}
-        >
-          <DialogTitle id="form-dialog-title">New Note</DialogTitle>
-          <DialogContent>
-            <TextField
-              autoFocus
-              multiline
-              fullWidth
-              id="note-input"
-              label="New Note"
-              type="text"
-              onChange={this.handleNoteInput.bind(this)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleDialogClose} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={this.noteSubmit}
-              color="primary"
-              variant="contained"
-            >
-              Add Note
-            </Button>
-          </DialogActions>
-        </Dialog>
       </div>
     );
   }
