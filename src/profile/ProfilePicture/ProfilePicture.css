@@ -87,4 +87,5 @@
   padding: 4px;
   z-index: 10000;
   -webkit-transition: all 0.2s;
+  cursor: pointer;
 }
