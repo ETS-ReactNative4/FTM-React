@@ -26,6 +26,11 @@ const styles = {
       title: 8,
     },
   },
+
+  input: {
+    display: 'none !important',
+  },
+
 };
 
 class CreateRecipe extends Component {
@@ -61,21 +66,22 @@ class CreateRecipe extends Component {
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.openDialog = this.openDialog.bind(this);
     this.successful = this.successful.bind(this);
+    this.toArray = this.toArray.bind(this);
   }
 
   handleIngredients = ingredients => (event) => {
     this.setState({
-      ingredients: event.target.value.split(','),
+      ingredients: event.target.value.split('|'),
     });
   };
   handleInstructions = instructions => (event) => {
     this.setState({
-      instructions: event.target.value.split(','),
+      instructions: event.target.value.split('|'),
     });
   };
   handleNotes = notes => (event) => {
     this.setState({
-      notes: event.target.value.split(','),
+      notes: event.target.value.split('|'),
     });
   };
   handleChange = name => (event) => {
@@ -93,13 +99,19 @@ class CreateRecipe extends Component {
     console.log('current images: ', this.state.images);
     console.log('new image: ', photos);
 
-    this.setState(
-      previousState => ({
-        images: [...previousState.images, photos],
-      }),
-      console.log('new images: ', this.state.images),
-    );
+    for (let i = 0; i < photos.length; i++) {
+      this.setState(
+        previousState => ({
+          images: [...previousState.images, photos[i]],
+        }),
+        console.log('new images: ', this.state.images),
+      );
+    }
   };
+
+  toArray(fileList) {
+    return Array.prototype.slice.call(fileList);
+  }
 
   UPLOAD_FILE = gql`
     mutation UploadPhoto($file: Upload!) {
@@ -316,7 +328,7 @@ class CreateRecipe extends Component {
 
                 <TextField
                   id="textarea"
-                  label="Ingredients Separated by comma"
+                  label="Ingredients, separated by bar '|'"
                   fullWidth
                   multiline
                   className="ingredients"
@@ -335,26 +347,30 @@ class CreateRecipe extends Component {
           >
             <Card>
               <Typography className="instructions-title"> Directions </Typography>
-              <span>You can upload pictures to go to specific directions.</span>
-              
-              <Mutation mutation={this.UPLOAD_FILE}>
-                {uploadFile => (
-                  <input
-                    type="file"
-                    accept="image/jpg, image/jpeg, image/png"
-                    className="upload-pic"
-                    required
-                    onChange={({ target: { validity, files } }) => {
-                      validity.valid && this.uploadFile(files);
-                    }}
-                  />
-                )}
-              </Mutation>
-              
+
+              <div className="instructions">
+                <span>You can upload pictures to go to specific directions.</span>
+
+                <Mutation mutation={this.UPLOAD_FILE}>
+                  {uploadFile => (
+                    <input
+                      type="file"
+                      accept="image/jpg, image/jpeg, image/png"
+                      className="upload-pic"
+                      required
+                      multiple
+                      onChange={({ target: { validity, files } }) => {
+                        validity.valid && this.uploadFile(files);
+                      }}
+                    />
+                  )}
+                </Mutation>
+              </div>
+
               <Grid item>
                 <TextField
                   id="textarea"
-                  label="Instructions Separated by comma"
+                  label="Directions, separated by bar '|'"
                   fullWidth
                   multiline
                   className="instructions"
@@ -376,7 +392,7 @@ class CreateRecipe extends Component {
 
 
         {this.state.success ? (
-          /* <Redirect to={`/recipe/${this.state.recipe_id}`} />*/
+          /* <Redirect to={`/recipe/${this.state.recipe_id}`} /> */
           <Dialog
             open={this.state.dialogOpen}
             onClose={this.handleCloseDialog}

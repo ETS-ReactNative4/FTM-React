@@ -6,12 +6,12 @@ import './Info.css';
 
 const styles = {
   chip: {
-    margin: 4
+    margin: 4,
   },
   wrapper: {
     display: 'flex',
-    flexWrap: 'wrap'
-  }
+    flexWrap: 'wrap',
+  },
 };
 
 function handleClick() {
@@ -30,59 +30,51 @@ class RecipeInfo extends Component {
       cookTime: null,
       prepTime: null,
       difficulty: null,
-      tags: null
+      tags: null,
     };
   }
 
   render() {
     return (
-      <Card className="recipeInfo">
-        <div className="recipeAuthor">
-          <Avatar src={this.props.authorImage} />
-          <Route
-            render={({ history }) => (
-              <span
-                className="authorName"
-                onClick={() => {
-                  history.push(`/profile/${this.props.authorName}`);
-                }}
-              >
-                {this.props.authorName}
-              </span>
-            )}
-          />
-          <span className="time">
+      <Card className="infoCard">
+        <div className="infoRoot">
+          <div className="infoColumn">
+            <Avatar className="avatar" src={this.props.authorImage} />
+            <Route
+              render={({ history }) => (
+                <div
+                  className="authorName"
+                  onClick={() => {
+                    history.push(`/profile/${this.props.authorName}`);
+                  }}
+                >
+                  {this.props.authorName}
+                </div>
+              )}
+            />
+          </div>
+
+          <div className="infoColumn">
             <TimerIcon /> Prep: {this.props.prepTime} mins
-          </span>
-          <span className="time">
+          </div>
+          <div className="infoColumn">
             <TimerIcon /> Cook: {this.props.cookTime} mins
-          </span>
-          <span className="difficulty">
-            Difficulty: {this.props.difficulty}
-          </span>
-        </div>
-        <div className="tags">
-          <div style={styles.wrapper}>
-            {this.props.tags.map((name, index) => {
-              return (
-                <Chip
-                  key={index}
-                  onClick={handleClick}
-                  style={styles.chip}
-                  className="chip"
-                  label={name}
-                />
-              );
-            })}
+          </div>
+          <div className="infoColumn">Difficulty: {this.props.difficulty}</div>
+          <div className="infoColumn">
+            <label className="servingsLabel" htmlFor="servingsInput">
+              Servings:
+            </label>
+            <Input
+              className="servingsCounter"
+              id="servingsInput"
+              type="number"
+              textAlign="center"
+              value={this.props.servings}
+              onChange={this.props.onScaleChange}
+            />
           </div>
         </div>
-        <label htmlFor="servingsInput">Servings</label>
-        <Input
-          id="servingsInput"
-          type="number"
-          value={this.props.servings}
-          onChange={this.props.onScaleChange}
-        />
       </Card>
     );
   }

@@ -76,14 +76,16 @@ class Social extends Component {
       <div className='fullSize social-info'>
 
         <div className="info">
-          <SocialButton
-            icon={'library_books'}
-            number={this.props.owned_recipes_number}
-            title={'Owned Recipes'}
-            delegateShow={ ownedString}
-            delegateShowResults={this.delegateShowResults}
-            classActive={this.state.ownActive}
-          />
+          {this.props.my_profile &&
+            <SocialButton
+              icon={'library_books'}
+              number={this.props.owned_recipes_number}
+              title={'Owned Recipes'}
+              delegateShow={ ownedString}
+              delegateShowResults={this.delegateShowResults}
+              classActive={this.state.ownActive}
+            />
+          }
           <SocialButton
             icon={'library_books'}
             number={this.props.saved_recipes_number}
