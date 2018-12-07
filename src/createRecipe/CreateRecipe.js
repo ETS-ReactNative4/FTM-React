@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from 'material-ui';
-import { Card, Typography, Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText } from '@material-ui/core';
+import {
+  Card,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+} from '@material-ui/core';
 import { withApollo, Mutation, compose } from 'react-apollo';
+import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
 import './CreateRecipe.css';
 import withLocalData from '../withLocalData';
@@ -30,7 +39,6 @@ const styles = {
   input: {
     display: 'none !important',
   },
-
 };
 
 class CreateRecipe extends Component {
@@ -135,7 +143,6 @@ class CreateRecipe extends Component {
     });
   };
 
-
   submitRecipe = async () => {
     const { client, userId } = this.props;
     const data = {
@@ -205,20 +212,9 @@ class CreateRecipe extends Component {
   render() {
     return (
       <div>
-        <Grid
-          className="pic-des-container"
-          container
-          spacing={styles.spacing}
-          justify={'center'}
-        >
-
+        <Grid className="pic-des-container" container spacing={styles.spacing} justify={'center'}>
           {/* ----- PICTURE ----- */}
-          <Grid
-            className="picture"
-            item
-            xs={styles.sizes.xs.picture}
-            sm={styles.sizes.sm.picture}
-          >
+          <Grid className="picture" item xs={styles.sizes.xs.picture} sm={styles.sizes.sm.picture}>
             <div className="fullSize">
               <Card className="recipe-pic">
                 <Mutation mutation={this.UPLOAD_FILE}>
@@ -267,12 +263,7 @@ class CreateRecipe extends Component {
           </Grid>
 
           {/* ----- INFO ----- */}
-          <Grid
-            className="info"
-            item
-            xs={styles.sizes.xs.author}
-            sm={styles.sizes.sm.author}
-          >
+          <Grid className="info" item xs={styles.sizes.xs.author} sm={styles.sizes.sm.author}>
             <Card className="recipeInfo">
               <TextField
                 id="textarea"
@@ -321,10 +312,8 @@ class CreateRecipe extends Component {
             sm={styles.sizes.sm.instructions}
           >
             <div className="fullSize">
-
               <Card>
                 <Typography className="ingredients-title"> Ingredients </Typography>
-
 
                 <TextField
                   id="textarea"
@@ -386,17 +375,20 @@ class CreateRecipe extends Component {
             xs={styles.sizes.xs.ingredients}
             sm={styles.sizes.sm.ingredients}
           >
-            <Button variant="contained" color="primary" className="create-recipe-button btn-margin" onClick={this.handleSubmit}>Submit</Button>
+            <Button
+              variant="contained"
+              color="primary"
+              className="create-recipe-button btn-margin"
+              onClick={this.handleSubmit}
+            >
+              Submit
+            </Button>
           </Grid>
         </Grid>
 
-
         {this.state.success ? (
           /* <Redirect to={`/recipe/${this.state.recipe_id}`} /> */
-          <Dialog
-            open={this.state.dialogOpen}
-            onClose={this.handleCloseDialog}
-          >
+          <Dialog open={this.state.dialogOpen} onClose={this.handleCloseDialog}>
             <DialogTitle>{'Success'}</DialogTitle>
             <DialogContent>
               <DialogContentText>
@@ -404,30 +396,26 @@ class CreateRecipe extends Component {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.handleCloseDialog} color="primary" autoFocus>
-              OK
+              <Button component={Link} to="/profile" color="primary" autoFocus>
+                OK
               </Button>
             </DialogActions>
           </Dialog>
         ) : (
-          <Dialog
-            open={this.state.dialogOpen}
-            onClose={this.handleCloseDialog}
-          >
+          <Dialog open={this.state.dialogOpen} onClose={this.handleCloseDialog}>
             <DialogTitle>{'Error'}</DialogTitle>
             <DialogContent>
               <DialogContentText>
-              There was an error creating the recipe. Please fill in all the fields.
+                There was an error creating the recipe. Please fill in all the fields.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={this.handleCloseDialog} color="primary" autoFocus>
-              OK
+                OK
               </Button>
             </DialogActions>
           </Dialog>
         )}
-
       </div>
     );
   }
