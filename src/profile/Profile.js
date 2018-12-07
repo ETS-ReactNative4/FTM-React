@@ -6,8 +6,10 @@ import {
   InputLabel,
   InputAdornment,
   Icon,
-  Button
+  Button,
+  Fab
 } from '@material-ui/core';
+import { Create } from '@material-ui/icons';
 import { Spring, Trail, animated } from 'react-spring';
 import gql from 'graphql-tag';
 import { compose, withApollo } from 'react-apollo';
@@ -363,9 +365,9 @@ class Profile extends Component {
         made_recipes: user.madeRecipes,
         following: user.following,
         followers: user.followers,
-        user_image: user.profilePicture,
+        user_image: user.profilePicture
       },
-      () => this.setLengths(),
+      () => this.setLengths()
     );
   }
 
@@ -456,6 +458,16 @@ class Profile extends Component {
       return <Loading />;
     }
 
+    let exportString = '';
+
+    if (this.state.currently_viewing === savedString) {
+      exportString = 'Export Saved Recipes';
+    } else if (this.state.currently_viewing === ownedString) {
+      exportString = 'Export Owned Recipes';
+    } else if (this.state.currently_viewing === madeThisString) {
+      exportString = 'Export Made Recipes';
+    }
+
     let savedShow = true;
     let ownedShow = false;
     let followShow = false;
@@ -523,53 +535,9 @@ class Profile extends Component {
               my_profile={myProfile}
               followUser={this.followUser}
             />
-            {!followShow && myProfile && ( // don't show export if they are looking at followers
-              <Grid item>
-                <Route
-                  render={({ history }) => (
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      Title="Export to .pdf"
-                      className="export-recipes-button"
-                      /*onClick={() => {
-                        history.push(`/exportrecipes/${this.state.saved_recipes}`);
-                      }}*/
-                      onClick={this.exportToPdf}
-                    >
-                      <Icon>picture_as_pdf</Icon>
-                      Export to PDF
-                    </Button>
-                  )}
-                />
-
-                <Route
-                  render={({ history }) => (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      title="Create Recipe"
-                      className="create-recipe-button"
-                      onClick={() => {
-                        history.push('/createrecipe');
-                      }}
-                    >
-                      <Icon>import_contacts</Icon>
-                      Create Recipe
-                    </Button>
-                  )}
-                />
-              </Grid>
-            )}
           </Grid>
-
-          {!followShow && ( // don't show search box if they are looking at followers
-            <Grid
-              className="search-box-grid"
-              item
-              xs={styles.sizes.xs.social}
-              sm={styles.sizes.sm.social}
-            >
+          <Grid item sm={8} xs={12}>
+            {!followShow && ( // don't show search box if they are looking at followers
               <Spring
                 from={{ marginTop: 0 }}
                 to={
@@ -580,31 +548,55 @@ class Profile extends Component {
               >
                 {({ marginTop }) => (
                   <div className="search-box" style={{ marginTop }}>
-                    <FormControl fullWidth>
-                      <InputLabel htmlFor="search">
-                        Search for a recipe...
-                      </InputLabel>
-                      <Input
-                        id="search"
-                        onKeyPress={this.handleEnterSearch}
-                        onChange={this.handleQueryChange}
-                        endAdornment={
-                          <InputAdornment position="end">
+                    <Grid
+                      className="search-box-grid"
+                      container
+                      justify={'center'}
+                    >
+                      <Grid item xs={9} sm={9}>
+                        <FormControl fullWidth>
+                          <InputLabel htmlFor="search">
+                            Search for a recipe...
+                          </InputLabel>
+                          <Input
+                            id="search"
+                            onKeyPress={this.handleEnterSearch}
+                            onChange={this.handleQueryChange}
+                            endAdornment={
+                              <InputAdornment position="end">
+                                <Button
+                                  id="searchButton"
+                                  onClick={this.handleButtonSearch}
+                                >
+                                  <i class="material-icons">search</i>
+                                </Button>
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
+                      </Grid>
+
+                      {!followShow &&
+                      myProfile && ( // don't show export if they are looking at followers
+                          <Grid item xs={3} sm={3}>
                             <Button
-                              id="searchButton"
-                              onClick={this.handleButtonSearch}
+                              variant="contained"
+                              color="secondary"
+                              Title="Export to PDF"
+                              className="export-recipes-button"
+                              onClick={this.exportToPdf}
                             >
-                              <i class="material-icons">search</i>
+                              <Icon>picture_as_pdf</Icon>
+                              {exportString}
                             </Button>
-                          </InputAdornment>
-                        }
-                      />
-                    </FormControl>
+                          </Grid>
+                        )}
+                    </Grid>
                   </div>
                 )}
               </Spring>
-            </Grid>
-          )}
+            )}
+          </Grid>
 
           <Grid
             className="users-recipes"
@@ -734,6 +726,19 @@ class Profile extends Component {
             </div>
           </Grid>
         </Grid>
+        <Route
+          render={({ history }) => (
+            <Fab
+              color="primary"
+              style={{ position: 'fixed', bottom: 20, right: 30 }}
+              onClick={() => {
+                history.push('/createrecipe');
+              }}
+            >
+              <Create />
+            </Fab>
+          )}
+        />
       </div>
     );
   }
