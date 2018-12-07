@@ -572,7 +572,6 @@ class Recipe extends Component {
 
     return (
       <div>
-        {userOwnsRecipe && <Notes notes={this.state.notes} />}
         <Grid
           className="pic-des-container"
           container
