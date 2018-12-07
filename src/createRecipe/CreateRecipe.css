@@ -1,11 +1,6 @@
 div.title-container {
   margin-top: 4em;
 }
-.recipe-title p {
-  font-size: 3em;
-  font-weight: 400;
-  letter-spacing: 1px;
-}
 .create-recipe-container {
   height: 300px;
   margin-top: 2em !important;
@@ -48,4 +43,46 @@ div.info {
 .source-url {
   font-size: .7em;
   color: gray;
+}
+
+.recipe-pic {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.recipe-description-card {
+  height: 100%;
+  display: flex;
+}
+.upload-pic {
+  width: 80%;
+  margin: 10px auto;
+}
+.recipe-title,
+.recipe-description {
+  width: 80% !important;
+  margin: 10px auto !important;
+}
+
+.preptime,
+.cooktime,
+.difficulty,
+.servings {
+  margin: 0 15px 10px 15px !important;
+}
+
+.ingredients,
+.instructions {
+  margin: 1.5em !important;
+  max-width: 96%;
+}
+
+.create-recipe-button {
+  background: #f44336 !important;
+  color: #fff !important;
+}
+.create-recipe-button:hover {
+  background: rgba(0, 0, 0, .1) !important;
+  color: #f44336 !important;
+  transition: ease .25s;
 }
