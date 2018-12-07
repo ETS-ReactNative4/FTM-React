@@ -30,12 +30,17 @@ class HomeAppBar extends React.Component {
 
   async getDataFromAPI() {
     const user = await this.fetchUser();
-    console.log(user);
+    console.log('GETDATAFROMAPI: ', user);
     this.setState({ user_image: user.profilePicture });
   }
 
   componentWillMount() {
     this.getDataFromAPI();
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.token !== prevProps.token || this.props.client !== prevProps.client) {
+      this.getDataFromAPI();
+    }
   }
 
   fetchUser = async () => {
@@ -81,6 +86,7 @@ class HomeAppBar extends React.Component {
             </Typography>
             {token ? (
               <Fragment>
+                {/* {this.getDataFromAPI && ( */}
                 <Avatar
                   aria-label="Result"
                   className={classes.avatar}
