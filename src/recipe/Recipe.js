@@ -547,12 +547,7 @@ class Recipe extends Component {
           >
             <RecipeInstructions value={this.state.instructions} />
           </Grid>
-          <Grid
-            className="recipe-buttons"
-            item
-            xs={styles.sizes.xs.ingredients}
-            sm={styles.sizes.sm.ingredients}
-          >
+          <Grid className="recipe-buttons" container justify={'center'}>
             <Button
               variant="contained"
               color="secondary"
@@ -632,27 +627,6 @@ class Recipe extends Component {
                 </Button>
               </DialogActions>
             </Dialog>
-          </Grid>
-
-          <Grid
-            className="source-url"
-            item
-            xs={styles.sizes.xs.ingredients}
-            sm={styles.sizes.sm.ingredients}
-          >
-            <span>
-              <a
-                href={
-                  this.state.sourceURL === '' || this.state.sourceURL === null
-                    ? 'http://www.foodtomake.com'
-                    : this.state.sourceURL
-                }
-              >
-                {this.state.sourceURL === '' || this.state.sourceURL === null
-                  ? 'http://www.foodtomake.com'
-                  : this.state.sourceURL}
-              </a>
-            </span>
           </Grid>
           <Grid
             className="comments"
@@ -746,6 +720,19 @@ class Recipe extends Component {
             ) : (
               <h3>Log in to post a comment</h3>
             )}
+          </Grid>
+          <Grid container>
+            <span style={{ marginBottom: 10, marginLeft: 10 }}>
+              <a
+                href={
+                  this.state.sourceURL === '' || this.state.sourceURL === null
+                    ? 'http://www.foodtomake.com'
+                    : this.state.sourceURL
+                }
+              >
+                source
+              </a>
+            </span>
           </Grid>
         </Grid>
       </div>
